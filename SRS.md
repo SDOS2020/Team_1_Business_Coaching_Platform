@@ -74,7 +74,7 @@
 
 ## Specific Requirements
 1. ### Functionality
-    1. Home Page
+    1. #### Home Page
         1. The system shall display a grid view of some coaches with maximum testimonials in the home page.
         1. The system shall display information about business coaching.
         1. The system shall display information about business coaching.
@@ -83,7 +83,7 @@
         1. The system shall enable existing users to login.
         1. The system shall provide access to free resources for coaches and clients.
         1. The system shall provide information about complimentary events being conducted by coaches registered with the portal.
-    1. Signup
+    1. #### Signup
         1. As Coach
             1. The system shall ask for name, email, payment details, location, experience, area of expertise, social media profiles, bio and profile photo for sign up.
             1. The system shall successfully register a coach only after the authentication is complete.
@@ -91,10 +91,10 @@
         1. As client
             1. The system shall ask for only name and email for registration.
             1. The system shall allow a client to fill additional details like location, resume, social media profiles, reasons for seeking coaching, contact info after sign up.
-    1. Login Page
+    1. #### Login Page
         1. The system shall allow registered users to login through their email and password.
         1. The system shall allow users to reset their password using their registered email id.
-    1. Dashboard
+    1. #### Dashboard
         1. As Coach
             1. The system shall provide a coach with a calendar which will have links to all scheduled video calls and upcoming event details.
             1. The system shall provide a coach with a list of the sessions scheduled for today.
@@ -120,7 +120,7 @@
             1. The system shall provide a list of current coaches hyperlinked to their dedicated page.
             1. The system shall direct a client to an enrolment page to book free sessions and enrol under different coaches.
             1. The system shall enable a client to view his/her profile page.
-    1. Profile Page
+    1. #### Profile Page
         1. As Coach
             1. The system shall provide the following information:
                 1. _Name_
@@ -137,7 +137,7 @@
             1. _Email_
             1. _Links to social media profiles_
         1. The system shall allow the client's profile to be viewed only by his/her connections. 
-    1. Requesting Sessions for New Clients
+    1. #### Requesting Sessions for New Clients
         1. The system shall provide a search bar to search for different coaches.
         1. The system shall enable a user to filter their searches in search bar by area of expertise. 
         1. The system shall provide a grid view of coaches which are hyperlinked to their profiles.
@@ -150,19 +150,19 @@
             1. Book a free session
             1. Enroll for desired number of sessions 
         1. The system shall allow a client to make a request if he/she has filled the entire profile, including additional details
-    1. Book a Free Session for New Clients
+    1. #### Book a Free Session for New Clients
         1. The system shall allow a client to book a free session with the desired coach. 
         1. The system shall allow client to choose a slot from the available 1 month slots of the coach and send a request. 
         1. The system shall allow coaches to accept or deny session requests.
         1. The system shall book the slot in the calendar for both coach and client if the request is accepted by the coach. 
         1. The system shall add video conferencing details in the slot booked for the session. 
-    1. Enrolment for New Clients
+    1. #### Enrolment for New Clients
         1. The system shall allow client to enrol with a coach for a desirable number of sessions 
         1. The system shall allow client to request for an enrolment with the coach
         1. The system shall allow coach to accept or deny enrolment requests
         1. The system shall direct client to the payment gateway if the request is accepted by the coach.
         1. The system shall create a dedicated coach-client page upon successful payment by the client. 
-    1. Dedicated Page for Coach-Client
+    1. #### Dedicated Page for Coach-Client
         1. The system shall display resources posted to the user such as 
             1. Mind Maps
             1. Notes
@@ -173,48 +173,48 @@
         1. The system shall display a time-bound action plan for the client.
         1. The system shall display announcements posted by the user.
         1. The system shall display number of sessions remaining between coach and client
-    1. Time-bound Action Plan
+    1. #### Time-bound Action Plan
         1. The system shall allow user to schedule weekly actions/tasks for the client
         1. The system shall allow user to add task description
         1. The system shall allow client to mark a task/action as completed before the due date
         1. The system shall allow user to edit and delete scheduled actions
         1. The system shall mark the action as overdue if not completed within the specified time.
-    1. Chat-Box
+    1. #### Chat-Box
         1. The system shall allow a user to send messages less than 1000 characters to his/her connections
-    1. Sharing Resources
+    1. #### Sharing Resources
         1. The system shall allow a user to post announcements (text) to their dedicated page.
         1. The system shall allow a user to post files less than 25 Mb to their dedicated page.
-    1. Calendar Integration
+    1. #### Calendar Integration
         1. The system shall provide a calendar for all users.
         1. The system shall allow a coach to schedule events with a client based on their calendar.
         1. The system shall enable a user to look at upcoming events on his/her calendar.
-    1. Note-taking
+    1. #### Note-taking
         1. The system shall allow a user to take notes along with video conferencing.
         1. The system shall allow a user to post notes in the resources section.
         1. The system shall provide a dedicated page for a user to take individual notes
-    1. Building Mind-Map
+    1. #### Building Mind-Map
         1. The system shall provide a drawing board with view and edit access to the coach
         1. The system shall have a drag and drop functionality to create text boxes
         1. The system shall allow user to add branches to text-boxes
         1. The system shall allow user to add text above branches
         1. The system shall allow user to add branches to existing branches
-    1. Payment Gateway
+    1. #### Payment Gateway
         1. The system shall allow a client to enrol for the desired number of sessions
         1. The system shall allow a client to make domestic payments via online banking or credit/debit cards
-    1. Event Reminders
+    1. #### Event Reminders
         1. The system shall allow a user to set the frequency of receiving reminders/notifications via email.
         1. The system shall provide reminders to client for upcoming sessions and task deadlines.
         1. The system shall provide reminders to coach for upcoming sessions.
         1. The system shall notify the coach in case of a new appointment request
         1. The system shall notify the client in case of a new session invite and when a new task is assigned
-    1. Track Milestones
+    1. #### Track Milestones
         1. The system shall allow coach to set milestones (long term task) for client
         1. The system shall allow the coach to mark a milestone as completed when a client successfully performs corresponding tasks/actions assigned
 
-    1. Linking Psychometric Assessment Portal
+    1. #### Linking Psychometric Assessment Portal
         1. The system shall provide access to an online psychometric assessment service.
         1. The system shall provide access to the assessment report generated to both coach and client.
-    1. Events
+    1. ####Events
         1. The system shall allow a coach to add information about seminars/talks being conducted by him/her.
 
 1. ###  Performance
