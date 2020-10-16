@@ -38,6 +38,7 @@
     1. Interface
 1. ### Supporting Information
     1. Use-Case Diagram
+    1. Architecture Diagram
 
 ## Introduction
 1. ### Purpose
