@@ -245,3 +245,5 @@
 ## Supporting Information
 1. ### Use-Case Diagram
     ![Alt text](https://github.com/SDOS2020/Team_1_Business_Coaching_Platform/blob/main/Images/UseCase.jpg?raw=true "Use-Case")
+2. ### Architecture Diagram
+    ![Alt text](https://github.com/SDOS2020/Team_1_Business_Coaching_Platform/blob/main/Images/Architecture.jpeg?raw=true "Use-Case")
