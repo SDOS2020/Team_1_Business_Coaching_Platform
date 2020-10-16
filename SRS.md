@@ -5,13 +5,13 @@
 <br>
 <h2> Table Of Contents </h2>
 
-1. Introduction
+1. ### Introduction
     1. Purpose
     1. Scope
     1. Overview
     1. Glossary
     1. References
-1. Specific Requirements
+1. ### Specific Requirements
     1. Functionality
     1. Home Page
     1. Signup
@@ -36,7 +36,7 @@
     1. Security	
     1. Design Constraints	
     1. Interface
-1. Supporting Information
+1. ### Supporting Information
     1. Use-Case Diagram
 
 ## Introduction
