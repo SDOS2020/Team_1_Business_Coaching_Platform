@@ -214,7 +214,7 @@
     1. #### Linking Psychometric Assessment Portal
         1. The system shall provide access to an online psychometric assessment service.
         1. The system shall provide access to the assessment report generated to both coach and client.
-    1. ####Events
+    1. #### Events
         1. The system shall allow a coach to add information about seminars/talks being conducted by him/her.
 
 1. ###  Performance
@@ -242,3 +242,6 @@
         1. The user interface for the software shall be compatible with any browser such as Internet Explorer, Mozilla, Google Chrome by which user can access the system.
     1. Hardware Interfaces
         1. The system shall require to connect to the internet. Hardware required would be WAN, Ethernet Cable etc.
+## Supporting Information
+1. ### Use-Case Diagram
+    ![Alt text](https://github.com/SDOS2020/Team_1_Business_Coaching_Platform/blob/main/Images/UseCase.jpg?raw=true "Use-Case")
