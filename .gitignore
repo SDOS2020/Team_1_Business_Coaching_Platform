@@ -139,3 +139,5 @@ cython_debug/
 .vscode/settings.json
 Business_Coaching_Platform/db.sqlite3
 Business_Coaching_Platform/db.sqlite3
+
+.idea/
