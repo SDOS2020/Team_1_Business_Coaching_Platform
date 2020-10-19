@@ -10,7 +10,7 @@ def registerCoach(request):
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
-            return redirect('home')
+            return redirect('login')
     else:
         form = CoachRegisterForm()
     return render(request, 'user/register-coach.html', {'form': form})
@@ -22,11 +22,13 @@ def registerCoachee(request):
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
-            return redirect('home')
+            return redirect('login')
     else:
         form = CoacheeRegisterForm()
     return render(request, 'user/register-coachee.html', {'form': form})
 
 def login(request):
     return render(request, 'user/login.html', {})
-
+    
+def profile(request):
+    return render(request, 'user/profile.html', {})

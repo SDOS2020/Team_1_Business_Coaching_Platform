@@ -2,12 +2,4 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <p>You are at home page</p>
-    <!-- Add Separate Coach and Coachee Registeration links and a sign in page-->
-    <a href="{% url 'registerCoach' %}">Register as Coach Today!</a>
-    <br>
-    <a href="{% url 'registerCoachee' %}">Register as Client Today!</a>
-    <br>
-    <p>Existing User?</p>
-    <br>
-    <a href="{% url 'login' %}">Sign in</a>
 {% endblock content %}
