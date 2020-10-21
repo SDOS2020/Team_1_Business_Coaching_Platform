@@ -19,11 +19,6 @@ class CoacheeRegisterView(CreateView):
     template_name = 'user/register-coachee.html'
 
 
-def login(request):
-    return render(request, 'user/login.html')
-
-
-
 @login_required
 @is_coach
 def profile(request):
