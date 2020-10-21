@@ -1,34 +1,30 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .forms import CoachRegisterForm, CoacheeRegisterForm
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from .forms import CoachCreationForm, CoacheeCreationForm
+from .decorators import is_coach, is_coachee
 
 
-def registerCoach(request):
-    if request.method == 'POST':
-        form = CoachRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}!')
-            return redirect('login')
-    else:
-        form = CoachRegisterForm()
-    return render(request, 'user/register-coach.html', {'form': form})
+class CoachRegisterView(CreateView):
+    form_class = CoachCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'user/register-coach.html'
 
-def registerCoachee(request):
-    if request.method == 'POST':
-        form = CoacheeRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}!')
-            return redirect('login')
-    else:
-        form = CoacheeRegisterForm()
-    return render(request, 'user/register-coachee.html', {'form': form})
+
+class CoacheeRegisterView(CreateView):
+    form_class = CoacheeCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'user/register-coachee.html'
+
 
 def login(request):
-    return render(request, 'user/login.html', {})
-    
+    return render(request, 'user/login.html')
+
+
+
+@login_required
+@is_coach
 def profile(request):
-    return render(request, 'user/profile.html', {})
+    return render(request, 'user/profile.html')
