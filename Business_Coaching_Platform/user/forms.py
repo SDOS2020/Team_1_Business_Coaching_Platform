@@ -37,6 +37,36 @@ class CoachCreationForm(UserCreationForm):
         coach.save()
         return user
 
+class CoachUpdateForm(UserChangeForm):
+    description = forms.CharField(max_length = 500)
+    
+    class Meta:
+        model = CustomUser
+        fields = ('description', 'email', 'first_name', 'last_name', 'age')
+
+
+    @transaction.atomic
+    def save(self):
+        user = super().save()
+        user.save()
+        coach = Coach.objects.get(user = user)
+        coach.description = self.cleaned_data.get('description')
+        coach.save()
+        return user
+
+
+class CoacheeUpdateForm(UserChangeForm):
+    
+    class Meta:
+        model = CustomUser
+        fields = ('email', 'first_name', 'last_name', 'age')
+
+
+    @transaction.atomic
+    def save(self):
+        user = super().save()
+        return user
+
 
 class CoacheeCreationForm(UserCreationForm):
     
