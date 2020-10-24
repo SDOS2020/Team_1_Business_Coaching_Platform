@@ -24,62 +24,56 @@ class CoachCreationForm(UserCreationForm):
     description = forms.CharField(max_length = 500)
     
     class Meta:
-        model = CustomUser
+        model = Coach
         fields = ('username', 'email', 'description', 'first_name', 'last_name', 'age')
     
     @transaction.atomic
     def save(self):
-        user = super().save()
-        user.is_coach = True
-        user.is_coachee = False
-        user.save()
-        coach = Coach.objects.create(user = user, description = self.cleaned_data.get('description'))
+        coach = super().save()
+        coach.is_coach = True
+        coach.is_coachee = False
         coach.save()
-        return user
+        return coach
+
 
 class CoachUpdateForm(UserChangeForm):
     description = forms.CharField(max_length = 500)
-    
+    password = None
+
     class Meta:
-        model = CustomUser
+        model = Coach
         fields = ('description', 'email', 'first_name', 'last_name', 'age')
 
-
     @transaction.atomic
     def save(self):
-        user = super().save()
-        user.save()
-        coach = Coach.objects.get(user = user)
-        coach.description = self.cleaned_data.get('description')
+        coach = super().save()
         coach.save()
-        return user
-
-
-class CoacheeUpdateForm(UserChangeForm):
-    
-    class Meta:
-        model = CustomUser
-        fields = ('email', 'first_name', 'last_name', 'age')
-
-
-    @transaction.atomic
-    def save(self):
-        user = super().save()
-        return user
+        return coach
 
 
 class CoacheeCreationForm(UserCreationForm):
     
     class Meta:
-        model = CustomUser
+        model = Coachee
         fields = ('username', 'email', 'first_name', 'last_name', 'age')
     
     @transaction.atomic
     def save(self):
-        user = super().save()
-        user.is_coach = False
-        user.is_coachee = True
-        user.save()
-        coachee = Coachee.objects.create(user = user)
+        coachee = super().save()
+        coachee.is_coach = False
+        coachee.is_coachee = True
         coachee.save()
-        return user
+        return coachee
+
+
+class CoacheeUpdateForm(UserChangeForm):
+    password = None
+
+    class Meta:
+        model = Coachee
+        fields = ('email', 'first_name', 'last_name', 'age')
+
+    @transaction.atomic
+    def save(self):
+        coachee = super().save()
+        return coachee
