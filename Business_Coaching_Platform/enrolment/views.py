@@ -1,10 +1,21 @@
-from django.shortcuts import render
-
-# Create your views here.
-
-from django.http import HttpResponse
+from user.models import Coach
+from rest_framework.viewsets import ModelViewSet
+from .serializers import CoachSerializer
 
 
-def findCoach(request):
-    return HttpResponse("Hello, world. You're at the find coach page.")
+#a grid view of all coaches
+class FindCoachViewSet(ModelViewSet):
+    queryset = Coach.objects.all()
+    serializer_class = CoachSerializer
 
+#Info about selected coach
+class DisplayCoachViewSet(ModelViewSet):
+    pass
+
+#View for choosing slots for booking a free session
+class FreeSessionViewSet(ModelViewSet):
+    pass
+
+#View for enrolling with a coach
+class EnrolmentViewSet(ModelViewSet):
+    pass

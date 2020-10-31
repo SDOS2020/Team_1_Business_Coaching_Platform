@@ -1,3 +1,4 @@
+
 {% extends "home/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
@@ -10,5 +11,15 @@
         </div>
       </div>
       <!-- FORM HERE -->
+      {% if user.is_coach %}
+        <small class="text-muted">
+          <a class="ml-2" href="{% url 'update_coach' pk=user.pk %}">Update Profile</a>
+        </small>
+      {% endif %}
+      {% if user.is_coachee %}
+        <small class="text-muted">
+          <a class="ml-2" href="{% url 'update_coachee' pk=user.pk %}">Update Profile</a>
+        </small>
+      {% endif %}
     </div>
 {% endblock content %}
