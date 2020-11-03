@@ -3,7 +3,15 @@
 {% block content %}
     <div class="content-section">
       <div class="media">
-        <!-- <img class="rounded-circle account-img" src="{{ user.profile.image.url }}"> -->
+        
+        {% if user.is_coach %}
+          <img class="rounded-circle account-img" src="{{ user.coach.profile_photo.url }}">
+        {% endif %}
+
+        {% if user.is_coachee %}
+        <img class="rounded-circle account-img" src="{{ user.coachee.profile_photo.url }}">
+        {% endif %}
+        
         <div class="media-body">
           <h2 class="account-heading">{{ user.username }}</h2>
           <p class="text-secondary">{{ user.email }}</p>

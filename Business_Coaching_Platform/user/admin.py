@@ -1,38 +1,37 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.contrib.auth.admin import UserAdmin
-from .forms import CustomUserCreationForm, CoacheeCreationForm, CoachCreationForm
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from .forms import CustomUserCreationForm, CustomUserChangeForm , CoacheeCreationForm, CoachCreationForm
 from .models import CustomUser, Coach, Coachee
 
 
-class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(BaseUserAdmin):
+    # The forms to add and change user instances
+    form = CustomUserChangeForm
     add_form = CustomUserCreationForm
-    model = CustomUser
-    list_display = ['username', 'email', 'first_name', 'last_name', 'age', 'is_coach', 'is_coachee']
-    fieldsets = UserAdmin.fieldsets + (
-        (('Other'), {'fields': ('age', 'is_coach', 'is_coachee')}),
+
+    # The fields to be used in displaying the User model.
+    # These override the definitions on the base UserAdmin
+    # that reference specific fields on auth.User.
+    list_display = ('email', 'age', 'is_coach', 'is_coachee', 'is_admin')
+    list_filter = ('is_admin',)
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('Personal info', {'fields': ('age', 'is_coach', 'is_coachee')}),
+        ('Permissions', {'fields': ('is_admin',)}),
     )
-
-class CoachAdmin(UserAdmin):
-    
-    add_form = CoachCreationForm
-    model = Coach
-    list_display = ['username', 'email', 'first_name', 'last_name', 'age', 'is_coach', 'is_coachee']
-    fieldsets = UserAdmin.fieldsets + (
-        (('Other'), {'fields': ('age', 'is_coach', 'is_coachee')}),
+    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
+    # overrides get_fieldsets to use this attribute when creating a user.
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2'),
+        }),
     )
-
-
-class CoacheeAdmin(UserAdmin):
-    
-    add_form = CoacheeCreationForm
-    model = Coachee
-    list_display = ['username', 'email', 'first_name', 'last_name', 'age', 'is_coach', 'is_coachee']
-    fieldsets = UserAdmin.fieldsets + (
-        (('Other'), {'fields': ('age', 'is_coach', 'is_coachee')}),
-    )
-
+    search_fields = ('email',)
+    ordering = ('email',)
+    filter_horizontal = ()
 
 admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Coach, CoachAdmin)
-admin.site.register(Coachee, CoacheeAdmin)
+admin.site.register(Coach)
+admin.site.register(Coachee)
