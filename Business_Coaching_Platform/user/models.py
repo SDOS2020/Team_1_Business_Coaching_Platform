@@ -2,6 +2,7 @@ from django.db import models
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
+
 class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None):
         """
@@ -84,6 +85,6 @@ class Coachee(models.Model):
     first_name = models.CharField(max_length = 100)
     last_name = models.CharField(max_length = 100)
     profile_photo = models.ImageField(null = True, blank = True, upload_to = 'profile_photos')
-    
+
     class Meta:
         verbose_name = 'Coachee'

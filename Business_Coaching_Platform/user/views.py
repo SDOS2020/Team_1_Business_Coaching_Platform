@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from .forms import CoachCreationForm, CoacheeCreationForm, CoachUpdateForm, CoacheeUpdateForm
+from .forms import CoachCreationForm, CoacheeCreationForm
 from .decorators import is_coach, is_coachee
 from .models import Coach, Coachee, CustomUser
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -22,27 +22,27 @@ class CoacheeRegisterView(CreateView):
 
 
 class CoachUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    form_class = CoachUpdateForm
     success_url = reverse_lazy('profile')
     template_name = 'user/update_coach.html'
-    model = CustomUser    
-    
+    model = Coach    
+    fields = ['first_name', 'last_name', 'description', 'profile_photo']
+
     def test_func(self):
-        user = self.get_object()
-        if self.request.user == user:
+        coach = self.get_object()
+        if self.request.user.coach == coach:
             return True
         return False
 
 
 class CoacheeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    form_class = CoacheeUpdateForm
     success_url = reverse_lazy('profile')
     template_name = 'user/update_coachee.html'
-    model = CustomUser    
-    
+    model = Coachee    
+    fields = ['first_name', 'last_name', 'profile_photo']
+
     def test_func(self):
-        user = self.get_object()
-        if self.request.user == user:
+        coachee = self.get_object()
+        if self.request.user.coachee == coachee:
             return True
         return False
 
