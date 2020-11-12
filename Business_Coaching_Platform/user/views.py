@@ -38,13 +38,14 @@ class ConnectionViewSet(viewsets.ViewSet):
         return Response([], status = status.HTTP_400_BAD_REQUEST)
     
     def retrieve(self, request, pk = None):
-        if request.user.is_coach and pk:
-            connection = Connection.objects.get (coach_id = request.user.coach.id, pk = pk)
+        requested_user = get_object_or_404(CustomUser, pk = pk)
+        if request.user.is_coach and requested_user.is_coachee and Connection.objects.filter(coach_id = request.user.coach.id, coachee = requested_user.coachee).exists():
+            connection = get_object_or_404(Connection, coach_id = request.user.coach.id, coachee = requested_user.coachee)
             serializer = ConnectionSerializer(connection)         
             return Response(serializer.data)
-        if request.user.is_coachee and pk:
-            connection = Connection.objects.get (coachee_id = request.user.coachee.id, pk = pk)
-            serializer = ConnectionSerializer(connection)         
+        if request.user.is_coachee and requested_user.is_coach and Connection.objects.filter(coachee_id = request.user.coachee.id, coach = requested_user.coach).exists():
+            connection = get_object_or_404(Connection, coachee_id = request.user.coachee.id, coach = requested_user.coach)
+            serializer = ConnectionSerializer(connection)
             return Response(serializer.data)
         return Response([], status = status.HTTP_400_BAD_REQUEST)
 
@@ -108,15 +109,11 @@ class CoacheeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 @login_required
 def profile(request, pk = None):
     requested_user = get_object_or_404(CustomUser, pk = pk)
-
     if requested_user.is_coach and request.user == requested_user:
         return render(request, 'user/profile_coach.html', {'profile' : requested_user})
     
     elif requested_user.is_coach:
-        connection = None
-        if request.user.is_coachee and Connection.objects.filter(coach = requested_user.coach, coachee = request.user.coachee).exists():
-            connection = Connection.objects.get(coach = requested_user.coach, coachee = request.user.coachee)
-        return render(request, 'user/profile_coach_view.html', {'profile' : requested_user, 'connection' : connection})
+        return render(request, 'user/profile_coach_view.html', {'profile' : requested_user})
 
     elif requested_user.is_coachee:
         return render(request, 'user/profile_coachee.html', {'profile' : requested_user})

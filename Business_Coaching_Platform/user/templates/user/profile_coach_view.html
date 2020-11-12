@@ -11,17 +11,11 @@
 		  	<p class="text-secondary">{{ profile.email }}</p>
 		</div>
 	</div>
-	<div id="app">
-		<div v-if="!my_request">
-			<button  v-on:click="send_request({{ profile.pk }})"> Send Request</button>
+	{% if user.is_coachee %}
+		<div id="app">
+			<button :disabled="my_request.length != 0" v-on:click="send_request({{ profile.pk }})">[[ get_send_request_button_message ]]</button>
 		</div>
-		<div v-else-if="my_request.accepted">
-			<button :disabled="my_request.accepted" v-on:click="send_request({{ profile.pk }})"> Connection</button>
-		</div>
-		<div v-else-if="!my_request.accepted" >
-			<button :disabled="!my_request.accepted" v-on:click="send_request({{ profile.pk }})"> Request Pending</button>
-		</div>
-	</div>
+	{% endif %}
 	<script>
 		var app = new Vue({
 			delimiters: ['[[', ']]'],
@@ -33,12 +27,12 @@
 			await this.get_my_request();
 		},
 		methods: {
-			async get_my_request() {
-				var response = await fetch('http://127.0.0.1:8000/viewset/connection/' + String({{connection.pk}}) + '/');
+			async get_my_request() { 
+				var response = await fetch('http://127.0.0.1:8000/api/connection/' + String({{profile.pk}}) + '/');
 				this.my_request = await response.json();
 			},
 			async send_request(coach_pk){
-				var url = 'http://127.0.0.1:8000/viewset/connection/';
+				var url = 'http://127.0.0.1:8000/api/connection/';
 				await fetch(url, {
 					method: 'post',
 					headers: {
@@ -49,9 +43,24 @@
 						"pk": coach_pk,
 					})
 				});
-				await this.get_coachee_requests();
+				await this.get_my_request();
 			},
-		}
+		},
+		computed: {
+			get_send_request_button_message: function () {
+      			if (this.my_request.length == 0){
+					return 'Send Request'
+				}
+				else{
+					if (this.my_request.accepted){
+						return 'Connection'
+					}
+					else{
+						return 'Pending'
+					}
+				}
+    		},
+		},
 		});
 		function getCookie(name) {
 		var cookieValue = null;

@@ -7,8 +7,8 @@ router = DefaultRouter()
 router.register('connection', user_views.ConnectionViewSet, basename='connection')
 
 urlpatterns = [
-    path('viewset/', include(router.urls)),
-    path('viewset/<int:pk>/', include(router.urls)),
+    path('api/', include(router.urls)),
+    path('api/<int:pk>/', include(router.urls)),
     path('register_coach/', user_views.CoachRegisterView.as_view(), name='register_coach'),
     path('update_coach/<int:pk>/', user_views.CoachUpdateView.as_view(), name='update_coach'),
     path('update_coachee/<int:pk>/', user_views.CoacheeUpdateView.as_view(), name='update_coachee'),
