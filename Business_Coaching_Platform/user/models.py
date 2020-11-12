@@ -48,6 +48,10 @@ class CustomUser(AbstractBaseUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = "Users"
+
     def __str__(self):
         return self.email
 
@@ -78,6 +82,7 @@ class Coach(models.Model):
 
     class Meta:    
         verbose_name = 'Coach'
+        verbose_name_plural = "Coaches"
         ordering = ("last_name", "first_name")
     
     def __str__(self):
@@ -93,7 +98,8 @@ class Coachee(models.Model):
 
     class Meta:
         verbose_name = 'Coachee'
-
+        verbose_name_plural = "Coachees"
+    
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
@@ -105,3 +111,8 @@ class Connection(models.Model):
 
     def __str__(self):
         return f"{self.coach} coaches {self.coachee} : {self.accepted}"
+    
+    class Meta:
+        verbose_name = 'Connection'
+        verbose_name_plural = "Connections"
+        unique_together = ['coach', 'coachee']
