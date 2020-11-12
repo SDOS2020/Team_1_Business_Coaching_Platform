@@ -36,7 +36,7 @@
 				await fetch(url, {
 					method: 'post',
 					headers: {
-					'X-CSRFTOKEN' : getCookie('csrftoken'),
+					'X-CSRFTOKEN' : get_cookie('csrftoken'),
 					'Content-Type': 'application/json'
 					},
 					body:JSON.stringify({
@@ -62,7 +62,7 @@
     		},
 		},
 		});
-		function getCookie(name) {
+		function get_cookie(name) {
 		var cookieValue = null;
 		if (document.cookie && document.cookie != '') {
 			var cookies = document.cookie.split(';');
