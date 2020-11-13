@@ -48,6 +48,10 @@ class CustomUser(AbstractBaseUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    class Meta:
+        verbose_name = 'User'
+        verbose_name_plural = "Users"
+
     def __str__(self):
         return self.email
 
@@ -68,23 +72,47 @@ class CustomUser(AbstractBaseUser):
         return self.is_admin
 
 
-
 class Coach(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE) 
+    user = models.OneToOneField(CustomUser, on_delete = models.CASCADE) 
     first_name = models.CharField(max_length = 100)
     last_name = models.CharField(max_length = 100)
     description = models.TextField(max_length = 1000)
     profile_photo = models.ImageField(null = True, blank = True, upload_to = 'profile_photos')
-    
+    linkedin = models.URLField(max_length = 100, blank = True, null = True)
+
     class Meta:    
         verbose_name = 'Coach'
+        verbose_name_plural = "Coaches"
+        ordering = ("last_name", "first_name")
+    
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 class Coachee(models.Model): 
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete = models.CASCADE)
     first_name = models.CharField(max_length = 100)
     last_name = models.CharField(max_length = 100)
     profile_photo = models.ImageField(null = True, blank = True, upload_to = 'profile_photos')
+    linkedin = models.URLField(max_length = 100, blank = True, null = True)
 
     class Meta:
         verbose_name = 'Coachee'
+        verbose_name_plural = "Coachees"
+    
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+class Connection(models.Model):
+    coach = models.ForeignKey(Coach, on_delete = models.CASCADE)
+    coachee = models.ForeignKey(Coachee, on_delete = models.CASCADE)
+    accepted = models.BooleanField(default = False)
+
+    def __str__(self):
+        return f"{self.coach} coaches {self.coachee} : {self.accepted}"
+    
+    class Meta:
+        verbose_name = 'Connection'
+        verbose_name_plural = "Connections"
+        unique_together = ['coach', 'coachee']
