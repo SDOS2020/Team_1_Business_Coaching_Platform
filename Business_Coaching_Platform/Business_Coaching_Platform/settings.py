@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'Dedicated_Page.apps.DedicatedPageConfig',
     'home.apps.HomeConfig',
     'user.apps.UserConfig',
     'dashboard.apps.DashboardConfig',
