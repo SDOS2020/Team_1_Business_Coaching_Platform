@@ -1,43 +1,41 @@
 <div id="app">
     <div class="wrapper">
         <form id="search">
-          Search <input name="query" v-model="searchQuery">
+          Search <input name="query" v-model="search_query">
         </form>
         <div id="grid-template">
-          <div class="table-header-wrapper">
-            <table class="table-header">
-              <thead>
-                <th v-for="key in columns"
-                  @click="sortBy(key)"
-                  :class="{ active: sortKey == key }"
-                >
-                  [[ key | capitalize ]]
-                  <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
-                </th>
-              </thead>
-            </table>
-          </div>
-          <!-- <p><router-link to="/profile">Profile</router-link></p> -->
-          <div class="table-body-wrapper">
-            <table class="table-body">
-              <tbody>
-                <tr v-for="entry in filteredData">
-                    <td v-for="key in columns"> 
-                        <template v-if="key == 'first_name'"> 
-                          [[ entry["first_name"] ]] [[ entry["last_name"] ]]
-                        </template>
-                        <template v-else-if="key == 'profile_photo'">
-                            <img v-bind:src="get_pic(entry)">
-                        </template>
-                        <template v-else>[[ entry[key] ]]</template>
-                    </td>
-                    <td>
-                        <a href="http://127.0.0.1:8000/profile/"><button>Visit Profile</button></a>
-                    </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <div class="table-header-wrapper">
+                <table class="table-header">
+                <thead>
+                    <th v-for="key in columns"
+                    @click="sort_by(key)"
+                    :class="{ active: sort_key == key }">
+                    [[ key | capitalize ]]
+                    <span class="arrow" :class="sort_orders[key] > 0 ? 'asc' : 'dsc'"></span>
+                    </th>
+                </thead>
+                </table>
+            </div>
+            <div class="table-body-wrapper">
+                <table class="table-body">
+                <tbody>
+                    <tr v-for="entry in filtered_data">
+                        <td v-for="key in columns"> 
+                            <template v-if="key == 'first_name'"> 
+                                [[ entry["first_name"] ]] [[ entry["last_name"] ]]
+                            </template>
+                            <template v-else-if="key == 'profile_photo'">
+                                <img v-bind:src="get_pic(entry)">
+                            </template>
+                            <template v-else>[[ entry[key] ]]</template>
+                        </td>
+                        <td>
+                            <a href="http://127.0.0.1:8000/profile/"><button>Visit Profile</button></a>
+                        </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -47,15 +45,7 @@
 <script src="https://unpkg.com/vue-router@3.4.9/dist/vue-router.js"></script>
 
 <script>
-    const Profile = { template: '<div>profile</div>' }
-    const routes = [
-        { path: '', component: Profile },
-    ]
-    const router = new VueRouter({
-        routes // short for `routes: routes`
-    })
     var app = new Vue({
-        router,
         delimiters: ['[[', ']]'],
         el: '#app',
         props: {
@@ -64,55 +54,51 @@
         },
         data(){
             return {
-                searchQuery : '',
-                sortKey: '',
-                sortOrders: {},
+                search_query : '',
+                sort_key: '',
+                sort_orders: {},
             }
         },
         async created(){
             await this.get_coaches();
-            let sortOrders = {};
+            let sort_orders = {};
             this.columns.forEach(function (key) {
-                sortOrders[key] = 1;
+                sort_orders[key] = 1;
             })
-            this.sortOrders = sortOrders;
+            this.sort_orders = sort_orders;
         },
         methods: {
-            
             async get_coaches() {
                 var response = await fetch('http://127.0.0.1:8000/api/find_coach');
                 this.data = await response.json();
                 this.columns = ['profile_photo','first_name','description'];
             },
-            sortBy(key) {
-                this.sortKey = key;
-                this.sortOrders[key] = this.sortOrders[key] * -1
-                },
+            sort_by(key) {
+                this.sort_key = key;
+                this.sort_orders[key] = this.sort_orders[key] * -1
+            },
             get_pic(entry) {
                 return entry['profile_photo']+'/';
             },
-            visit_profile() {
-
-            }
         },
         computed: {
-            filteredData() {
-                let sortKey = this.sortKey;
-                let filterKey = this.searchQuery && this.searchQuery.toLowerCase();
-                let order = this.sortOrders[sortKey] || 1;
+            filtered_data() {
+                let sort_key = this.sort_key;
+                let filter_key = this.search_query && this.search_query.toLowerCase();
+                let order = this.sort_orders[sort_key] || 1;
                 let data = this.data;
 
-                if (filterKey) {
+                if (filter_key) {
                     data = data.filter(function (row) {
                     return Object.keys(row).some(function (key) {
-                        return String(row[key]).toLowerCase().indexOf(filterKey) > -1;
+                        return String(row[key]).toLowerCase().indexOf(filter_key) > -1;
                     })
                     })
                 }
-                if (sortKey) {
+                if (sort_key) {
                     data = data.slice().sort(function (a, b) {
-                    a = a[sortKey];
-                    b = b[sortKey];
+                    a = a[sort_key];
+                    b = b[sort_key];
                     return (a === b ? 0 : a > b ? 1 : -1) * order;
                     })
                 }
@@ -128,87 +114,85 @@
 </script>
 
 <style>
-body{
-    font-family: Helvetica Neue, Arial, sans-serif;
-    font-size: 14px;
-    text-align: center;
-    color: #555;
-  }
+    body{
+        font-family: Helvetica Neue, Arial, sans-serif;
+        font-size: 14px;
+        text-align: center;
+        color: #555;
+    }
+    
+    table {
+        border-spacing: 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+    th {
+        background-color: #008f68;
+        color: rgba(255,255,255,0.66);
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    td {
+        border-bottom: 1px #008f68 solid;
+    }
+    
+    th, td {
+        min-width: 150px;
+        padding: 10px 20px;
+        text-align: center;
+    }
+    
+    th.active {
+        color: #fff;
+    }
+    
+    th.active .arrow {
+        opacity: 1;
+    }
+    
+    .arrow {
+        display: inline-block;
+        vertical-align: middle;
+        width: 0;
+        height: 0;
+        margin-left: 5px;
+        opacity: 0.66;
+    }
+    
+    .arrow.asc {
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-bottom: 4px solid #FAE042;
+    }
+    
+    .arrow.dsc {
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 4px solid #FAE042;
+    }
+    
+    #grid-template {
+        display: flex;
+        display: -webkit-flex;
+        flex-direction: column;
+        -webkit-flex-direction: column;
+        width: 700px;
+        margin: auto;
+        margin-top: 25px;
+    }
 
-  
-  table {
-    border-spacing: 0;
-    width: 100%;
-    text-align: center;
-  }
-  
-  th {
-    background-color: #008f68;
-    color: rgba(255,255,255,0.66);
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  
-  td {
-    border-bottom: 1px #008f68 solid;
-  }
-  
-  th, td {
-    min-width: 150px;
-    padding: 10px 20px;
-    text-align: center;
-  }
-  
-  th.active {
-    color: #fff;
-  }
-  
-  th.active .arrow {
-    opacity: 1;
-  }
-  
-  .arrow {
-    display: inline-block;
-    vertical-align: middle;
-    width: 0;
-    height: 0;
-    margin-left: 5px;
-    opacity: 0.66;
-  }
-  
-  .arrow.asc {
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-bottom: 4px solid #FAE042;
-  }
-  
-  .arrow.dsc {
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 4px solid #FAE042;
-  }
-  
-  #grid-template {
-    display: flex;
-    display: -webkit-flex;
-    flex-direction: column;
-    -webkit-flex-direction: column;
-    width: 700px;
-    margin: auto;
-    margin-top: 25px;
-  }
+    img {
+    max-width: 80%;
+    height: auto;
+    }
 
-  img {
-  max-width: 80%;
-  height: auto;
-}
-input {
-  width: 50%;
-  margin-top: 30px;
-}
+    input {
+    width: 50%;
+    margin-top: 30px;
+    }
 </style>
-
-
