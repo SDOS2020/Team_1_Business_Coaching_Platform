@@ -12,15 +12,3 @@ class FindCoachViewSet(ModelViewSet):
     serializer_class = CoachSerializer
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
-
-#Info about selected coach
-class DisplayCoachViewSet(ModelViewSet):
-    pass
-
-#View for choosing slots for booking a free session
-class FreeSessionViewSet(ModelViewSet):
-    pass
-
-#View for enrolling with a coach
-class EnrolmentViewSet(ModelViewSet):
-    pass
