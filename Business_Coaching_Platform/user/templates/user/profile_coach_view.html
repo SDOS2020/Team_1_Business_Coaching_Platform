@@ -1,0 +1,99 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<div class="content-section">
+		<div class="media">
+	  	<img class="rounded-circle account-img" src="{{ profile.coach.profile_photo.url }}">        
+	  	<div class="media-body">
+		  	<h2 class="account-heading">{{ profile.username }}</h2>
+		  	<p class="text-secondary">{{ profile.email }}</p>
+		</div>
+	</div>
+	{% if user.is_coachee %}
+		<div id="app">
+			<button :disabled="my_request.length != 0" v-on:click="send_request({{ profile.pk }})">[[ get_send_request_button_message ]]</button>
+		</div>
+	{% endif %}
+	<script>
+		var app = new Vue({
+			delimiters: ['[[', ']]'],
+			el: '#app',
+			data: {
+				my_request: '',
+		},
+		async created() {
+			await this.get_my_request();
+		},
+		methods: {
+			async get_my_request() { 
+				var response = await fetch('http://127.0.0.1:8000/api/connection/' + String({{profile.pk}}) + '/');
+				this.my_request = await response.json();
+			},
+			async send_request(coach_pk){
+				var url = 'http://127.0.0.1:8000/api/connection/';
+				await fetch(url, {
+					method: 'post',
+					headers: {
+					'X-CSRFTOKEN' : get_cookie('csrftoken'),
+					'Content-Type': 'application/json'
+					},
+					body:JSON.stringify({
+						"pk": coach_pk,
+					})
+				});
+				await this.get_my_request();
+			},
+		},
+		computed: {
+			get_send_request_button_message: function () {
+      			if (this.my_request.length == 0){
+					return 'Send Request'
+				}
+				else{
+					if (this.my_request.accepted){
+						return 'Connection'
+					}
+					else{
+						return 'Pending'
+					}
+				}
+    		},
+		},
+		});
+		function get_cookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie != '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = cookies[i].trim();
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) == (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+	</script>
+{% endblock content %}
+
+<style>
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
+  #btt {
+    font-size: 15px;
+    float:right;
+  }
+  #theader {
+    text-align: center
+  }
+</style>

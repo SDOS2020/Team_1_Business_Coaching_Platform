@@ -1,0 +1,16 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+	<div class="content-section">
+		<div class="media">
+	  	<img class="rounded-circle account-img" src="{{ profile.coachee.profile_photo.url }}">        
+	  	<div class="media-body">
+		  	<h2 class="account-heading">{{ profile.username }}</h2>
+		  	<p class="text-secondary">{{ profile.email }}</p>
+		</div>
+    </div>
+    <small class="text-muted">
+        <a class="ml-2" href="{% url 'update_coachee' pk=user.coachee.pk %}">Update Profile</a>
+    </small>
+{% endblock content %}
