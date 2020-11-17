@@ -28,10 +28,10 @@
 		},
 		methods: {
 			async get_my_request() { 
-				var response = await fetch('http://127.0.0.1:8000/api/connection/' + String({{profile.pk}}) + '/');
+				var response = await fetch('http://127.0.0.1:8000/api/connection/' + String('{{ profile.pk }}') + '/');
 				this.my_request = await response.json();
 			},
-			async send_request(coach_pk){
+			async send_request(coach_pk) {
 				var url = 'http://127.0.0.1:8000/api/connection/';
 				await fetch(url, {
 					method: 'post',
@@ -48,14 +48,14 @@
 		},
 		computed: {
 			get_send_request_button_message: function () {
-      			if (this.my_request.length == 0){
+      			if (this.my_request.length == 0) {
 					return 'Send Request'
 				}
-				else{
-					if (this.my_request.accepted){
+				else {
+					if (this.my_request.accepted) {
 						return 'Connection'
 					}
-					else{
+					else {
 						return 'Pending'
 					}
 				}
