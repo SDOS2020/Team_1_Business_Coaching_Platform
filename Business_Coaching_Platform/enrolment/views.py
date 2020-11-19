@@ -1,6 +1,6 @@
 from user.models import Coach
 from rest_framework.viewsets import ModelViewSet
-from .serializers import CoachSerializer
+from user.serializer import CoachSerializer
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated

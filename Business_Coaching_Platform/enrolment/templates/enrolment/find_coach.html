@@ -27,10 +27,10 @@
                             <template v-else-if="key == 'profile_photo'">
                                 <img v-bind:src="get_pic(entry)">
                             </template>
+                            <template v-else-if="key == 'link'">
+                                <a v-bind:href="get_profile(entry)">Visit Profile</button></a>
+                            </template>
                             <template v-else>[[ entry[key] ]]</template>
-                        </td>
-                        <td>
-                            <a href="http://127.0.0.1:8000/profile/"><button>Visit Profile</button></a>
                         </td>
                     </tr>
                 </tbody>
@@ -71,7 +71,7 @@
             async get_coaches() {
                 var response = await fetch('http://127.0.0.1:8000/api/find_coach');
                 this.data = await response.json();
-                this.columns = ['profile_photo','first_name','description'];
+                this.columns = ['profile_photo','first_name','description','link'];
             },
             sort_by(key) {
                 this.sort_key = key;
@@ -79,6 +79,9 @@
             },
             get_pic(entry) {
                 return entry['profile_photo']+'/';
+            },
+            get_profile(entry) {
+                return "http://127.0.0.1:8000/profile/" + entry['user_pk'] + '/';
             },
         },
         computed: {
