@@ -1,0 +1,120 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<div class="content-section">
+		<div class="media">
+	  	<img class="rounded-circle account-img" src="{{ profile.coach.profile_photo.url }}">        
+	  	<div class="media-body">
+		  	<h2 class="account-heading">{{ profile.coach.first_name }} {{ profile.coach.last_name }}</h2>
+		  	<p class="text-secondary">{{ profile.email }}</p>
+		</div>
+	</div>
+	<div id="app">
+			<h2>Requests</h2>
+			<table class="table">
+				<thead>
+					<th id = "theader">#</th>
+					<th>Coachee's Name</th>
+					<th>Current Status</th>
+				</thead>
+				<tbody v-for="(coachee_request, index) in coachee_requests" :key="coachee_request.id">
+					<td>[[ index + 1 ]]</td>
+					<td>[[ coachee_requests[index].coachee.first_name + ' ' + coachee_requests[index].coachee.last_name ]] </td>
+					<td>[[ coachee_requests[index].accepted ]] </td>
+					<td>
+						<button v-on:click="accept(coachee_request)"> accept</button>
+						<button v-on:click="reject(coachee_request)"> reject</button>
+					</td>
+				</tbody>
+			</table>
+	</div>
+	<script>
+		var app = new Vue({
+			delimiters: ['[[', ']]'],
+			el: '#app',
+			data: {
+				coachee_requests:[],
+			},
+			async created() {
+				await this.get_coachee_requests();
+			},
+			methods: {
+				async get_coachee_requests() {
+					var response = await fetch('http://127.0.0.1:8000/api/connection/');
+					this.coachee_requests = await response.json();
+				},
+				async accept(request){
+					var url = 'http://127.0.0.1:8000/api/connection/' + String(request.pk) + '/';
+					await fetch(url, {
+						method: 'put',
+						headers: {
+						'X-CSRFTOKEN' : get_cookie('csrftoken'),
+						'Content-Type': 'application/json'
+						},
+						body:JSON.stringify({
+							"pk": request.pk,
+							"coach" : request.coach,
+							"coachee" : request.coachee,
+							"accepted" : "True"
+						})
+					});
+					await this.get_coachee_requests();
+				},
+				async reject(request){
+					var url = 'http://127.0.0.1:8000/api/connection/' + String(request.pk) + '/';
+					await fetch(url, {
+						method: 'delete',
+						headers: {
+						'X-CSRFTOKEN' : get_cookie('csrftoken'),
+						'Content-Type': 'application/json'
+						},
+						body:JSON.stringify({
+							"pk": request.pk,
+							"coach" : request.coach,
+							"coachee" : request.coachee,
+							"accepted" : "False"
+						})
+					});
+					await this.get_coachee_requests();
+				},
+			}
+		});
+		function get_cookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie != '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = cookies[i].trim();
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) == (name + '=')) {
+					cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+	</script>
+{% endblock content %}
+
+
+
+<style>
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
+  #btt {
+    font-size: 15px;
+    float:right;
+  }
+  #theader {
+    text-align: center
+  }
+</style>
