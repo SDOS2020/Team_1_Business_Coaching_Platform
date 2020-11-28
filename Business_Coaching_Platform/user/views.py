@@ -55,6 +55,7 @@ class ConnectionViewSet(viewsets.ViewSet):
             connection.accepted = True
             connection.save()
             serializer = ConnectionSerializer(connection)
+
             return Response(serializer.data)
         return Response([], status = status.HTTP_400_BAD_REQUEST)
 
