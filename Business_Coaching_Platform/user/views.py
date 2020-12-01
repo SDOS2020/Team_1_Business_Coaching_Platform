@@ -27,6 +27,10 @@ class ConnectionViewSet(viewsets.ViewSet):
             connections = Connection.objects.filter(coach_id = request.user.coach.id)
             serializer = ConnectionSerializer(connections, many = True)         
             return Response(serializer.data)
+        if request.user.is_coachee:
+            connections = Connection.objects.filter(coachee_id = request.user.coachee.id)
+            serializer = ConnectionSerializer(connections, many = True)         
+            return Response(serializer.data)
         return Response([], status = status.HTTP_400_BAD_REQUEST)
     
     def create(self, request):
@@ -55,7 +59,6 @@ class ConnectionViewSet(viewsets.ViewSet):
             connection.accepted = True
             connection.save()
             serializer = ConnectionSerializer(connection)
-
             return Response(serializer.data)
         return Response([], status = status.HTTP_400_BAD_REQUEST)
 
@@ -121,3 +124,18 @@ def profile(request, pk = None):
     
     else:
         return redirect('home')
+
+
+def connection_exists(user1, user2):
+    if user1.is_coach and user2.is_coachee and (Connection.objects.filter(coach = user1.coach, coachee = user2.coachee, accepted = True).exists()):
+        return True
+    if user2.is_coach and user1.is_coachee and (Connection.objects.filter(coach = user2.coach, coachee = user1.coachee, accepted = True).exists()):
+        return True
+    return False
+
+
+def get_all_connections(user):
+    if user.is_coach:
+        return Connection.objects.filter(coach = user.coach, accepted = True)
+    else:
+        return Connection.objects.filter(coachee = user.coachee, accepted = True)

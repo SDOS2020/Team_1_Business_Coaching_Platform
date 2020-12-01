@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from user.serializer import CustomUserSerializer
 from rest_framework import serializers
 
 # noinspection PyUnresolvedReferences
@@ -11,8 +12,10 @@ from .models import Post
 
 
 class PostSerializer(serializers.ModelSerializer):
-    coach = CoachSerializer()
-    coachee = CoacheeSerializer()
+    creator = CustomUserSerializer()
+    viewer = CustomUserSerializer()
+
+
     class Meta:
         model = Post
-        fields = ['title','content','date_posted']
+        fields = ['pk', 'creator','viewer','title','content','date_posted']

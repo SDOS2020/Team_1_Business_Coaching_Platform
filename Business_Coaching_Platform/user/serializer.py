@@ -1,9 +1,31 @@
 from rest_framework import serializers
-from .models import Coach, Coachee, Connection
+from .models import CustomUser, Coach, Coachee, Connection
+
+
+class CustomUserSerializer(serializers.ModelSerializer):
+
+    profile_photo = serializers.SerializerMethodField('get_profile_photo')
+    name = serializers.SerializerMethodField('get_name')
+
+    def get_profile_photo(self, user):
+        if user.is_coach:
+            return str(user.coach.profile_photo)
+        elif user.is_coachee:
+            return str(user.coachee.profile_photo)
+    
+    def get_name(self, user):
+        if user.is_coach:
+            return str(user.coach.first_name)
+        elif user.is_coachee:
+            return str(user.coachee.first_name)
+         
+    class Meta: 
+        model = CustomUser
+        fields = ['pk', 'profile_photo', 'name']
 
 
 class CoachSerializer(serializers.ModelSerializer):
-    # Helps in Python to JSON conversion
+
     user_pk = serializers.SerializerMethodField('get_user_pk')
 
     def get_user_pk(self, coach):
@@ -15,7 +37,7 @@ class CoachSerializer(serializers.ModelSerializer):
 
 
 class CoacheeSerializer(serializers.ModelSerializer):
-    # Helps in Python to JSON conversion
+
     user_pk = serializers.SerializerMethodField('get_user_pk')
 
     def get_user_pk(self, coachee):

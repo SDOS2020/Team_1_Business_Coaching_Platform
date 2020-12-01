@@ -6,18 +6,19 @@ from django.conf import settings
 import os
 # print("PATH",os.getcwd())
 # noinspection PyUnresolvedReferences
-from user.models import Coach, Coachee
+from user.models import CustomUser,Coach, Coachee
 
 
 class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
-    coach = models.ForeignKey(Coach, on_delete = models.CASCADE)
-    coachee = models.ForeignKey(Coachee, on_delete = models.CASCADE)
+    creator = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name='post_creator')
+    viewer = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name='post_viewer')
+
 
     def __str__(self):
-        return self.title
+        return f"{self.creator} -> {self.viewer} : {self.content}"
 
     class Meta:
         verbose_name = 'Post'
