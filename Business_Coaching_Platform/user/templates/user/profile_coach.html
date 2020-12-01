@@ -11,4 +11,7 @@
 		  	<p class="text-secondary">{{ profile.email }}</p>
 		</div>
 	</div>
+	<small class="text-muted">
+        <a class="ml-2" href="{% url 'update_coach' pk=user.coach.pk %}">Update Profile</a>
+    </small>
 {% endblock content %}
