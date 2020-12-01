@@ -1,7 +1,9 @@
 body {
     background: #fafafa;
     color: #333333;
-    margin-top: 5rem;
+    margin-top: 4rem;
+    margin-left: -10rem;
+    
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -13,7 +15,7 @@ body {
   }
   
   .bg-steel {
-    background-color: #5f788a;
+    background-color: #4f7a99;
   }
   
   .site-header .navbar-nav .nav-link {
@@ -29,17 +31,46 @@ body {
   }
   
   .content-section {
-    background: #ffffff;
-    padding: 10px 20px;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
+    background: #baedf7;
+    padding: 20px 30px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
     margin-bottom: 20px;
   }
   
   .article-title {
     color: #444444;
   }
+
+  .welcome-area{
+    padding-top: 92px;
+    padding-bottom: 80px;
+    padding-left: 10px;
+    padding-right: 30px;
+    left:-5rem;
+  }
+
+  .about-area{
+    padding-top: 92px;
+    padding-bottom: 80px;
+    padding-left: 195px;
+    padding-right: -5px;
+    right: -20rem;
+  }
+
+  .welcome-img{
+    width: 50%;
+    height: 50%;
+  }
   
+  /* img {
+    position: absolute;
+    width: 57%;
+    top: 6rem;
+    height: 37%;
+    right: -10rem;
+  } */
+
   a.article-title:hover {
     color: #428bca;
     text-decoration: none;
@@ -47,6 +78,15 @@ body {
   
   .article-content {
     white-space: pre-line;
+  }
+
+  .feature-section {
+    background: #baedf7;
+    padding: 20px 30px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    text-align: center;
   }
   
   .article-img {
