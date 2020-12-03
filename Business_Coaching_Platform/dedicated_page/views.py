@@ -11,7 +11,9 @@ from user.views import connection_exists, get_all_connections
 
 
 class PostViewSet(viewsets.ViewSet):
-
+    """
+        A viewset for viewing and editing post instances.
+    """
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -48,23 +50,11 @@ class PostViewSet(viewsets.ViewSet):
             post.content = request.data['content']
             post.save()
             serializer = PostSerializer(post)
+            return Response(serializer.data)
         return Response([], status=status.HTTP_400_BAD_REQUEST)
 
-        # if request.user.is_coach and request.user.coach.id == request.data['coach']['id'] and post_pk:
-        #     post = Post.objects.get_object_or_404(pk = post_pk, coach = request.user.coach)
-        #     post.title = request.data['title']
-        #     post.content = request.data['content']
-        #     post.save()
-        #     serializer = PostSerializer(post)
-        #     return Response(serializer.data)
-        # elif request.user.is_coachee and request.user.coachee.id == request.data['coachee']['id'] and post_pk:
-        #     post = Post.objects.get_object_or_404(pk=post_pk, coach=request.user.coach)
-        #     post.title = request.data['title']
-        #     post.content = request.data['content']
-        #     post.save()
-        #     serializer = PostSerializer(post)
-        #     return Response(serializer.data)
-        # return Response([], status=status.HTTP_400_BAD_REQUEST)
+    def retrieve(self,request,post_pk = None):
+        return Response([], status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, post_pk = None):
         """
@@ -72,10 +62,9 @@ class PostViewSet(viewsets.ViewSet):
         """
         if post_pk and request.user.id == request.data['creator']['id']:
             post = Post.objects.get_object_or_404(pk = post_pk, creator = request.user)
-            post.title = request.data['title']
-            post.content = request.data['content']
-            post.save()
+            post.delete()
             serializer = PostSerializer(post)
+            return Response(serializer.data)
         return Response([], status=status.HTTP_400_BAD_REQUEST)
 
 
