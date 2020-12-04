@@ -19,19 +19,29 @@ body {
   }
   
   .site-header .navbar-nav .nav-link {
-    color: #cbd5db;
+    color: #484b4d;
   }
   
   .site-header .navbar-nav .nav-link:hover {
-    color: #ffffff;
+    color: #658b9c;
   }
   
   .site-header .navbar-nav .nav-link.active {
-    font-weight: 500;
+    font-weight: 600;
   }
+
+  .site-header {
+    width: 100%;
+    position: fixed;
+    z-index: 600;
+    left: 0;
+    top: 0;
+  }
+
+  
   
   .content-section {
-    background: #baedf7;
+    background: #ffffff;
     padding: 20px 30px;
     border: 1px solid #ffffff;
     border-radius: 5px;
@@ -62,14 +72,6 @@ body {
     width: 50%;
     height: 50%;
   }
-  
-  /* img {
-    position: absolute;
-    width: 57%;
-    top: 6rem;
-    height: 37%;
-    right: -10rem;
-  } */
 
   a.article-title:hover {
     color: #428bca;
