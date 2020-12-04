@@ -98,11 +98,11 @@
 			},
 			methods: {
 				async get_coachee_requests() {
-					var response = await fetch('http://127.0.0.1:8000/api/connection/');
+					var response = await fetch('http://localhost:8000/api/connection/');
 					this.coachee_requests = await response.json();
 				},
 				async accept(request){
-					var url = 'http://127.0.0.1:8000/api/connection/' + String(request.pk) + '/';
+					var url = 'http://localhost:8000/api/connection/' + String(request.pk) + '/';
 					await fetch(url, {
 						method: 'put',
 						headers: {
@@ -119,7 +119,7 @@
 					await this.get_coachee_requests();
 				},
 				async reject(request){
-					var url = 'http://127.0.0.1:8000/api/connection/' + String(request.pk) + '/';
+					var url = 'http://localhost:8000/api/connection/' + String(request.pk) + '/';
 					await fetch(url, {
 						method: 'delete',
 						headers: {
@@ -154,7 +154,7 @@
 	}
 	</script>
 
-	<!-- <div id = "my-calendar" class="container">
+	<div id = "my-calendar" class="container">
 		<button id="authorize_button" style="display: none;">Authorize</button>
 		<button id="signout_button" style="display: none;">Sign Out</button>
 		<pre id="content" style="white-space: pre-wrap;"></pre>
@@ -284,7 +284,7 @@
 		  onreadystatechange="if (this.readyState === 'complete') this.onload()">
 		</script>
 
-	</div> -->
+	</div>
 	<div id="client-pages" class="container">
 		<h2> Client Pages </h2>
 		<table class="table">
@@ -312,7 +312,7 @@
 			},
 			methods: {
 				async get_coachee_requests() {
-					var response = await fetch('http://127.0.0.1:8000/api/connection/');
+					var response = await fetch('http://localhost:8000/api/connection/');
 					this.coachee_requests = await response.json();
 				},
 			}
