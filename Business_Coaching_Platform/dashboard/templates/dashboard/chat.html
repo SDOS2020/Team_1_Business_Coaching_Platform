@@ -41,6 +41,7 @@
                                         {% endif%}
                                         {% if user.is_coachee %}
                                             {% for connection in connections %}
+                                            {% for connection in connections %}
                                             <li class="person" data-chat="{{connection.coachee}}" v-on:click="get_chats({{connection.coach.user.pk}})">
                                                 <div class="user">
                                                     <img src="{{ connection.coach.profile_photo.url }}" alt="Retail Admin">

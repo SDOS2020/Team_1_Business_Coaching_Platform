@@ -1,0 +1,220 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" xmlns:>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router@3.4.9/dist/vue-router.js"></script>
+<div class="new_post" id = "post_container">
+  <div class="testbox">
+    <!--      <form action="/">-->
+    <h1>New Post</h1>
+    <p>Go ahead!</p>
+
+    <!--        <p ref="input"> I am a car</p>-->
+    <h4>Content</h4>
+    <textarea id="content" rows="10"></textarea>
+    <button v-on:click="createPost" >Post</button>
+    <!--        <div class="btn-block">-->
+    <!--          <button @:click="submit">Post</button>-->
+    <!--          <button >Post</button>-->
+  </div>
+  </form>
+</div>
+</div>
+
+<script>
+  var app = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#post_container',
+    data: {
+      current_posts: [],
+      con_pk: '',
+    },
+    async created()
+    {
+      this.con_pk = "{{con.pk}}";
+      var response = await this.get_posts("");
+    },
+    methods: {
+
+      async get_posts(other_user_pk) {
+
+        var url = 'http://127.0.0.1:8000/api/post/';
+        var response = await fetch(url, {
+          method: 'list',
+          headers: {
+            'X-CSRFTOKEN' : get_cookie('csrftoken'),
+            'Content-Type': 'application/json'
+          },
+          body:JSON.stringify({
+            'pk': parseInt(this.con_pk),
+          })
+        });
+        this.current_posts = await response.json();
+        console.log(this.current_posts[0]["date_posted"]);
+        console.log(this.current_posts[1]["date_posted"]);
+      },
+      async createPost() {
+
+        // var response = await fetch('http://127.0.0.1:8000/api/connection/' + String('{{ con.pk }}') + '/');
+        // this.my_request = await response.json();
+
+        // this.con_pk = "{{con.pk}}";
+        var url = 'http://127.0.0.1:8000/api/post/';
+        var msg = String(document.getElementById("content").value)
+        console.log("Message: "+msg);
+        console.log("con_pk: "+this.con_pk);
+        await fetch(url, {
+          method: 'create',
+          headers: {
+            'X-CSRFTOKEN' : get_cookie('csrftoken'),
+            'Content-Type': 'application/json'
+          },
+          body:JSON.stringify({
+            'pk': parseInt(this.con_pk),
+            'content' : msg,
+          })
+        });
+        document.getElementById("content").value = ""
+        // await this.get_chats(parseInt(this.selected_user_pk));
+        return false;
+      },
+    },
+  });
+  function get_cookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  //         async created() {
+  //             await this.get_connections();
+  //             // check base case
+  //             if ("{{user.is_coach}}" == "False"){
+  //                 await this.get_chats("{{connections.0.coach.user.pk}}");
+  //             }
+  //             if ("{{user.is_coach}}" == "True"){
+  //                 await this.get_chats("{{connections.0.coachee.user.pk}}");
+  //             }
+  // 	    },
+  //         methods: {
+  //             async get_chats(other_user_pk) {
+  //                 var response = await fetch('http://127.0.0.1:8000/api/chat/' + String(other_user_pk) + '/');
+  //                 this.selected_chat_data = await response.json();
+  //             },
+  //             async get_connections() {
+  //                 var response = await fetch('http://127.0.0.1:8000/api/connection/');
+  //                 this.my_connections = await response.json();
+  //             },
+  //             async send_message() {
+  //                 var url = 'http://127.0.0.1:8000/api/chat/';
+  //                 var msg = String(document.getElementById("input_message").value).replace(/(\r\n|\n|\r)/gm, "")
+  //                 console.log(msg);
+  //                 await fetch(url, {
+  //                     method: 'post',
+  //                     headers: {
+  //                     'X-CSRFTOKEN' : get_cookie('csrftoken'),
+  //                     'Content-Type': 'application/json'
+  //                     },
+  //                     body:JSON.stringify({
+  //                         "pk": parseInt(this.selected_user_pk),
+  //                         "message" : msg
+  //                     })
+  //                 });
+  //                 document.getElementById("input_message").value = ""
+  //                 await this.get_chats(parseInt(this.selected_user_pk));
+  //             },
+  //         },
+  //         computed: {
+  //             computed_current_chat : function() {
+  //                 var chat_messages =  this.selected_chat_data;
+  //                 let result = '<ul class="chat-box chatContainerScroll" style="height: 500px; overflow: auto; display: flex; flex-direction: column-reverse;">';
+  //                 for(let i = 0;i < chat_messages.length; i++ ) {
+  //                     if (String(chat_messages[i]['sender']['pk']) == '{{user.pk}}'){
+  //                         this.selected_user_pk = chat_messages[i]['receiver']['pk'];
+  //                         result += `<li class="chat-left">
+  //                                         <div class="chat-avatar">
+  //                                             <img src="/images/` + chat_messages[i]["sender"]["profile_photo"] + `" alt="Retail Admin">
+  //                                             <div class="chat-name">` + chat_messages[i]["sender"]["name"] + `</div>
+  //                                         </div>
+  //                                         <div class="chat-text">` + chat_messages[i]["message"] + `</div>
+  //                                         <div class="chat-hour">` + chat_messages[i]["time"] + `<span class="fa fa-check-circle"></span></div>
+  //                                     </li>`
+  //                     }
+  //                     else{
+  //                         this.selected_user_pk = chat_messages[i]['sender']['pk'];
+  //                         result += `<li class="chat-right">
+  //                                         <div class="chat-hour">` + chat_messages[i]["time"] + `<span class="fa fa-check-circle"></span></div>
+  //                                         <div class="chat-text">` + chat_messages[i]["message"] + `</div>
+  //                                         <div class="chat-avatar">
+  //                                             <img src="/images/` + chat_messages[i]["sender"]["profile_photo"] + `" alt="Retail Admin">
+  //                                             <div class="chat-name">` + chat_messages[i]["sender"]["name"] + `</div>
+  //                                         </div>
+  //                                     </li>`
+  //                     }
+  //                 }
+  //                 result += `</ul>`
+  //                 return result
+  //             },
+  //             computed_my_connections : function() {
+  //                 var connections =  this.my_connections;
+  //                 let result = '<ul class="users">';
+  //                 if ("{{user.is_coach}}" == "True"){
+  //                     for(let i = 0;i < connections.length; i++ ) {
+  //                         result += `<li class="person" data-chat="` + String(connections[i]["coachee"]["first_name"]) + `" v-on:click="get_chats(`+ String(connections[i]["coachee"]["user_pk"]) + +`)">
+  //                                         <div class="user">
+  //                                             <img src="`+ String(connections[i]["coachee"]["profile_photo"]) +`" alt="Retail Admin">
+  //                                         </div>
+  //                                         <p class="name-time">
+  //                                             <span class="name">`+ connections[i]["coachee"]["first_name"]+ ` `+ connections[i]["coachee"]["last_name"] + `</span>
+  //                                         </p>
+  //                                     </li>`
+  //                     }
+  //                 }
+  //                 else{
+  //                     for(let i = 0;i < connections.length; i++ ) {
+  //                         result += `<li class="person" data-chat="` + String(connections[i]["coach"]["first_name"]) + `" v-on:click="get_chats(`+ String(connections[i]["coach"]["user_pk"]) + +`)">
+  //                                         <div class="user">
+  //                                             <img src="`+ String(connections[i]["coach"]["profile_photo"]) +`" alt="Retail Admin">
+  //                                         </div>
+  //                                         <p class="name-time">
+  //                                             <span class="name">`+ connections[i]["coach"]["first_name"]+ ` `+ connections[i]["coach"]["last_name"] + `</span>
+  //                                         </p>
+  //                                     </li>`
+  //                     }
+  //                 }
+  //                 result += `</ul>`
+  //                 return result
+  //             }
+  //         }
+  //     });
+  //
+  //     function get_cookie(name) {
+  //     var cookieValue = null;
+  //     if (document.cookie && document.cookie != '') {
+  //         var cookies = document.cookie.split(';');
+  //         for (var i = 0; i < cookies.length; i++) {
+  //             var cookie = cookies[i].trim();
+  //             // Does this cookie string begin with the name we want?
+  //             if (cookie.substring(0, name.length + 1) == (name + '=')) {
+  //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+  //                 break;
+  //             }
+  //         }
+  //     }
+  //     return cookieValue;
+  // }
+</script>
+
+{% endblock content %}
+

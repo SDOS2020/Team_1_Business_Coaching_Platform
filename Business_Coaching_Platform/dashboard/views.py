@@ -36,7 +36,6 @@ def chat_view(request):
         return render(request, 'dashboard/chat.html', {'connections' : connections})
     return redirect('home')
 
-
 class ChatViewSet(viewsets.ViewSet):
     """
         A viewset for viewing and editing Chat instances.
