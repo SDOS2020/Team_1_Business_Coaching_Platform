@@ -143,6 +143,8 @@ cython_debug/
 .vscode/settings.json
 Business_Coaching_Platform/db.sqlite3
 Business_Coaching_Platform/db.sqlite3
+*0001_initial.py
+
 
 *.DS_Store
 static

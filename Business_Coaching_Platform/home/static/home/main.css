@@ -1,7 +1,9 @@
 body {
     background: #fafafa;
     color: #333333;
-    margin-top: 5rem;
+    margin-top: 4rem;
+    margin-left: -10rem;
+    
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -13,33 +15,64 @@ body {
   }
   
   .bg-steel {
-    background-color: #5f788a;
+    background-color: #4f7a99;
   }
   
   .site-header .navbar-nav .nav-link {
-    color: #cbd5db;
+    color: #484b4d;
   }
   
   .site-header .navbar-nav .nav-link:hover {
-    color: #ffffff;
+    color: #658b9c;
   }
   
   .site-header .navbar-nav .nav-link.active {
-    font-weight: 500;
+    font-weight: 600;
   }
+
+  .site-header {
+    width: 100%;
+    position: fixed;
+    z-index: 600;
+    left: 0;
+    top: 0;
+  }
+
+  
   
   .content-section {
     background: #ffffff;
-    padding: 10px 20px;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
+    padding: 20px 30px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
     margin-bottom: 20px;
   }
   
   .article-title {
     color: #444444;
   }
-  
+
+  .welcome-area{
+    padding-top: 92px;
+    padding-bottom: 80px;
+    padding-left: 10px;
+    padding-right: 30px;
+    left:-5rem;
+  }
+
+  .about-area{
+    padding-top: 92px;
+    padding-bottom: 80px;
+    padding-left: 195px;
+    padding-right: -5px;
+    right: -20rem;
+  }
+
+  .welcome-img{
+    width: 50%;
+    height: 50%;
+  }
+
   a.article-title:hover {
     color: #428bca;
     text-decoration: none;
@@ -47,6 +80,15 @@ body {
   
   .article-content {
     white-space: pre-line;
+  }
+
+  .feature-section {
+    background: #baedf7;
+    padding: 20px 30px;
+    border: 1px solid #ffffff;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    text-align: center;
   }
   
   .article-img {
