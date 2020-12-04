@@ -10,7 +10,20 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/asgi/
 import os
 
 from django.core.asgi import get_asgi_application
+from channels.auth import AuthMiddlewareStack
+from channels.security.websocket import AllowedHostsOriginValidator
+from channels.routing import ProtocolTypeRouter, URLRouter
+import notification.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Business_Coaching_Platform.settings')
 
-application = get_asgi_application()
+application = ProtocolTypeRouter({
+  "http": get_asgi_application(),
+  "websocket": AllowedHostsOriginValidator(
+        AuthMiddlewareStack(
+            URLRouter(
+                notification.routing.websocket_urlpatterns
+                )
+            ),
+    ),
+})
