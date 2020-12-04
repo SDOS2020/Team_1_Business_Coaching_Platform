@@ -1,37 +1,51 @@
 {% extends "home/base.html" %}
-{% load crispy_forms_tags %}
+
 <meta name="theme-color" content="#563d7c">
 <body>
     {% block content %}
-    <div class="col-12 col-md-9 col-sm-12">
-        <div class="content-section">
-            <div class="border-bottom mb-4">
-                <h1>A powerful business coaching platform allowing coaches and clients to work together effectively</h1>
+    <section class="welcome-area">
+        <div class="row justify-content-start">
+            <div class="col-md-7" style="margin-left: 2rem;">
+                <div class="content-section" style="background-color: #baedf7;">
+                    <div class="border-bottom mb-4">
+                        <h1>A powerful business coaching platform allowing coaches and clients to work together effectively</h1>
+                    </div>
+                    <div class="border-bottom mb-4">
+                        <h6>Enhances the experience of personalised online coaching for both the coach and the client</h6>
+                    </div>
+                    <h6>Helps build a strong network of world class business coaches that delivers great results</h6>
+                </div>
             </div>
-            <div class="border-bottom mb-4">
-                <h6>Enhances the experience of personalised online coaching for both the coach and the client</h6>
+            <div clas="col-12 col-md-3">
+                <img src="/static/home/business-coaching-img1.jpeg" style="margin-left: 30rem; width:70%; margin-top: -25rem;">
             </div>
-            <h6>Helps build a strong network of world class business coaches that delivers great results</h6>
-        </div>        
-    </div>
-    <div class="col-12 col-md-9 col-sm-12">
-        <div class="content-section">
-            <div class="border-bottom mb-4">
-                <h1>Why Business Coaching?</h1>
+        </div>
+    </section>
+    <section class="about-area">
+        <div class="row justify-content-end">
+            <div class="col-12 col-md-3">
+                <img src="/static/home/business-coaching-img2.jpg" style="margin-right: 10rem; margin-left: -19rem; width:280%; height:140%;">
             </div>
-            <div class="border-bottom mb-4">
-                <h6>Helps you reach your full potential in the corporate world</h6>
+            <div class="col-md-7" style="margin-right: -4rem;">
+                <div class="content-section" style="background-color: #baedf7;">
+                    <div class="border-bottom mb-4">
+                        <h1>Why Business Coaching?</h1>
+                    </div>
+                    <div class="border-bottom mb-4">
+                        <h6>Helps you reach your full potential in the corporate world</h6>
+                    </div>
+                    <div class="border-bottom mb-4">
+                        <h6>Gives you a direction to overcome your fears and weaknesses to fulfil your ultimate goals</h6>
+                    </div>
+                </div>        
             </div>
-            <div class="border-bottom mb-4">
-                <h6>Gives you a direction to overcome your fears and weaknesses to fulfil your ultimate goals</h6>
-            </div>
-            <h6>Learn More</h6>
-        </div>        
-    </div>
-    <section class="uza-services-area section-padding-80-0">
-        <div class="content-section">
+        </div>
+    </section>
+    
+    <section class="uza-services-area section-padding-100-0">
+        <div class="feature-section" style="margin-top: 10rem; margin-left: 10rem;">
             <div class="row">
-                <div class="col-12">
+                <div class="col-md-12" style="padding-right: 50px; padding-left: 50px; padding-bottom: 50px;">
                     <div class="section-heading text-align: center">
                         <h2>All In One Business Coaching Solution</h2>
                         <p>The platform provides great features to make sure you have a memeorable experience</p>
@@ -42,8 +56,7 @@
                 <div class="col-12 col-lg-4">
                     <div class="feature mb-80">
                         <div class="service-icon">
-                            <i class="icon_calender">
-                            </i>
+                            <img src="/static/home/calendar.jpg" style="width: 50%; height: 50%; margin-top: -3rem; margin-bottom: 2rem;">
                         </div>
                         <h5>Meeting Scheduler and Notes</h5>
                         <p>Schedule client meetings easily, set agenda, record notes, assign actions, and manage history in a secure space.</p>
@@ -52,8 +65,7 @@
                 <div class="col-12 col-lg-4">
                     <div class="feature mb-80">
                         <div class="service-icon">
-                            <i class="icon_calender">
-                            </i>
+                            <img src="/static/home/planning.jpg" style="width: 50%; height: 50%; margin-top: -3rem; margin-bottom: 2rem;">
                         </div>
                         <h5>Planning and Actions</h5>
                         <p>Design your clients personal and business vision, business values and 90 day action plans assigned to business team members.</p>
@@ -62,8 +74,7 @@
                 <div class="col-12 col-lg-4">
                     <div class="feature mb-80">
                         <div class="service-icon">
-                            <i class="icon_calender">
-                            </i>
+                            <img src="/static/home/tracking.jpg" style="width: 50%; height: 50%; margin-top: -3rem; margin-bottom: 2rem;">
                         </div>
                         <h5>Business Development Process</h5>
                         <p>Clients can effectively manage their business development contact funnel (lead, prospect, customer)through to the sales pipeline to ensure monthly budgets are achieved.</p>
@@ -74,24 +85,3 @@
     </section>
 {% endblock content %}
 </body>
-
-<style>
-    .content {
-      max-width: 500px;
-      margin: auto;
-    }
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
-    }
-</style>
