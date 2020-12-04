@@ -32,9 +32,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'home.apps.HomeConfig',
     'user.apps.UserConfig',
     'dashboard.apps.DashboardConfig',
+    'notification.apps.NotificationConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -75,7 +77,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Business_Coaching_Platform.wsgi.application'
+ASGI_APPLICATION = "Business_Coaching_Platform.asgi.application"
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -142,10 +153,3 @@ LOGOUT_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ]
-}

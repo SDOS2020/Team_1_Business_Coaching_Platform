@@ -1,16 +1,77 @@
 {% extends "home/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
+    <div class="content-section" style="margin: auto; background-color: azure; padding: 100px; width: 90%; margin-top: auto;">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Join Today</legend>
-                {{ form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Sign Up as a Coachee today!</button>
+            <div class="text-center">
+                <legend class="mb-4">Join Today</legend>
+                <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
             </div>
+            <fieldset class="signup-form">
+                <div class="row">
+                    <div class="col">
+                        <div id="div_id_first_name" class="form-group"> 
+                            <label for="id_first_name" class=" requiredField"></label> 
+                            <div class="form-group"> 
+                                <input type="text" name="first_name" maxlength="500" placeholder="First Name" class="textinput textInput form-control" required="required" id="id_first_name"> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div id="div_id_last_name" class="form-group"> 
+                            <label for="id_last_name" class=" requiredField"></label> 
+                            <div class="form-group">
+                                <input type="text" name="last_name" maxlength="500" placeholder="Last Name" class="textinput textInput form-control" required="required" id="id_last_name"> 
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div id="div_id_email" class="form-group"> 
+                    <label for="id_email" class=" requiredField"></label> 
+                    <div class="form-group"> 
+                        <input type="email" name="email" maxlength="255" autofocus="" class="emailinput form-control" placeholder="Email" required="required" id="id_email"> 
+                    </div> 
+                </div>
+                
+                <div id="div_id_age" class="form-group">
+                    <label for="id_age" class=" requiredField"></label> 
+                    <div class="form-group"> 
+                        <input type="number" name="age" placeholder="Age" class="numberinput form-control" required="required" id="id_age"> 
+                    </div> 
+                </div> 
+                <div id="div_id_profile_photo" class="form-group"> 
+                    <label for="id_profile_photo" class="custom-file-upload requiredField">
+                        <i class="fa fa-cloud-upload"></i> Profile photo
+                    </label> 
+                    <div class="form-group"> 
+                        <input type="file"  name="profile_photo" accept="image/*" class="clearablefileinput form-control-file" required="required"  id="id_profile_photo"> 
+                    </div> 
+                </div> 
+                <div id="div_id_linkedin" class="form-group"> 
+                    <label for="id_linkedin" class=""></label> 
+                    <div class="form-group"> 
+                        <input type="url" name="linkedin" placeholder="URL" maxlength="100" class="urlinput form-control" id="id_linkedin"> 
+                    </div> 
+                </div> 
+                <div id="div_id_password1" class="form-group"> 
+                    <label for="id_password1" class=" requiredField"></label> 
+                    <div class="form-group"> 
+                        <input type="password" name="password1" placeholder="Password" autocomplete="new-password" class="textinput textInput form-control" required="required" id="id_password1"> <small id="hint_id_password1" class="form-text text-muted"><ul><li>Your password can’t be too similar to your other personal information.</li><li>Your password must contain at least 8 characters.</li><li>Your password can’t be a commonly used password.</li><li>Your password can’t be entirely numeric.</li></ul></small> 
+                    </div> 
+                </div> 
+                <div id="div_id_password2" class="form-group"> 
+                    <label for="id_password2" class=" requiredField"></label> 
+                    <div class="form-group"> 
+                        <input type="password" name="password2" placeholder="Password Confirmation" autocomplete="new-password" class="textinput textInput form-control" required="required" id="id_password2"> <small id="hint_id_password2" class="form-text text-muted">Enter the same password as before, for verification.</small> 
+                    </div> 
+                </div>
+            </fieldset>
+
+            <div class="form-group">
+                <button class="btn btn-outline-info btn-block" style="margin-top: 20px;" type="submit">Sign Up as a Coach today!</button>
+            </div>
+
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
@@ -19,3 +80,94 @@
         </div>
     </div>
 {% endblock content %}
+
+<style>
+    body {
+        color: #fff;
+        background: #3598dc;
+        font-family: 'Roboto', sans-serif;
+    }
+    .form-control {
+        height: 41px;
+        background: #f2f2f2;
+        box-shadow: none !important;
+        border: none;
+    }
+    .form-control:focus {
+        background: #e2e2e2;
+    }
+    .form-control, .btn {        
+        border-radius: 3px;
+    }
+    .signup-form {
+        width: 400px;
+        margin: 30px auto;
+    }
+    .signup-form form {
+        color: #999;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        background: #fff;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+    .signup-form h2  {
+        color: #333;
+        font-weight: bold;
+        margin-top: 0;
+    }
+    .signup-form hr  {
+        margin: 0 -30px 20px;
+    }    
+    .signup-form .form-group {
+        margin-bottom: 20px;
+    }
+    .signup-form input[type="checkbox"] {
+        margin-top: 3px;
+    }
+    .signup-form .row div:first-child {
+        padding-right: 10px;
+    }
+    .signup-form .row div:last-child {
+        padding-left: 10px;
+    }
+    .signup-form .btn {        
+        font-size: 16px;
+        font-weight: bold;
+        background: #3598dc;
+        border: none;
+        min-width: 140px;
+    }
+    .signup-form .btn:hover, .signup-form .btn:focus {
+        background: #2389cd !important;
+        outline: none;
+    }
+    .signup-form a {
+        color: #fff;
+        text-decoration: underline;
+    }
+    .signup-form a:hover {
+        text-decoration: none;
+    }
+    .signup-form form a {
+        color: #3598dc;
+        text-decoration: none;
+    }	
+    .signup-form form a:hover {
+        text-decoration: underline;
+    }
+    .signup-form .hint-text  {
+        padding-bottom: 15px;
+        text-align: center;
+    }
+
+    input[type="file"] {
+    display: none;
+    }
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+    </style>
