@@ -3,11 +3,19 @@ const chat_box = Vue.component('chat_box', {
     props: ['user_pk', 'is_coach'],
     data: function () {
         return {
-            chat_data: []
+            chat_data: [],
+            chatSocket: '',
         }
     },
     async created() {
         await this.get_chat_data(); 
+    },
+    async mounted(){
+        this.chatSocket = new WebSocket('ws://' + window.location.host + '/ws/notification/');
+        let chatComponent = this;
+        this.chatSocket.onmessage = async function(e) {
+            await chatComponent.get_chat_data(); 
+        };
     },
     methods: {
         async get_chat_data() {
@@ -17,7 +25,7 @@ const chat_box = Vue.component('chat_box', {
             }
         },
         async send_message() {
-            alert("SAdasd");
+            
             var url = 'http://localhost:8000/api/chat/';
             var msg = String(document.getElementById("input_message").value).replace(/(\r\n|\n|\r)/gm, "")
             console.log(msg);
@@ -33,12 +41,12 @@ const chat_box = Vue.component('chat_box', {
                 })
             });
             document.getElementById("input_message").value = ""
-            await this.get_chats(parseInt(this.user_pk));
+            await this.get_chat_data();
         },
     },
     template: `<div id="selected_chat" class="container floating_chat" >
-                    <div class="row">
-                        <div class="card" style="width:100%;float:right;">
+                    <div class="row" style="float: right; width: 80%">
+                        <div class="card">
                             <div class="card-header">Chat</div>
                             <ul class="chat-list" style="width=300px;height:500px;overflow:scroll;">
                                 <div v-for="chat in chat_data" :key="chat.pk">

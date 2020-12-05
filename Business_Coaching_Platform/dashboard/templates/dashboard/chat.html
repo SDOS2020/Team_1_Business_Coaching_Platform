@@ -1,185 +1,62 @@
 {% extends "home/base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}       
 
-{% block content %}
+{% block add-html %}
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <div class="container" id="chat_container" style="margin-top: 25px;">
-        <div class="content-wrapper">
+    <script src="{% static 'dashboard/components/connection_list.js' %}"></script>
+    <script src="{% static 'dashboard/components/chat_box.js' %}"></script>
 
-            <!-- Row start -->
-            <div class="row gutters">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                    <div class="card m-0">
-                        <!-- Row start -->
-                        <div class="row no-gutters">
-                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3">
-                                <div class="users-container">
-                                    <div class="chat-search-box">
-                                        <div class="input-group">
-                                            <input class="form-control" placeholder="Search">
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-info">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- <div v-html="computed_my_connections"></div> -->
-                                    <ul class="users" style="height: 500px; overflow: auto;">
-                                        {% if user.is_coach %}
-                                            {% for connection in connections %}
-                                            <li class="person" data-chat="{{connection.coachee}}" v-on:click="get_chats({{connection.coachee.user.pk}})">
-                                                <div class="user">
-                                                    <img src="{{ connection.coachee.profile_photo.url }}" alt="Retail Admin">
-                                                </div>
-                                                <p class="name-time">
-                                                    <span class="name">{{ connection.coachee.first_name}} {{ connection.coachee.last_name}}</span>
-                                                </p>
-                                            </li>
-                                            {% endfor %}
-                                        {% endif%}
-                                        {% if user.is_coachee %}
-                                            {% for connection in connections %}
-                                            <li class="person" data-chat="{{connection.coachee}}" v-on:click="get_chats({{connection.coach.user.pk}})">
-                                                <div class="user">
-                                                    <img src="{{ connection.coach.profile_photo.url }}" alt="Retail Admin">
-                                                </div>
-                                                <p class="name-time">
-                                                    <span class="name">{{ connection.coach.first_name}} {{ connection.coach.last_name}}</span>
-                                                </p>
-                                            </li>
-                                            {% endfor %}
-                                        {% endif%}
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
-                                <div class="chat-container">
-                                    <div v-html="computed_current_chat"></div>
-                                    <div class="form-group mt-3 mb-0">
-                                        <textarea v-on:keyup.enter="send_message()" class="form-control" id="input_message" rows="1"  placeholder="Type your message here..."></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Row end -->
-                    </div>
-                </div>
-            </div>
-            <!-- Row end -->
-        </div>
-        <!-- Content wrapper end -->
+
+    <div class="container" id="chat_container" style="margin-top: 25px;">
+        <connection_list v-on:request_chat="load_chat" is_coach="{{user.is_coach}}"></connection_list>
+        <chat_box :user_pk="vue_selected_user_pk" is_coach="{{user.is_coach}}"></chat_box>
     </div>
-    <script>
+    <style>
+        .chat-box {
+            position:fixed;
+            bottom: 0%;
+            right: 0%;
+            width: 30%;
+            height: 50%;
+            margin: 1 auto;
+            border: solid 1px #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .chatbox-container {
+            height: 400px;
+            overflow: auto;
+            direction: rtl;
+        }
+        .message{
+            border-bottom: solid 1px #ccc;
+            padding: 20px;
+            direction: ltr;
+        }
+        .avatar {
+            float: left;
+            margin-right: 5px;
+        }
+        .datetime{
+            float: right;
+            color: #999;
+        }
+    </style>
+    <script>        
         var app = new Vue({
             delimiters: ['[[', ']]'],
             el: '#chat_container',
             data: {
-                selected_chat_data: [],
-                my_connections: [],
-                selected_user_pk: '',
+                vue_selected_user_pk: '',
             },
-            async created() {
-                await this.get_connections();
-                // check base case
-                if ("{{user.is_coach}}" == "False"){
-                    await this.get_chats("{{connections.0.coach.user.pk}}");
-                }
-                if ("{{user.is_coach}}" == "True"){
-                    await this.get_chats("{{connections.0.coachee.user.pk}}");
-                }    
-		    },
             methods: {
-                async get_chats(other_user_pk) {
-                    var response = await fetch('http://127.0.0.1:8000/api/chat/' + String(other_user_pk) + '/');
-                    this.selected_chat_data = await response.json();
+                load_chat(pk) {
+                    this.vue_selected_user_pk = pk; 
                 },
-                async get_connections() {
-                    var response = await fetch('http://127.0.0.1:8000/api/connection/');
-                    this.my_connections = await response.json();
-                },
-                async send_message() {
-                    var url = 'http://127.0.0.1:8000/api/chat/';
-                    var msg = String(document.getElementById("input_message").value).replace(/(\r\n|\n|\r)/gm, "")
-                    console.log(msg);
-                    await fetch(url, {
-                        method: 'post',
-                        headers: {
-                        'X-CSRFTOKEN' : get_cookie('csrftoken'),
-                        'Content-Type': 'application/json'
-                        },
-                        body:JSON.stringify({
-                            "pk": parseInt(this.selected_user_pk),
-                            "message" : msg
-                        })
-                    });
-                    document.getElementById("input_message").value = ""
-                    await this.get_chats(parseInt(this.selected_user_pk));
-                },
+                
             },
-            computed: {
-                computed_current_chat : function() {
-                    var chat_messages =  this.selected_chat_data;
-                    let result = '<ul class="chat-box chatContainerScroll" style="height: 500px; overflow: auto; display: flex; flex-direction: column-reverse;">';
-                    for(let i = 0;i < chat_messages.length; i++ ) {
-                        if (String(chat_messages[i]['sender']['pk']) == '{{user.pk}}'){
-                            this.selected_user_pk = chat_messages[i]['receiver']['pk'];
-                            result += `<li class="chat-left">
-                                            <div class="chat-avatar">
-                                                <img src="/images/` + chat_messages[i]["sender"]["profile_photo"] + `" alt="Retail Admin">
-                                                <div class="chat-name">` + chat_messages[i]["sender"]["name"] + `</div>
-                                            </div>
-                                            <div class="chat-text">` + chat_messages[i]["message"] + `</div>
-                                            <div class="chat-hour">` + chat_messages[i]["time"] + `<span class="fa fa-check-circle"></span></div>
-                                        </li>`    
-                        }
-                        else{
-                            this.selected_user_pk = chat_messages[i]['sender']['pk'];
-                            result += `<li class="chat-right">      
-                                            <div class="chat-hour">` + chat_messages[i]["time"] + `<span class="fa fa-check-circle"></span></div>
-                                            <div class="chat-text">` + chat_messages[i]["message"] + `</div>
-                                            <div class="chat-avatar">
-                                                <img src="/images/` + chat_messages[i]["sender"]["profile_photo"] + `" alt="Retail Admin">
-                                                <div class="chat-name">` + chat_messages[i]["sender"]["name"] + `</div>
-                                            </div>
-                                        </li>`
-                        }
-                    }
-                    result += `</ul>`
-                    return result
-                },
-                computed_my_connections : function() {
-                    var connections =  this.my_connections;
-                    let result = '<ul class="users">';
-                    if ("{{user.is_coach}}" == "True"){
-                        for(let i = 0;i < connections.length; i++ ) {
-                            result += `<li class="person" data-chat="` + String(connections[i]["coachee"]["first_name"]) + `" v-on:click="get_chats(`+ String(connections[i]["coachee"]["user_pk"]) + +`)">
-                                            <div class="user">
-                                                <img src="`+ String(connections[i]["coachee"]["profile_photo"]) +`" alt="Retail Admin">
-                                            </div>
-                                            <p class="name-time">
-                                                <span class="name">`+ connections[i]["coachee"]["first_name"]+ ` `+ connections[i]["coachee"]["last_name"] + `</span>
-                                            </p>
-                                        </li>`
-                        }
-                    }
-                    else{
-                        for(let i = 0;i < connections.length; i++ ) {
-                            result += `<li class="person" data-chat="` + String(connections[i]["coach"]["first_name"]) + `" v-on:click="get_chats(`+ String(connections[i]["coach"]["user_pk"]) + +`)">
-                                            <div class="user">
-                                                <img src="`+ String(connections[i]["coach"]["profile_photo"]) +`" alt="Retail Admin">
-                                            </div>
-                                            <p class="name-time">
-                                                <span class="name">`+ connections[i]["coach"]["first_name"]+ ` `+ connections[i]["coach"]["last_name"] + `</span>
-                                            </p>
-                                        </li>`
-                        }
-                    }
-                    result += `</ul>`
-                    return result
-                }
-            }
         });
 
         function get_cookie(name) {
@@ -420,10 +297,7 @@
         font-weight: 700;
     }
 
-    .chat-container {
-        position: relative;
-        padding: 1rem;
-    }
+    
 
     .chat-container li.chat-left,
     .chat-container li.chat-right {
@@ -576,6 +450,114 @@
         border-radius: 2px;
         margin-bottom: 2rem;
         box-shadow: none;
-    }
+    }  
     </style>
-{% endblock content %}
+    <style>
+        body{
+        background:#eee;    
+        }
+        .chat-list {
+            padding: 0;
+            font-size: .8rem;
+        }
+
+        .chat-list li {
+            margin-bottom: 10px;
+            overflow: auto;
+            color: #ffffff;
+        }
+
+        .chat-list .chat-img {
+            float: left;
+            width: 48px;
+        }
+
+        .chat-list .chat-img img {
+            -webkit-border-radius: 50px;
+            -moz-border-radius: 50px;
+            border-radius: 50px;
+            width: 100%;
+        }
+
+        .chat-list .chat-message {
+            -webkit-border-radius: 50px;
+            -moz-border-radius: 50px;
+            border-radius: 50px;
+            background: #5a99ee;
+            display: inline-block;
+            padding: 10px 20px;
+            position: relative;
+        }
+
+        .chat-list .chat-message:before {
+            content: "";
+            position: absolute;
+            top: 15px;
+            width: 0;
+            height: 0;
+        }
+
+        .chat-list .chat-message h5 {
+            margin: 0 0 5px 0;
+            font-weight: 600;
+            line-height: 100%;
+            font-size: .9rem;
+        }
+
+        .chat-list .chat-message p {
+            line-height: 18px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-list .chat-body {
+            margin-left: 20px;
+            float: left;
+            width: 70%;
+        }
+
+        .chat-list .in .chat-message:before {
+            left: -12px;
+            border-bottom: 20px solid transparent;
+            border-right: 20px solid #5a99ee;
+        }
+
+        .chat-list .out .chat-img {
+            float: right;
+        }
+
+        .chat-list .out .chat-body {
+            float: right;
+            margin-right: 20px;
+            text-align: right;
+        }
+
+        .chat-list .out .chat-message {
+            background: #fc6d4c;
+        }
+
+        .chat-list .out .chat-message:before {
+            right: -12px;
+            border-bottom: 20px solid transparent;
+            border-left: 20px solid #fc6d4c;
+        }
+
+        .card .card-header:first-child {
+            -webkit-border-radius: 0.3rem 0.3rem 0 0;
+            -moz-border-radius: 0.3rem 0.3rem 0 0;
+            border-radius: 0.3rem 0.3rem 0 0;
+        }
+        .card .card-header {
+            background: #17202b;
+            border: 0;
+            font-size: 1rem;
+            padding: .65rem 1rem;
+            position: relative;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .content{
+            margin-top:40px;    
+        }
+    </style>
+{% endblock add-html %}

@@ -9,9 +9,9 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     def get_profile_photo(self, user):
         if user.is_coach:
-            return str(user.coach.profile_photo)
+            return str(user.coach.profile_photo.url)
         elif user.is_coachee:
-            return str(user.coachee.profile_photo)
+            return str(user.coachee.profile_photo.url)
     
     def get_name(self, user):
         if user.is_coach:
