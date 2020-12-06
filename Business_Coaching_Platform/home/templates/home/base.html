@@ -50,16 +50,16 @@
 </header>
 <main role="main" class="container w-200 h-100">
 	<div class="row justify-content-around w-200 h-200">
-	<div class="col-md-12 w-300 h-200">
-		{% if messages %}
-		{% for message in messages %}
-			<div class="alert alert-{{ message.tags }}">
-			{{ message }}
-			</div>
-		{% endfor %}
-		{% endif %}
-		{% block content %}{% endblock %}
-	</div>	
+		<div class="col-md-12 w-300 h-200">
+			{% if messages %}
+			{% for message in messages %}
+				<div class="alert alert-{{ message.tags }}">
+				{{ message }}
+				</div>
+			{% endfor %}
+			{% endif %}
+			{% block content %}{% endblock %}
+		</div>
 	</div>
 </main>
 {% block add-html %}

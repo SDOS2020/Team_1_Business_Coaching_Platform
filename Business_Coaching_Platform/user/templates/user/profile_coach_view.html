@@ -1,21 +1,51 @@
 {% extends "home/base.html" %}
-{% load crispy_forms_tags %}
+<head>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	{% load static %}
+</head>
 
-{% block content %}
+{% block add-html %}
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'dashboard/profile_style.css' %}">
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<div class="content-section">
-		<div class="media">
-	  	<img class="rounded-circle account-img" src="{{ profile.coach.profile_photo.url }}">        
-	  	<div class="media-body">
-		  	<h2 class="account-heading">{{ profile.username }}</h2>
-		  	<p class="text-secondary">{{ profile.email }}</p>
+	
+	<div class="container" style="margin-top:2%">
+		<div class="row">
+			<div class="col-lg-12 col-sm-12">
+				<div class="card hovercard">
+					<div class="cardheader"></div>
+					<div class="avatar">
+						<img alt="" src="{{ profile.coach.profile_photo.url }}">
+					</div>
+					<div class="info">
+						{% if user.pk == profile.pk %}
+							<a style="float:right;" href="{% url 'update_coach' pk=profile.coach.pk %}">
+								<i class="fa fa-edit" style="font-size:36px;"></i>
+							</a>
+						{% endif %}
+						<div class="title">
+							<p> {{ profile.coach.first_name }} {{ profile.coach.last_name }}</p>
+						</div>
+						<div class="desc">{{ profile.email }}</div>
+						<div class="desc">{{ profile.coach.description }}</div>
+					</div>
+					<div class="bottom">
+						<a href="{{ profile.coach.linkedin }}">
+							<i class="fa fa-linkedin-square" style="font-size:48px;color:blue"></i>
+						</a>
+						{% if user.is_coachee %}
+							<div id="app" style="margin-top:15px;">
+								<button style="background-color: #40c0e7;border: 1px solid;" :disabled="my_request.length != 0" v-on:click="send_request({{ profile.pk }})">[[ get_send_request_button_message ]]</button>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	{% if user.is_coachee %}
-		<div id="app">
-			<button :disabled="my_request.length != 0" v-on:click="send_request({{ profile.pk }})">[[ get_send_request_button_message ]]</button>
-		</div>
-	{% endif %}
+	
 	<script>
 		var app = new Vue({
 			delimiters: ['[[', ']]'],
@@ -28,11 +58,11 @@
 		},
 		methods: {
 			async get_my_request() { 
-				var response = await fetch('http://127.0.0.1:8000/api/connection/' + String('{{ profile.pk }}') + '/');
+				var response = await fetch('http://localhost:8000/api/connection/' + String('{{ profile.pk }}') + '/');
 				this.my_request = await response.json();
 			},
 			async send_request(coach_pk) {
-				var url = 'http://127.0.0.1:8000/api/connection/';
+				var url = 'http://localhost:8000/api/connection/';
 				await fetch(url, {
 					method: 'post',
 					headers: {
@@ -78,7 +108,7 @@
 		return cookieValue;
 	}
 	</script>
-{% endblock content %}
+{% endblock add-html %}
 
 <style>
   #app {
