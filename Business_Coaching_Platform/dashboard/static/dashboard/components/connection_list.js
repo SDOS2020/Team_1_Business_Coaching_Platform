@@ -1,4 +1,4 @@
-const connection_list = Vue.component('connection_list', {
+const connectionList = Vue.component('connection-list', {
     delimiters: ['[[', ']]'],
     props: ['is_coach'],
     data: function () {
@@ -16,9 +16,9 @@ const connection_list = Vue.component('connection_list', {
         },
     },
     template: `<div id="connection_list">
-                    <ul class="users" style="height: 500px; overflow: auto;">
+                    <ul class="users" style="height: 300px; float: left; width: 200px;">
                         <div v-if='is_coach == "True"'>
-                            <li v-for="connection in my_connections" :key="connection.pk" class="person" v-on:click="$emit('request_chat',connection.coachee.user_pk)">
+                            <li v-for="connection in my_connections" v-if="connection.accepted" :key="connection.pk" class="person" v-on:click="$emit('request_chat',connection.coachee)">
                                 <div class="user">
                                     <img :src="connection.coachee.profile_photo" alt="Profile_photo">
                                 </div>
@@ -28,7 +28,7 @@ const connection_list = Vue.component('connection_list', {
                             </li>
                         </div> 
                         <div v-else>
-                            <li v-for="connection in my_connections" :key="connection.pk" class="person" v-on:click="$emit('request_chat',connection.coach.user_pk)">
+                            <li v-for="connection in my_connections" v-if="connection.accepted" :key="connection.pk" class="person" v-on:click="$emit('request_chat',connection.coach)">
                                 <div class="user">
                                     <img :src="connection.coach.profile_photo" alt="Profile_photo">
                                 </div>

@@ -1,10 +1,12 @@
-const chat_box = Vue.component('chat_box', {
+const chatBox = Vue.component('chat-box', {
     delimiters: ['[[', ']]'],
-    props: ['user_pk', 'is_coach'],
+    props: ['user_pk', 'is_coach', 'user_name'],
     data: function () {
         return {
             chat_data: [],
             chatSocket: '',
+            chatDisplay: false,
+            requestedUserName: "Chat",
         }
     },
     async created() {
@@ -25,7 +27,6 @@ const chat_box = Vue.component('chat_box', {
             }
         },
         async send_message() {
-            
             var url = 'http://localhost:8000/api/chat/';
             var msg = String(document.getElementById("input_message").value).replace(/(\r\n|\n|\r)/gm, "")
             console.log(msg);
@@ -43,39 +44,45 @@ const chat_box = Vue.component('chat_box', {
             document.getElementById("input_message").value = ""
             await this.get_chat_data();
         },
+        toggleDisplay: function(){
+            this.chatDisplay = !this.chatDisplay
+        }
     },
-    template: `<div id="selected_chat" class="container floating_chat" >
-                    <div class="row" style="float: right; width: 80%">
+    template: `<div id="selected_chat" class="container floating_chat" style="position:relative; z-index:1000">
+                    <div class="row" style="float: right; width: 414px; position:fixed;right:5%;bottom:1%;">
                         <div class="card">
-                            <div class="card-header">Chat</div>
-                            <ul class="chat-list" style="width=300px;height:500px;overflow:scroll;">
-                                <div v-for="chat in chat_data" :key="chat.pk">
-                                    <li v-if='user_pk == chat.sender.pk' class="in">
-                                        <div class="chat-img">
-                                            <img alt="Avatar" :src="[[ chat.sender.profile_photo ]]">
-                                        </div>
-                                        <div class="chat-body">
-                                            <div class="chat-message">
-                                                <h5>[[ chat.sender.first_name ]] [[ chat.sender.last_name ]]</h5>
-                                                <p>[[ chat.message ]]</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li v-else class="out">
-                                        <div class="chat-img">
-                                            <img alt="Avatar" :src="[[ chat.sender.profile_photo ]]">
-                                        </div>
-                                        <div class="chat-body">
-                                            <div class="chat-message">
-                                                <h5>[[ chat.sender.first_name ]] [[ chat.sender.last_name ]]</h5>
-                                                <p>[[ chat.message ]]</p>
-                                            </div>
+                           <div v-on:click="toggleDisplay()" class="card-header" style="float: right; width: 414px; cursor:pointer">[[ requestedUserName ]]</div>
+                                <div v-show="chatDisplay" id="chat-messages" >
+                                    <ul class="chat-list" style="width: 414px; height:400px;overflow:scroll;">
+                                        <div v-for="chat in chat_data" :key="chat.pk">
+                                            <li v-if='user_pk == chat.sender.pk' class="in">
+                                                <div class="chat-img">
+                                                    <img alt="Avatar" :src="[[ chat.sender.profile_photo ]]">
+                                                </div>
+                                                <div class="chat-body">
+                                                    <div class="chat-message">
+                                                        <h5>[[ chat.sender.first_name ]] [[ chat.sender.last_name ]]</h5>
+                                                        <p>[[ chat.message ]]</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li v-else class="out">
+                                                <div class="chat-img">
+                                                    <img alt="Avatar" :src="[[ chat.sender.profile_photo ]]">
+                                                </div>
+                                                <div class="chat-body">
+                                                    <div class="chat-message">
+                                                        <h5>[[ chat.sender.first_name ]] [[ chat.sender.last_name ]]</h5>
+                                                        <p>[[ chat.message ]]</p>
+                                                    </div>
+                                                </div> 
+                                            </li> 
                                         </div> 
-                                    </li> 
-                                </div> 
-                            </ul>
-                            <div class="form-group mt-3 mb-0">
-                                <textarea v-on:keyup.enter="send_message()" class="form-control" id="input_message" rows="1"  placeholder="Type your message here..."></textarea>
+                                    </ul>
+                                    <div class="form-group mt-3 mb-0">
+                                        <textarea v-on:keyup.enter="send_message()" class="form-control" id="input_message" rows="1"  placeholder="Type your message here..."></textarea>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -83,7 +90,11 @@ const chat_box = Vue.component('chat_box', {
     `,
     watch: { 
         user_pk: function(new_user_pk, old_user_pk) { // watch it
-            this.get_chat_data(); 
-      }
+            this.get_chat_data();
+            this.chatDisplay = true;
+        },
+        user_name: function(new_user_name, old_user_name) { // watch it
+            this.requestedUserName = new_user_name; 
+        }
     }
 })

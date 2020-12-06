@@ -9,8 +9,8 @@
     <script src="{% static 'dashboard/components/chat_box.js' %}"></script>
 
 
-    <div class="container" id="chat_container" style="margin-top: 25px;">
-        <connection_list v-on:request_chat="load_chat" is_coach="{{user.is_coach}}"></connection_list>
+    <div class="container" id="chat-container" style="margin-top: 25px;">
+        <connection-list v-on:request_chat="load_chat" is_coach="{{user.is_coach}}"></connection-list>
         <chat_box :user_pk="vue_selected_user_pk" is_coach="{{user.is_coach}}"></chat_box>
     </div>
     <style>
