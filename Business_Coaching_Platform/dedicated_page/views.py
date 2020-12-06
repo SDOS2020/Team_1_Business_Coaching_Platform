@@ -13,6 +13,7 @@ from django.db.models import Q
 import html
 
 # Create your views here.
+# @requested_user_is_coach_or_connection
 @login_required
 def dedicated_page(request,pk):
     print("Hi")
@@ -107,15 +108,17 @@ class PostViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         return Response([], status = status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, post_pk = None):
+    def delete(self, request):
         """
         Deletes the Post having primary key as post_pk
         """
-        if post_pk and request.user.id == request.data['creator']['id']:
-            post = Post.objects.get_object_or_404(pk = post_pk, creator = request.user)
-            post.delete()
-            serializer = PostSerializer(post)
-            return Response(serializer.data)
+        post_pk = request.data['post_pk']
+        if post_pk:
+            post = get_object_or_404(Post,pk=post_pk)
+            if request.user.id == post.creator.id:
+                post.delete()
+                serializer = PostSerializer(post)
+                return Response(serializer.data)
         return Response([], status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -124,4 +127,4 @@ def get_posts_between_users(user1, user2):
     Returns all post objects between 2 users sorted by date posted.
     Note: It does not check if they are a connection
     """
-    return Post.objects.filter(Q(creator = user1, viewer = user2) | Q(creator = user2, viewer = user1)).order_by('date_posted')
+    return Post.objects.filter(Q(creator = user1, viewer = user2) | Q(creator = user2, viewer = user1)).order_by('-date_posted')

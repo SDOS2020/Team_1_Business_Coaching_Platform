@@ -25,7 +25,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div v-html="computed_my_connections"></div> -->
+                                     <div v-html="computed_my_connections"></div>
                                     <ul class="users" style="height: 500px; overflow: auto;">
                                         {% if user.is_coach %}
                                             {% for connection in connections %}
@@ -50,6 +50,7 @@
                                                     <span class="name">{{ connection.coach.first_name}} {{ connection.coach.last_name}}</span>
                                                 </p>
                                             </li>
+                                            {% endfor %}
                                             {% endfor %}
                                         {% endif%}
                                     </ul>

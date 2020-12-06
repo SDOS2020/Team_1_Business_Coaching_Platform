@@ -2,25 +2,78 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" xmlns:>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" xmlns:
+      xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/vue-router@3.4.9/dist/vue-router.js"></script>
+
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<!--<link rel="stylesheet" href="fb_post_style.css">-->
+
+
 <div class="new_post" id = "post_container">
   <div class="testbox">
-    <!--      <form action="/">-->
-    <h1>New Post</h1>
-    <p>Go ahead!</p>
-
-    <!--        <p ref="input"> I am a car</p>-->
-    <h4>Content</h4>
-    <textarea id="content" rows="10"></textarea>
-    <button v-on:click="createPost" >Post</button>
-    <!--        <div class="btn-block">-->
-    <!--          <button @:click="submit">Post</button>-->
-    <!--          <button >Post</button>-->
+    <!--    <textarea v-bind:placeholder="Share something with your get_connection_type()" id="content" rows="6"></textarea>-->
+    <textarea v-model="newContent" placeholder="Share something..." id="content" rows="6"></textarea>
+    <div></div>
+    <button id="newPost" :disabled="check_empty" class="button-disabled"  v-on:click="createPost" >Post</button>
   </div>
-  </form>
-</div>
+
+  <div>
+    <!--    <ul>-->
+    <div v-for="post in current_posts">
+      <!--              <img :src="[[ post.creator.profile_photo.url ]]" width="40" height="40" alt="...">-->
+      <!--      <div>-->
+      <!--        <p> images/[[post.creator.profile_photo]] "OOH LA LA"</p>-->
+      <!--        <p> New path: [[get_image_url(post.creator.profile_photo) ]]</p>-->
+      <!--        <p> New path: [[post.creator.profile_photo ]]</p>-->
+      <!--        <img v-bind:src ="get_image_url(post.creator.profile_photo)">-->
+      <!--      </div>-->
+      <div class="container">
+        <div class="col-md-5">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <section class="post-heading">
+                <div class="row">
+                  <div class="col-md-11">
+                    <div class="media">
+                      <div class="media-left">
+                        <a href="#">
+                          <img class="media-object photo-profile" v-bind:src ="post.creator.profile_photo" width="40" height="40" alt="...">
+                        </a>
+                      </div>
+                      <div class="media-body">
+
+                        <a href="#" class="anchor-username"><h4 class="media-heading">[[post.creator.name]]</h4></a>
+                        <a class="anchor-time">[[post.date_posted]] </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-1">
+                    <a href="#"><i v-on:click="deletePost([[post.pk]])" class="glyphicon glyphicon-trash"></i></a>
+                  </div>
+                </div>
+              </section>
+              <section class="post-body">
+                <p>[[post.content]]</p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--      </li>-->
+      <!--    </ul>-->
+      </article>
+    </div>
+
+
+    </form>
+  </div>
+
+
+
 </div>
 
 <script>
@@ -30,9 +83,10 @@
     data: {
       current_posts: [],
       con_pk: '',
+      newContent: '',
+      btnClass: ''
     },
-    async created()
-    {
+    async created() {
       this.con_pk = "{{con.pk}}";
       var response = await this.get_posts("");
     },
@@ -44,16 +98,14 @@
         var response = await fetch(url, {
           method: 'list',
           headers: {
-            'X-CSRFTOKEN' : get_cookie('csrftoken'),
+            'X-CSRFTOKEN': get_cookie('csrftoken'),
             'Content-Type': 'application/json'
           },
-          body:JSON.stringify({
+          body: JSON.stringify({
             'pk': parseInt(this.con_pk),
           })
         });
         this.current_posts = await response.json();
-        console.log(this.current_posts[0]["date_posted"]);
-        console.log(this.current_posts[1]["date_posted"]);
       },
       async createPost() {
 
@@ -63,25 +115,96 @@
         // this.con_pk = "{{con.pk}}";
         var url = 'http://127.0.0.1:8000/api/post/';
         var msg = String(document.getElementById("content").value)
-        console.log("Message: "+msg);
-        console.log("con_pk: "+this.con_pk);
-        await fetch(url, {
-          method: 'create',
-          headers: {
-            'X-CSRFTOKEN' : get_cookie('csrftoken'),
-            'Content-Type': 'application/json'
-          },
-          body:JSON.stringify({
-            'pk': parseInt(this.con_pk),
-            'content' : msg,
-          })
-        });
-        document.getElementById("content").value = ""
+        console.log("I have reached anyway")
+        if (msg !== "") {
+          console.log("Message: " + msg);
+          console.log("con_pk: " + this.con_pk);
+          await fetch(url, {
+            method: 'create',
+            headers: {
+              'X-CSRFTOKEN': get_cookie('csrftoken'),
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              'pk': parseInt(this.con_pk),
+              'content': msg,
+            })
+          });
+          document.getElementById("content").value = "";
+          this.newContent = "";
+        }
+        await this.get_posts();
         // await this.get_chats(parseInt(this.selected_user_pk));
-        return false;
       },
+      async deletePost(post_pk){
+        console.log("del "+post_pk)
+        var url = 'http://127.0.0.1:8000/api/post/';
+        console.log("deletion underway")
+          await fetch(url, {
+            method: 'delete',
+            headers: {
+              'X-CSRFTOKEN': get_cookie('csrftoken'),
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              'post_pk': parseInt(post_pk) ,
+            })
+          });
+          console.log("Deletion done");
+          await this.get_posts();
+      },
+
+
+  },
+
+  computed: {
+    // get_send_request_button_message: function () {
+    //   if (this.my_request.length == 0) {
+    //     return 'Send Request'
+    //   }
+    //   else {
+    //     if (this.my_request.accepted) {
+    //       return 'Connection'
+    //     }
+    //     else {
+    //       return 'Pending'
+    //     }
+    //   }
+    // },
+
+    get_connection_type: function () {
+      console.log("We are here")
+      var type = String("");
+      // if ({{cn.isCoachee}}==true)
+      // if (true) {
+      // console.log("Expr is ");
+      // console.log(String({{con.is_coachee}}));
+      {{con.is_coachee}}
+      if (String()=="True")
+      {
+        type = "client";
+      } else {
+        type = "coach";
+      }
+      return type;
     },
+    check_empty: function (){
+      var msg = String(document.getElementById("content").value);
+      // console.log("Entering");
+      if(this.newContent==="")
+      {
+        document.getElementById("newPost").opacity= 0.6;
+        return true;
+      }
+      else
+      {
+        document.getElementById("newPost").opacity= 0;
+        return false;
+      }
+    },
+  },
   });
+
   function get_cookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -97,124 +220,111 @@
     }
     return cookieValue;
   }
-  //         async created() {
-  //             await this.get_connections();
-  //             // check base case
-  //             if ("{{user.is_coach}}" == "False"){
-  //                 await this.get_chats("{{connections.0.coach.user.pk}}");
-  //             }
-  //             if ("{{user.is_coach}}" == "True"){
-  //                 await this.get_chats("{{connections.0.coachee.user.pk}}");
-  //             }
-  // 	    },
-  //         methods: {
-  //             async get_chats(other_user_pk) {
-  //                 var response = await fetch('http://127.0.0.1:8000/api/chat/' + String(other_user_pk) + '/');
-  //                 this.selected_chat_data = await response.json();
-  //             },
-  //             async get_connections() {
-  //                 var response = await fetch('http://127.0.0.1:8000/api/connection/');
-  //                 this.my_connections = await response.json();
-  //             },
-  //             async send_message() {
-  //                 var url = 'http://127.0.0.1:8000/api/chat/';
-  //                 var msg = String(document.getElementById("input_message").value).replace(/(\r\n|\n|\r)/gm, "")
-  //                 console.log(msg);
-  //                 await fetch(url, {
-  //                     method: 'post',
-  //                     headers: {
-  //                     'X-CSRFTOKEN' : get_cookie('csrftoken'),
-  //                     'Content-Type': 'application/json'
-  //                     },
-  //                     body:JSON.stringify({
-  //                         "pk": parseInt(this.selected_user_pk),
-  //                         "message" : msg
-  //                     })
-  //                 });
-  //                 document.getElementById("input_message").value = ""
-  //                 await this.get_chats(parseInt(this.selected_user_pk));
-  //             },
-  //         },
-  //         computed: {
-  //             computed_current_chat : function() {
-  //                 var chat_messages =  this.selected_chat_data;
-  //                 let result = '<ul class="chat-box chatContainerScroll" style="height: 500px; overflow: auto; display: flex; flex-direction: column-reverse;">';
-  //                 for(let i = 0;i < chat_messages.length; i++ ) {
-  //                     if (String(chat_messages[i]['sender']['pk']) == '{{user.pk}}'){
-  //                         this.selected_user_pk = chat_messages[i]['receiver']['pk'];
-  //                         result += `<li class="chat-left">
-  //                                         <div class="chat-avatar">
-  //                                             <img src="/images/` + chat_messages[i]["sender"]["profile_photo"] + `" alt="Retail Admin">
-  //                                             <div class="chat-name">` + chat_messages[i]["sender"]["name"] + `</div>
-  //                                         </div>
-  //                                         <div class="chat-text">` + chat_messages[i]["message"] + `</div>
-  //                                         <div class="chat-hour">` + chat_messages[i]["time"] + `<span class="fa fa-check-circle"></span></div>
-  //                                     </li>`
-  //                     }
-  //                     else{
-  //                         this.selected_user_pk = chat_messages[i]['sender']['pk'];
-  //                         result += `<li class="chat-right">
-  //                                         <div class="chat-hour">` + chat_messages[i]["time"] + `<span class="fa fa-check-circle"></span></div>
-  //                                         <div class="chat-text">` + chat_messages[i]["message"] + `</div>
-  //                                         <div class="chat-avatar">
-  //                                             <img src="/images/` + chat_messages[i]["sender"]["profile_photo"] + `" alt="Retail Admin">
-  //                                             <div class="chat-name">` + chat_messages[i]["sender"]["name"] + `</div>
-  //                                         </div>
-  //                                     </li>`
-  //                     }
-  //                 }
-  //                 result += `</ul>`
-  //                 return result
-  //             },
-  //             computed_my_connections : function() {
-  //                 var connections =  this.my_connections;
-  //                 let result = '<ul class="users">';
-  //                 if ("{{user.is_coach}}" == "True"){
-  //                     for(let i = 0;i < connections.length; i++ ) {
-  //                         result += `<li class="person" data-chat="` + String(connections[i]["coachee"]["first_name"]) + `" v-on:click="get_chats(`+ String(connections[i]["coachee"]["user_pk"]) + +`)">
-  //                                         <div class="user">
-  //                                             <img src="`+ String(connections[i]["coachee"]["profile_photo"]) +`" alt="Retail Admin">
-  //                                         </div>
-  //                                         <p class="name-time">
-  //                                             <span class="name">`+ connections[i]["coachee"]["first_name"]+ ` `+ connections[i]["coachee"]["last_name"] + `</span>
-  //                                         </p>
-  //                                     </li>`
-  //                     }
-  //                 }
-  //                 else{
-  //                     for(let i = 0;i < connections.length; i++ ) {
-  //                         result += `<li class="person" data-chat="` + String(connections[i]["coach"]["first_name"]) + `" v-on:click="get_chats(`+ String(connections[i]["coach"]["user_pk"]) + +`)">
-  //                                         <div class="user">
-  //                                             <img src="`+ String(connections[i]["coach"]["profile_photo"]) +`" alt="Retail Admin">
-  //                                         </div>
-  //                                         <p class="name-time">
-  //                                             <span class="name">`+ connections[i]["coach"]["first_name"]+ ` `+ connections[i]["coach"]["last_name"] + `</span>
-  //                                         </p>
-  //                                     </li>`
-  //                     }
-  //                 }
-  //                 result += `</ul>`
-  //                 return result
-  //             }
-  //         }
-  //     });
-  //
-  //     function get_cookie(name) {
-  //     var cookieValue = null;
-  //     if (document.cookie && document.cookie != '') {
-  //         var cookies = document.cookie.split(';');
-  //         for (var i = 0; i < cookies.length; i++) {
-  //             var cookie = cookies[i].trim();
-  //             // Does this cookie string begin with the name we want?
-  //             if (cookie.substring(0, name.length + 1) == (name + '=')) {
-  //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-  //                 break;
-  //             }
-  //         }
-  //     }
-  //     return cookieValue;
-  // }
-</script>
 
+</script>
+<style>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
+  }
+  body, div, form, input, p {
+    padding: 0;
+    margin: 0;
+    outline: none;
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 14px;
+    color: #666;
+    line-height: 22px;
+  }
+  h1 {
+    font-weight: 400;
+  }
+  h4 {
+    margin: 22px 0 4px;
+    color: #095484;
+  }
+  .testbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: inherit;
+    padding: 3px;
+  }
+  form {
+    width: 100%;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 2px 5px #ccc;
+  }
+  input {
+    width: calc(100% - 10px);
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    vertical-align: middle;
+  }
+  input:hover, textarea:hover {
+    outline: none;
+    border: 1px solid #095484;
+  }
+  .first-name {
+    margin-bottom: 22px;
+  }
+  span {
+    color: red;
+  }
+  th, td {
+    width: 21%;
+    padding: 15px 0;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    vertical-align: unset;
+    line-height: 18px;
+    font-weight: 400;
+    word-break: break-all;
+  }
+  .first-col {
+    width: 16%;
+    text-align: left;
+  }
+  table {
+    width: 100%;
+  }
+  textarea {
+    width: calc(100% - 6px);
+  }
+  .btn-block {
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .button-disabled{
+    opacity: 0.6;
+  }
+
+    .button-disabled{
+    opacity: 0.0;
+  }
+
+
+  button {
+    width: 150px;
+    padding: 10px;
+    border: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #095484;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #0666a3;
+  }
+  @media (min-width: 568px) {
+    th, td {
+      word-break: keep-all;
+    }
+  }
+</style>
 {% endblock content %}
 

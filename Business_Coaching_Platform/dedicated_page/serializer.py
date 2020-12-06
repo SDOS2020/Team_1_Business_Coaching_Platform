@@ -9,12 +9,19 @@ from user.models import Coach, Coachee
 # noinspection PyUnresolvedReferences
 from user.serializer import CoachSerializer, CoacheeSerializer
 from .models import Post
-
+from django.utils.timezone import now
 
 class PostSerializer(serializers.ModelSerializer):
     creator = CustomUserSerializer()
     viewer = CustomUserSerializer()
+    date_posted = serializers.SerializerMethodField('get_time')
 
+    def get_time(self, post):
+        if post.date_posted.strftime("%m/%d/%Y") == now().strftime("%m/%d/%Y"):
+            return post.date_posted.strftime("%I:%M %p")
+        else:
+            return post.date_posted.strftime("%d %B, %Y %I:%M %p")
+            # return post.date_posted.strftime("%d/%m/%Y %H:%M")
 
     class Meta:
         model = Post
