@@ -49,11 +49,11 @@ const chatBox = Vue.component('chat-box', {
         }
     },
     template: `<div id="selected_chat" class="container floating_chat" style="position:relative; z-index:1000">
-                    <div class="row" style="float: right; width: 414px; position:fixed;right:5%;bottom:1%;">
+                    <div class="row" style="float: right; width: 375px; position:fixed;right:40px;bottom:1%;">
                         <div class="card">
-                           <div v-on:click="toggleDisplay()" class="card-header" style="float: right; width: 414px; cursor:pointer">[[ requestedUserName ]]</div>
-                                <div v-show="chatDisplay" id="chat-messages" >
-                                    <ul class="chat-list" style="width: 414px; height:400px;overflow:scroll;">
+                           <div v-on:click="toggleDisplay()" class="card-header" style="float: right; width: 350px; cursor:pointer">[[ requestedUserName ]]</div>
+                                <div v-show="chatDisplay" id="chat-messages" style="background-color:#e6ffff; ">
+                                    <ul class="chat-list" style="width: 350px; height:400px;overflow:auto; display: flex; flex-direction: column-reverse;">
                                         <div v-for="chat in chat_data" :key="chat.pk">
                                             <li v-if='user_pk == chat.sender.pk' class="in">
                                                 <div class="chat-img">
@@ -94,7 +94,8 @@ const chatBox = Vue.component('chat-box', {
             this.chatDisplay = true;
         },
         user_name: function(new_user_name, old_user_name) { // watch it
-            this.requestedUserName = new_user_name; 
+            this.requestedUserName = new_user_name;
+            this.chatDisplay = true; 
         }
     }
 })

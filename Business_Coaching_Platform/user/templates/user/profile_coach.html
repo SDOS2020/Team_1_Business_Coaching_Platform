@@ -1,17 +1,46 @@
 {% extends "home/base.html" %}
-{% load crispy_forms_tags %}
+<head>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+	{% load static %}
+</head>
 
-{% block content %}
-	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-	<div class="content-section" style="margin: auto; background-color: azure; padding: 100px; width: 80%; margin-top: auto;">
-		<div class="media">
-	  	<img class="rounded-circle account-img" src="{{ profile.coach.profile_photo.url }}">        
-	  	<div class="media-body">
-		  	<h2 class="account-heading">{{ profile.coach.first_name }} {{ profile.coach.last_name }}</h2>
-		  	<p class="text-secondary">{{ profile.email }}</p>
+{% block add-html %}
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'dashboard/profile_style.css' %}">
+		
+	<div class="container" style="margin-top:2%">
+		<div class="row">
+			<div class="col-lg-12 col-sm-12">
+				<div class="card hovercard">
+					<div class="cardheader"></div>
+					<div class="avatar">
+						<img alt="" src="{{ profile.coach.profile_photo.url }}">
+					</div>
+					<div class="info" style="margin-top: 10px;">
+						{% if user.pk == profile.pk %}
+						<a style="float:right;" href="{% url 'update_coach' pk=profile.coach.pk %}">
+						<i class="fa fa-edit" style="font-size:36px;"></i>
+						</a>
+						{% endif %}
+						<div class="title" style="margin-left:40px">
+							{{ profile.coach.first_name }} {{ profile.coach.last_name }}
+						</div>
+						<div class="desc" style="margin-left:40px">
+							{{ profile.coach.description }}
+						</div>
+					</div>
+					<div class="bottom">
+						<a href="{{ profile.coach.linkedin }}" style="margin:5px;">
+						<i class="fa fa-linkedin-square" style="font-size:48px;color:blue"></i>
+						</a>
+						<a href="mailto:{{ profile.email }}" style="margin:5px;">
+						<i class="fa fa-envelope" style="font-size:48px;"></i>
+						</a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	<small class="text-muted">
-        <a class="ml-2" href="{% url 'update_coach' pk=user.coach.pk %}">Update Profile</a>
-    </small>
-{% endblock content %}
+{% endblock add-html %}

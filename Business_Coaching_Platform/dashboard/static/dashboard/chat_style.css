@@ -1,4 +1,4 @@
-<style>
+
 body{margin-top:20px;}
 /*************** 1.Variables ***************/
 
@@ -373,8 +373,7 @@ border-radius: 2px;
 margin-bottom: 2rem;
 box-shadow: none;
 }  
-</style>
-<style>
+
 body{
 background:#eee;    
 }
@@ -427,7 +426,8 @@ background:#eee;
 }
 
 .chat-list .chat-message p {
-    line-height: 18px;
+    font-size: 15px;
+    line-height: 25px;
     margin: 0;
     padding: 0;
 }
@@ -472,7 +472,8 @@ background:#eee;
 .card .card-header {
     background: #17202b;
     border: 0;
-    font-size: 1rem;
+    text-align: center;
+    font-size: 1.5rem;
     padding: .65rem 1rem;
     position: relative;
     font-weight: 600;
@@ -481,4 +482,3 @@ background:#eee;
 .content{
     margin-top:40px;    
 }
-</style>
