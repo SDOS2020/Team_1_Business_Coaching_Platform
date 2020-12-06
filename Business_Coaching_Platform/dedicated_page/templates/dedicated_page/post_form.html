@@ -101,10 +101,6 @@
       },
       async createPost() {
 
-        // var response = await fetch('http://127.0.0.1:8000/api/connection/' + String('{{ con.pk }}') + '/');
-        // this.my_request = await response.json();
-
-        // this.con_pk = "{{con.pk}}";
         var url = 'http://127.0.0.1:8000/api/post/';
         var msg = String(document.getElementById("content").value)
         console.log("I have reached anyway")
