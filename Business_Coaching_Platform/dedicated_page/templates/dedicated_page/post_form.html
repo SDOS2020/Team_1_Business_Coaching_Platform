@@ -18,7 +18,7 @@
     <!--    <textarea v-bind:placeholder="Share something with your get_connection_type()" id="content" rows="6"></textarea>-->
     <textarea v-model="newContent" placeholder="Share something..." id="content" rows="6"></textarea>
     <div></div>
-    <button id="newPost" :disabled="check_empty" class="button-disabled"  v-on:click="createPost" >Post</button>
+    <button id="newPost" :disabled="check_empty" :class="is_active"  v-on:click="createPost" >Post</button>
   </div>
 
   <div>
@@ -84,7 +84,7 @@
       current_posts: [],
       con_pk: '',
       newContent: '',
-      btnClass: ''
+      btnClass: '',
     },
     async created() {
       this.con_pk = "{{con.pk}}";
@@ -140,69 +140,77 @@
         console.log("del "+post_pk)
         var url = 'http://127.0.0.1:8000/api/post/';
         console.log("deletion underway")
-          await fetch(url, {
-            method: 'delete',
-            headers: {
-              'X-CSRFTOKEN': get_cookie('csrftoken'),
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              'post_pk': parseInt(post_pk) ,
-            })
-          });
-          console.log("Deletion done");
-          await this.get_posts();
+        await fetch(url, {
+          method: 'delete',
+          headers: {
+            'X-CSRFTOKEN': get_cookie('csrftoken'),
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            'post_pk': parseInt(post_pk) ,
+          })
+        });
+        console.log("Deletion done");
+        await this.get_posts();
       },
 
 
-  },
-
-  computed: {
-    // get_send_request_button_message: function () {
-    //   if (this.my_request.length == 0) {
-    //     return 'Send Request'
-    //   }
-    //   else {
-    //     if (this.my_request.accepted) {
-    //       return 'Connection'
-    //     }
-    //     else {
-    //       return 'Pending'
-    //     }
-    //   }
-    // },
-
-    get_connection_type: function () {
-      console.log("We are here")
-      var type = String("");
-      // if ({{cn.isCoachee}}==true)
-      // if (true) {
-      // console.log("Expr is ");
-      // console.log(String({{con.is_coachee}}));
-      {{con.is_coachee}}
-      if (String()=="True")
-      {
-        type = "client";
-      } else {
-        type = "coach";
-      }
-      return type;
     },
-    check_empty: function (){
-      var msg = String(document.getElementById("content").value);
-      // console.log("Entering");
-      if(this.newContent==="")
-      {
-        document.getElementById("newPost").opacity= 0.6;
-        return true;
+
+    computed: {
+      // get_send_request_button_message: function () {
+      //   if (this.my_request.length == 0) {
+      //     return 'Send Request'
+      //   }
+      //   else {
+      //     if (this.my_request.accepted) {
+      //       return 'Connection'
+      //     }
+      //     else {
+      //       return 'Pending'
+      //     }
+      //   }
+      // },
+
+      get_connection_type: function () {
+        console.log("We are here")
+        var type = String("");
+        // if ({{cn.isCoachee}}==true)
+        // if (true) {
+        // console.log("Expr is ");
+        // console.log(String({{con.is_coachee}}));
+        {{con.is_coachee}}
+        if (String()=="True")
+        {
+          type = "client";
+        } else {
+          type = "coach";
+        }
+        return type;
+      },
+      check_empty: function (){
+        if(this.newContent==="")
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      },
+
+      is_active: function (){
+        if(this.newContent==="")
+        {
+          return "button-disabled";
+        }
+        else
+        {
+          return "button-enabled";
+        }
       }
-      else
-      {
-        document.getElementById("newPost").opacity= 0;
-        return false;
-      }
+
     },
-  },
   });
 
   function get_cookie(name) {
@@ -300,8 +308,8 @@
     opacity: 0.6;
   }
 
-    .button-disabled{
-    opacity: 0.0;
+  .button-enabled{
+    opacity: 1.0;
   }
 
 
