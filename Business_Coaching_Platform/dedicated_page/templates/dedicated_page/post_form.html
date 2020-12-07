@@ -1,16 +1,44 @@
 {% extends "home/base.html" %}
 
 {% block content %}
+{% load static %}
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" xmlns:
       xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/vue-router@3.4.9/dist/vue-router.js"></script>
 
+
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<!--<link rel="stylesheet" href="fb_post_style.css">-->
+<link rel="stylesheet" type="text/css" href="{% static 'dedicated_page/profile_style.css' %}">
+<!--<link rel="stylesheet" href="static/dedicated_page/profile_style.css">-->
+<!--<link rel="stylesheet" href="profile_style.css">-->
 
+
+
+<div class="card hovercard" style="width: 100%">
+  <div class="cardheader" style="background: url('http://lorempixel.com/850/280/nature/4/');
+  background-size: cover;height: 200px; width: 100%"></div>
+
+  <div class="info" style="margin-top: 10px;">
+    {% if user.pk == profile.pk %}
+    <a style="float:right;" href="{% url 'update_coach' pk=profile.coach.pk %}">
+      <i class="fa fa-edit" style="font-size:36px;"></i>
+    </a>
+    {% endif %}
+    <div class="title" style="margin-left:40px">
+      {{ profile.coach.first_name }} {{ profile.coach.last_name }}
+    </div>
+    <div class="desc" style="margin-left:40px">
+      {{ profile.coach.description }}
+    </div>
+  </div>
+  <!--        <div class="avatar" style="height:150px;">-->
+  <!--          <img alt="" style="width:150px; height:150px; max-width: 150px;"-->
+  <!--               src="{{ profile.coach.profile_photo.url }}">-->
+</div>
+</div>
 
 <div class="new_post" id = "post_container">
   <div class="testbox">
@@ -24,10 +52,10 @@
     <!--    <ul>-->
     <div v-for="post in current_posts">
 
-      <div class="container" style="width:100%; margin-left:300px; ">
-        <div class="col-md-10"  >
+      <div class="container" style="width:100%; margin-left:250px; ">
+        <div class="col-md-10" style="padding: 4px;">
           <div class="panel panel-default">
-            <div class="panel-body" style="width:100%">
+            <div class="panel-body" style="width:100%; padding: 10px;">
               <section class="post-heading">
                 <div class="row">
                   <div class="col-md-11">
@@ -70,41 +98,42 @@
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-
+  <!--Main Sidebar-->
+  <div class="msb" id="msb">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"
+          id="bootstrap-css">
+    <nav class="navbar navbar-default" role="navigation" style="padding-top: 25%;">
+      <div class="side-menu-container" style="margin-top: 10px">
+        <ul class="nav navbar-nav" id="chat-container">
+          <li><a href="#dedicated-pages"><i class="fa fa-dashboard"></i> Posts</a></li>
+          <li class="active"><a href="#my-calendar"><i class="fa fa-puzzle-piece"></i> Schedule Meeting</a></li>
+          <!-- Dropdown-->
+<!--          <li class="panel panel-default" id="dropdown">-->
+<!--            <a data-toggle="collapse" href="#dropdown-lvl1">-->
+<!--              <i class="fa fa-diamond"></i> Connections-->
+<!--              <span class="caret"></span>-->
+<!--            </a>-->
+<!--            &lt;!&ndash; Dropdown level 1 &ndash;&gt;-->
+<!--            <div id="dropdown-lvl1" class="panel-collapse collapse">-->
+<!--              <div class="panel-body">-->
+<!--                <ul class="nav navbar-nav">-->
+<!--                  <connection-list v-on:request_chat="load_chat" is_coach="True">-->
+<!--                  </connection-list>-->
+<!--                </ul>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </li>-->
+          <chat-box :user_pk="vue_selected_user_pk" :user_name="vue_selected_user_username"
+                    is_coach="True"></chat-box>
+        </ul>
+      </div>
+    </nav>
+  </div>
 
 
 </div>
 
-<div class="msb" id="msb">
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"
-        id="bootstrap-css">
-  <nav class="navbar navbar-default" role="navigation" style="padding-top: 25%;">
-    <div class="side-menu-container" style="margin-top: 10px">
-      <ul class="nav navbar-nav" id="chat-container">
-        <li><a href="#dedicated-pages"><i class="fa fa-dashboard"></i> Dedicated Pages</a></li>
-        <li class="active"><a href="#my-calendar"><i class="fa fa-puzzle-piece"></i> Calendar</a></li>
-        <!-- Dropdown-->
-        <li class="panel panel-default" id="dropdown">
-          <a data-toggle="collapse" href="#dropdown-lvl1">
-            <i class="fa fa-diamond"></i> Connections
-            <span class="caret"></span>
-          </a>
-          <!-- Dropdown level 1 -->
-          <div id="dropdown-lvl1" class="panel-collapse collapse">
-            <div class="panel-body">
-              <ul class="nav navbar-nav">
-                <connection-list v-on:request_chat="load_chat" is_coach="True">
-                </connection-list>
-              </ul>
-            </div>
-          </div>
-        </li>
-        <chat-box :user_pk="vue_selected_user_pk" :user_name="vue_selected_user_username"
-                  is_coach="True"></chat-box>
-      </ul>
-    </div>
-  </nav>
-</div>
+
 
 <script>
   var app = new Vue({
@@ -265,8 +294,9 @@
     align-items: center;
     height: inherit;
     padding: 20px;
-    width: 60%;
+    width: 75%;
     margin: auto;
+    margin-left: 250px;
   }
   form {
     width: 100%;
