@@ -11,13 +11,10 @@
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<link rel="stylesheet" type="text/css" href="{% static 'dedicated_page/profile_style.css' %}">
-<!--<link rel="stylesheet" href="static/dedicated_page/profile_style.css">-->
-<!--<link rel="stylesheet" href="profile_style.css">-->
 
 
 
-<div class="card hovercard" style="width: 100%">
+<div class="card hovercard" style="width: 100%; margin-top:6%;">
   <div class="cardheader" style="background: url('http://lorempixel.com/850/280/nature/4/');
   background-size: cover;height: 200px; width: 100%"></div>
 
@@ -34,15 +31,12 @@
       {{ profile.coach.description }}
     </div>
   </div>
-  <!--        <div class="avatar" style="height:150px;">-->
-  <!--          <img alt="" style="width:150px; height:150px; max-width: 150px;"-->
-  <!--               src="{{ profile.coach.profile_photo.url }}">-->
+
 </div>
 </div>
 
 <div class="new_post" id = "post_container">
   <div class="testbox">
-    <!--    <textarea v-bind:placeholder="Share something with your get_connection_type()" id="content" rows="6"></textarea>-->
     <textarea v-model="newContent" placeholder="Share something..." id="content" rows="6"></textarea>
     <div></div>
     <button id="newPost" :disabled="check_empty" :class="is_active"  v-on:click="createPost" >Post</button>
@@ -107,22 +101,7 @@
         <ul class="nav navbar-nav" id="chat-container">
           <li><a href="#dedicated-pages"><i class="fa fa-dashboard"></i> Posts</a></li>
           <li class="active"><a href="#my-calendar"><i class="fa fa-puzzle-piece"></i> Schedule Meeting</a></li>
-          <!-- Dropdown-->
-<!--          <li class="panel panel-default" id="dropdown">-->
-<!--            <a data-toggle="collapse" href="#dropdown-lvl1">-->
-<!--              <i class="fa fa-diamond"></i> Connections-->
-<!--              <span class="caret"></span>-->
-<!--            </a>-->
-<!--            &lt;!&ndash; Dropdown level 1 &ndash;&gt;-->
-<!--            <div id="dropdown-lvl1" class="panel-collapse collapse">-->
-<!--              <div class="panel-body">-->
-<!--                <ul class="nav navbar-nav">-->
-<!--                  <connection-list v-on:request_chat="load_chat" is_coach="True">-->
-<!--                  </connection-list>-->
-<!--                </ul>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </li>-->
+
           <chat-box :user_pk="vue_selected_user_pk" :user_name="vue_selected_user_username"
                     is_coach="True"></chat-box>
         </ul>
@@ -170,10 +149,7 @@
 
         var url = 'http://localhost:8000/api/post/';
         var msg = String(document.getElementById("content").value)
-        console.log("I have reached anyway")
         if (msg !== "") {
-          console.log("Message: " + msg);
-          console.log("con_pk: " + this.con_pk);
           await fetch(url, {
             method: 'create',
             headers: {
@@ -189,12 +165,9 @@
           this.newContent = "";
         }
         await this.get_posts();
-        // await this.get_chats(parseInt(this.selected_user_pk));
       },
       async deletePost(post_pk){
-        console.log("del "+post_pk)
         var url = 'http://localhost:8000/api/post/';
-        console.log("deletion underway")
         await fetch(url, {
           method: 'delete',
           headers: {
@@ -205,7 +178,6 @@
             'post_pk': parseInt(post_pk) ,
           })
         });
-        console.log("Deletion done");
         await this.get_posts();
       },
 
@@ -214,7 +186,6 @@
 
     computed: {
       get_connection_type: function () {
-        console.log("We are here")
         var type = String("");
         {{con.is_coachee}}
         if (String()=="True")

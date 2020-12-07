@@ -16,12 +16,9 @@ import html
 # @requested_user_is_coach_or_connection
 @login_required
 def dedicated_page(request,pk):
-    print("Hi")
     other_user = get_object_or_404(CustomUser, pk=pk)
     if connection_exists(request.user, other_user):
         return render(request, 'dedicated_page/post_form.html',{"con":other_user})#change con with connection
-    else:
-        print("Doesn't exist")
     return redirect('dashboard')
 
 @login_required
@@ -54,15 +51,7 @@ class PostViewSet(viewsets.ViewSet):
         """
         Get posts between the authenticated user and one of his/her connection (whose pk is specified)
         """
-        # print("HEllo")
-        # connections = get_all_connections(request.user)
-        # chats = [ChatSerializer(get_chats_between_users(connection.coach.user, connection.coachee.user), many = True).data for connection in connections]
-        # return Response(chats)
 
-
-        # connections = get_all_connections(request.user)
-        # posts = [PostSerializer(get_posts_between_users(connection.coach.user, connection.coachee.user), many = True).data for connection in connections]
-        # return Response(posts)
         other_user = get_object_or_404(CustomUser, pk = request.data['pk'])
         if connection_exists(request.user, other_user):
             posts = get_posts_between_users(request.user, other_user)
@@ -74,8 +63,6 @@ class PostViewSet(viewsets.ViewSet):
         """
         Creates a Post between authenticated user and one of his/her connection
         """
-        print("My pk is",request.user.pk)
-        print("Hi, create me!")
         other_user = get_object_or_404(CustomUser, pk = request.data['pk'])
         if connection_exists(request.user, other_user):
             post = Post.objects.create(creator = request.user, viewer = other_user, content = html.escape(request.data['content']))
