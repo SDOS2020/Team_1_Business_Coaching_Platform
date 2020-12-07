@@ -11,5 +11,4 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/<int:pk>/', include(router.urls)),
     path('dashboard/', dashboard_views.dashboard, name='dashboard'),
-    path('chat/', dashboard_views.chat_view, name='chat'),
 ]
