@@ -21,7 +21,6 @@ class PostSerializer(serializers.ModelSerializer):
             return post.date_posted.strftime("%I:%M %p")
         else:
             return post.date_posted.strftime("%d %B, %Y %I:%M %p")
-            # return post.date_posted.strftime("%d/%m/%Y %H:%M")
 
     class Meta:
         model = Post
