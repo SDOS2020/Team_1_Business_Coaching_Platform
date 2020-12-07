@@ -24,10 +24,10 @@
     <!--    <ul>-->
     <div v-for="post in current_posts">
 
-      <div class="container">
-        <div class="col-md-5">
+      <div class="container" style="width:100%; margin-left:300px; ">
+        <div class="col-md-10"  >
           <div class="panel panel-default">
-            <div class="panel-body">
+            <div class="panel-body" style="width:100%">
               <section class="post-heading">
                 <div class="row">
                   <div class="col-md-11">
@@ -63,8 +63,47 @@
     </form>
   </div>
 
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/home/main.css">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
+
+
+</div>
+
+<div class="msb" id="msb">
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"
+        id="bootstrap-css">
+  <nav class="navbar navbar-default" role="navigation" style="padding-top: 25%;">
+    <div class="side-menu-container" style="margin-top: 10px">
+      <ul class="nav navbar-nav" id="chat-container">
+        <li><a href="#dedicated-pages"><i class="fa fa-dashboard"></i> Dedicated Pages</a></li>
+        <li class="active"><a href="#my-calendar"><i class="fa fa-puzzle-piece"></i> Calendar</a></li>
+        <!-- Dropdown-->
+        <li class="panel panel-default" id="dropdown">
+          <a data-toggle="collapse" href="#dropdown-lvl1">
+            <i class="fa fa-diamond"></i> Connections
+            <span class="caret"></span>
+          </a>
+          <!-- Dropdown level 1 -->
+          <div id="dropdown-lvl1" class="panel-collapse collapse">
+            <div class="panel-body">
+              <ul class="nav navbar-nav">
+                <connection-list v-on:request_chat="load_chat" is_coach="True">
+                </connection-list>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <chat-box :user_pk="vue_selected_user_pk" :user_name="vue_selected_user_username"
+                  is_coach="True"></chat-box>
+      </ul>
+    </div>
+  </nav>
 </div>
 
 <script>
@@ -202,17 +241,17 @@
 <style>
 
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
-  /* <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
-  } */
-  body, div, form, input, p {
-    padding: 0;
-    margin: 0;
-    outline: none;
-    font-family: Roboto, Arial, sans-serif;
-    font-size: 14px;
-    color: #666;
-    line-height: 22px;
-  }
+                                                                                                                                   /* <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
+                                                                                                                                   } */
+                                                                                                                                 body, div, form, input, p {
+                                                                                                                                   padding: 0;
+                                                                                                                                   margin: 0;
+                                                                                                                                   outline: none;
+                                                                                                                                   font-family: Roboto, Arial, sans-serif;
+                                                                                                                                   font-size: 14px;
+                                                                                                                                   color: #666;
+                                                                                                                                   line-height: 22px;
+                                                                                                                                 }
   h1 {
     font-weight: 400;
   }
@@ -305,6 +344,80 @@
     th, td {
       word-break: keep-all;
     }
+  }
+
+  .msb {
+    width: 200px;
+    background-color: #f5f7f9;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: auto;
+    min-height: 100%;
+    overflow-y: auto;
+    white-space: nowrap;
+    height: 100%;
+    z-index: 1;
+    border-right: 1px solid #ddd;
+  }
+  .msb .navbar {
+    border: none;
+    margin-left: 0;
+    background-color: inherit;
+  }
+  .msb .navbar-header {
+    width: 100%;
+    border-bottom: 1px solid #e7e7e7;
+    margin-bottom: 20px;
+    background: #fff;
+  }
+  .msb .navbar-nav .panel {
+    border: 0 none;
+    box-shadow: none;
+    margin: 0;
+    background: inherit;
+  }
+  .msb .navbar-nav li {
+    display: block;
+    width: 100%;
+  }
+  .msb .navbar-nav li a {
+    padding: 15px;
+    color: #5f5f5f;
+  }
+  .msb .navbar-nav li a .glyphicon,
+  .msb .navbar-nav li a .fa {
+    margin-right: 8px;
+  }
+  .msb .nb {
+    padding-top: 1px;
+    padding-left: 10px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+  /*main content wrapper*/
+  /*globals*/
+  a,
+  a:focus,
+  a:hover {
+    text-decoration: solid;
+  }
+  .msb,
+  .mnb {
+    -moz-animation: slidein 300ms forwards;
+    -o-animation: slidein 300ms forwards;
+    -webkit-animation: slidein 300ms forwards;
+    animation: slidein 300ms forwards;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+  body.msb-x .msb {
+    -moz-animation: slideout 300ms forwards;
+    -o-animation: slideout 300ms forwards;
+    -webkit-animation: slideout 300ms forwards;
+    animation: slideout 300ms forwards;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
   }
 </style>
 {% endblock content %}
