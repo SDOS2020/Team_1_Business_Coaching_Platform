@@ -86,7 +86,7 @@
 
       async get_posts(other_user_pk) {
 
-        var url = 'http://127.0.0.1:8000/api/post/';
+        var url = 'http://localhost:8000/api/post/';
         var response = await fetch(url, {
           method: 'list',
           headers: {
@@ -101,7 +101,7 @@
       },
       async createPost() {
 
-        var url = 'http://127.0.0.1:8000/api/post/';
+        var url = 'http://localhost:8000/api/post/';
         var msg = String(document.getElementById("content").value)
         console.log("I have reached anyway")
         if (msg !== "") {
@@ -126,7 +126,7 @@
       },
       async deletePost(post_pk){
         console.log("del "+post_pk)
-        var url = 'http://127.0.0.1:8000/api/post/';
+        var url = 'http://localhost:8000/api/post/';
         console.log("deletion underway")
         await fetch(url, {
           method: 'delete',
@@ -202,7 +202,6 @@
 </script>
 <style>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
-  }
   body, div, form, input, p {
     padding: 0;
     margin: 0;

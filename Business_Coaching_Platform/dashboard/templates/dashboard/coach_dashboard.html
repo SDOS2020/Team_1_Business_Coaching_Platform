@@ -42,11 +42,11 @@
 			},
 			methods: {
 				async get_coachee_requests() {
-					var response = await fetch('http://127.0.0.1:8000/api/connection/');
+					var response = await fetch('http://localhost:8000/api/connection/');
 					this.coachee_requests = await response.json();
 				},
 				async accept(request){
-					var url = 'http://127.0.0.1:8000/api/connection/' + String(request.pk) + '/';
+					var url = 'http://localhost:8000/api/connection/' + String(request.pk) + '/';
 					await fetch(url, {
 						method: 'put',
 						headers: {
@@ -63,7 +63,7 @@
 					await this.get_coachee_requests();
 				},
 				async reject(request){
-					var url = 'http://127.0.0.1:8000/api/connection/' + String(request.pk) + '/';
+					var url = 'http://localhost:8000/api/connection/' + String(request.pk) + '/';
 					await fetch(url, {
 						method: 'delete',
 						headers: {

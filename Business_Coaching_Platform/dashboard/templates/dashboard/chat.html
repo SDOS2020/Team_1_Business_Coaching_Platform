@@ -94,15 +94,15 @@
 		    },
             methods: {
                 async get_chats(other_user_pk) {
-                    var response = await fetch('http://127.0.0.1:8000/api/chat/' + String(other_user_pk) + '/');
+                    var response = await fetch('http://localhost:8000/api/chat/' + String(other_user_pk) + '/');
                     this.selected_chat_data = await response.json();
                 },
                 async get_connections() {
-                    var response = await fetch('http://127.0.0.1:8000/api/connection/');
+                    var response = await fetch('http://localhost:8000/api/connection/');
                     this.my_connections = await response.json();
                 },
                 async send_message() {
-                    var url = 'http://127.0.0.1:8000/api/chat/';
+                    var url = 'http://localhost:8000/api/chat/';
                     var msg = String(document.getElementById("input_message").value).replace(/(\r\n|\n|\r)/gm, "")
                     console.log(msg);
                     await fetch(url, {

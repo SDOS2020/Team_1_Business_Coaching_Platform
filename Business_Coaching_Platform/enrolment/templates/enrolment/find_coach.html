@@ -69,7 +69,7 @@
         },
         methods: {
             async get_coaches() {
-                var response = await fetch('http://127.0.0.1:8000/api/find_coach');
+                var response = await fetch('http://localhost:8000/api/find_coach');
                 this.data = await response.json();
                 this.columns = ['profile_photo','first_name','description','link'];
             },
@@ -81,7 +81,7 @@
                 return entry['profile_photo']+'/';
             },
             get_profile(entry) {
-                return "http://127.0.0.1:8000/profile/" + entry['user_pk'] + '/';
+                return "http://localhost:8000/profile/" + entry['user_pk'] + '/';
             },
         },
         computed: {

@@ -28,11 +28,11 @@
 		},
 		methods: {
 			async get_my_request() { 
-				var response = await fetch('http://127.0.0.1:8000/api/connection/' + String('{{ profile.pk }}') + '/');
+				var response = await fetch('http://localhost:8000/api/connection/' + String('{{ profile.pk }}') + '/');
 				this.my_request = await response.json();
 			},
 			async send_request(coach_pk) {
-				var url = 'http://127.0.0.1:8000/api/connection/';
+				var url = 'http://localhost:8000/api/connection/';
 				await fetch(url, {
 					method: 'post',
 					headers: {
