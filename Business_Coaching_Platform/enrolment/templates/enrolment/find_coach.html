@@ -1,41 +1,43 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+
 <div id="app">
-    <div class="wrapper">
-        <form id="search">
-          Search <input name="query" v-model="search_query">
-        </form>
-        <div id="grid-template">
-            <div class="table-header-wrapper">
-                <table class="table-header">
-                <thead>
-                    <th v-for="key in columns"
-                    @click="sort_by(key)"
-                    :class="{ active: sort_key == key }">
-                    [[ key | capitalize ]]
-                    <span class="arrow" :class="sort_orders[key] > 0 ? 'asc' : 'dsc'"></span>
-                    </th>
-                </thead>
-                </table>
-            </div>
-            <div class="table-body-wrapper">
-                <table class="table-body">
-                <tbody>
-                    <tr v-for="entry in filtered_data">
-                        <td v-for="key in columns"> 
-                            <template v-if="key == 'first_name'"> 
-                                [[ entry["first_name"] ]] [[ entry["last_name"] ]]
-                            </template>
-                            <template v-else-if="key == 'profile_photo'">
-                                <img v-bind:src="get_pic(entry)">
-                            </template>
-                            <template v-else-if="key == 'link'">
-                                <a v-bind:href="get_profile(entry)">Visit Profile</button></a>
-                            </template>
-                            <template v-else>[[ entry[key] ]]</template>
-                        </td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
+    <form id="search">
+        Search <input name="query" v-model="search_query">
+    </form>
+    <div id="grid-template">
+        <div class="table-header-wrapper">
+            <table class="table-header">
+            <thead>
+                <th v-for="key in columns"
+                @click="sort_by(key)"
+                :class="{ active: sort_key == key }">
+                [[ key | capitalize ]]
+                <span class="arrow" :class="sort_orders[key] > 0 ? 'asc' : 'dsc'"></span>
+                </th>
+            </thead>
+            </table>
+        </div>
+        <div class="table-body-wrapper">
+            <table class="table-body">
+            <tbody>
+                <tr v-for="entry in filtered_data">
+                    <td v-for="key in columns"> 
+                        <template v-if="key == 'first_name'"> 
+                            [[ entry["first_name"] ]] [[ entry["last_name"] ]]
+                        </template>
+                        <template v-else-if="key == 'profile_photo'">
+                            <img class="rounded-circle account-img" v-bind:src="get_pic(entry)">
+                        </template>
+                        <template v-else-if="key == 'link'">
+                            <a v-bind:href="get_profile(entry)">Visit Profile</button></a>
+                        </template>
+                        <template v-else>[[ entry[key] ]]</template>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -110,18 +112,30 @@
         },
         filters: {
             capitalize(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1);
+                if (!str.localeCompare("profile_photo")){
+                    return "";
+                }
+                if (!str.localeCompare("first_name")){
+                    return "Name";
+                }
+                if (!str.localeCompare("description")){
+                    return "Area of Expertise";
+                }
+                return str.charAt(0).toUpperCase() + str.slice(1);
             }
         },
     });
 </script>
 
+
+
 <style>
-    body{
+    #app{
         font-family: Helvetica Neue, Arial, sans-serif;
-        font-size: 14px;
+        font-size: 15px;
         text-align: center;
         color: #555;
+        margin-left: 20px;
     }
     
     table {
@@ -131,8 +145,8 @@
     }
     
     th {
-        background-color: #008f68;
-        color: rgba(255,255,255,0.66);
+        background-color: #baedf7;
+        color: rgba(0, 0, 0, 0.66);
         cursor: pointer;
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -141,7 +155,7 @@
     }
     
     td {
-        border-bottom: 1px #008f68 solid;
+        border-bottom: 1px #555 solid;
     }
     
     th, td {
@@ -151,7 +165,7 @@
     }
     
     th.active {
-        color: #fff;
+        color: #555;
     }
     
     th.active .arrow {
@@ -170,13 +184,13 @@
     .arrow.asc {
         border-left: 4px solid transparent;
         border-right: 4px solid transparent;
-        border-bottom: 4px solid #FAE042;
+        border-bottom: 4px solid rgb(190, 184, 184);
     }
     
     .arrow.dsc {
         border-left: 4px solid transparent;
         border-right: 4px solid transparent;
-        border-top: 4px solid #FAE042;
+        border-top: 4px solid rgb(190, 184, 184);
     }
     
     #grid-template {
@@ -184,18 +198,20 @@
         display: -webkit-flex;
         flex-direction: column;
         -webkit-flex-direction: column;
-        width: 700px;
+        width: 800px;
         margin: auto;
-        margin-top: 25px;
+        margin-top: 35px;
     }
 
     img {
-    max-width: 80%;
+    max-width: 100%;
     height: auto;
     }
 
     input {
-    width: 50%;
+    width: 70%;
     margin-top: 30px;
     }
 </style>
+
+{% endblock content %}
