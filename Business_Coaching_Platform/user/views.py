@@ -121,9 +121,12 @@ def profile(request, pk = None):
     elif requested_user.is_coach:
         return render(request, 'user/profile_coach_view.html', {'profile' : requested_user})
 
-    elif requested_user.is_coachee:
+    elif requested_user.is_coachee and request.user == requested_user:
         return render(request, 'user/profile_coachee.html', {'profile' : requested_user})
     
+    elif requested_user.is_coachee and request.user.is_coach and connection_exists(request.user, requested_user):
+        return render(request, 'user/profile_coachee.html', {'profile' : requested_user})
+
     else:
         return redirect('home')
 

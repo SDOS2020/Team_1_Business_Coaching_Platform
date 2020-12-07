@@ -36,6 +36,7 @@ def chat_view(request):
         return render(request, 'dashboard/chat.html', {'connections' : connections})
     return redirect('home')
 
+
 class ChatViewSet(viewsets.ViewSet):
     """
         A viewset for viewing and editing Chat instances.
@@ -79,4 +80,4 @@ def get_chats_between_users(user1, user2):
     Returns all chat objects between 2 users sorted by date posted. 
     Note: It does not check if they are a connection
     """
-    return Chat.objects.filter(Q(sender = user1, receiver = user2) | Q(sender = user2, receiver = user1)).order_by('-date_posted').desc()
+    return Chat.objects.filter(Q(sender = user1, receiver = user2) | Q(sender = user2, receiver = user1)).order_by('-date_posted')
