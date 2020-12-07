@@ -1,5 +1,4 @@
 {% extends "home/base.html" %}
-{% load crispy_forms_tags %}
 
 {% block content %}
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" xmlns:
@@ -31,7 +30,7 @@
       <!--        <p> New path: [[post.creator.profile_photo ]]</p>-->
       <!--        <img v-bind:src ="get_image_url(post.creator.profile_photo)">-->
       <!--      </div>-->
-      <div class="container">
+      <div class="container" style="width: 150%; margin-left: 400px;">
         <div class="col-md-5">
           <div class="panel panel-default">
             <div class="panel-body">
@@ -231,8 +230,8 @@
 
 </script>
 <style>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
-  }
+  /* <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
+  } */
   body, div, form, input, p {
     padding: 0;
     margin: 0;
@@ -254,7 +253,9 @@
     justify-content: center;
     align-items: center;
     height: inherit;
-    padding: 3px;
+    padding: 20px;
+    width: 60%;
+    margin: auto;
   }
   form {
     width: 100%;
