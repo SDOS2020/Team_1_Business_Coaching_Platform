@@ -23,14 +23,8 @@
   <div>
     <!--    <ul>-->
     <div v-for="post in current_posts">
-      <!--              <img :src="[[ post.creator.profile_photo.url ]]" width="40" height="40" alt="...">-->
-      <!--      <div>-->
-      <!--        <p> images/[[post.creator.profile_photo]] "OOH LA LA"</p>-->
-      <!--        <p> New path: [[get_image_url(post.creator.profile_photo) ]]</p>-->
-      <!--        <p> New path: [[post.creator.profile_photo ]]</p>-->
-      <!--        <img v-bind:src ="get_image_url(post.creator.profile_photo)">-->
-      <!--      </div>-->
-      <div class="container" style="width: 150%; margin-left: 400px;">
+
+      <div class="container">
         <div class="col-md-5">
           <div class="panel panel-default">
             <div class="panel-body">
@@ -62,8 +56,6 @@
           </div>
         </div>
       </div>
-      <!--      </li>-->
-      <!--    </ul>-->
       </article>
     </div>
 
@@ -108,10 +100,6 @@
       },
       async createPost() {
 
-        // var response = await fetch('http://127.0.0.1:8000/api/connection/' + String('{{ con.pk }}') + '/');
-        // this.my_request = await response.json();
-
-        // this.con_pk = "{{con.pk}}";
         var url = 'http://127.0.0.1:8000/api/post/';
         var msg = String(document.getElementById("content").value)
         console.log("I have reached anyway")
@@ -157,27 +145,9 @@
     },
 
     computed: {
-      // get_send_request_button_message: function () {
-      //   if (this.my_request.length == 0) {
-      //     return 'Send Request'
-      //   }
-      //   else {
-      //     if (this.my_request.accepted) {
-      //       return 'Connection'
-      //     }
-      //     else {
-      //       return 'Pending'
-      //     }
-      //   }
-      // },
-
       get_connection_type: function () {
         console.log("We are here")
         var type = String("");
-        // if ({{cn.isCoachee}}==true)
-        // if (true) {
-        // console.log("Expr is ");
-        // console.log(String({{con.is_coachee}}));
         {{con.is_coachee}}
         if (String()=="True")
         {
