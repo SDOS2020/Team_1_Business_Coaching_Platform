@@ -12,6 +12,7 @@ urlpatterns = [
     path('', include('user.urls')),
     path('', include('enrolment.urls')),
     path('', include('dashboard.urls')),
+    path('', include('dedicated_page.urls')),
     path('notification/', include('notification.urls')),
     path('admin/', admin.site.urls),
     path('find_coach/', TemplateView.as_view(template_name='enrolment/find_coach.html')),

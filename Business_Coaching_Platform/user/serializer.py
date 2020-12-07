@@ -18,7 +18,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             return str(user.coach.first_name)
         elif user.is_coachee:
             return str(user.coachee.first_name)
-
+    
     class Meta: 
         model = CustomUser
         fields = ['pk', 'profile_photo', 'name']

@@ -26,17 +26,6 @@ def dashboard(request):
         return redirect('home')
 
 
-@login_required
-def chat_view(request):
-    if request.user.is_coach:
-        connections = Connection.objects.filter(coach = request.user.coach, accepted = True)
-        return render(request, 'dashboard/chat.html', {'connections' : connections})
-    elif request.user.is_coachee:
-        connections = Connection.objects.filter(coachee = request.user.coachee, accepted = True)
-        return render(request, 'dashboard/chat.html', {'connections' : connections})
-    return redirect('home')
-
-
 class ChatViewSet(viewsets.ViewSet):
     """
         A viewset for viewing and editing Chat instances.
@@ -65,7 +54,7 @@ class ChatViewSet(viewsets.ViewSet):
     
     def create(self, request):
         """
-        Creates a chat message between and authenticated user and one of his/her connection 
+        Creates a chat message between authenticated user and one of his/her connection
         """
         other_user = get_object_or_404(CustomUser, pk = request.data['pk'])
         if connection_exists(request.user, other_user):

@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'channels',
     'home.apps.HomeConfig',
+    'dedicated_page.apps.DedicatedPageConfig',
     'user.apps.UserConfig',
     'dashboard.apps.DashboardConfig',
     'notification.apps.NotificationConfig',
@@ -91,7 +92,7 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
