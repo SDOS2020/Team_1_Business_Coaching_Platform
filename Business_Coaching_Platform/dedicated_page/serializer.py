@@ -3,6 +3,8 @@ from django.db import models
 from django.utils import timezone
 from user.serializer import CustomUserSerializer
 from rest_framework import serializers
+from rest_framework.parsers import FileUploadParser
+
 
 # noinspection PyUnresolvedReferences
 from user.models import Coach, Coachee
@@ -10,6 +12,8 @@ from user.models import Coach, Coachee
 from user.serializer import CoachSerializer, CoacheeSerializer
 from .models import Post
 from django.utils.timezone import now
+from rest_framework.serializers import Serializer, FileField, ListField
+
 
 class PostSerializer(serializers.ModelSerializer):
     creator = CustomUserSerializer()
@@ -25,3 +29,20 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['pk', 'creator','viewer','title','content','date_posted']
+
+
+
+# Serializers define the API representation.
+class UploadSerializer(Serializer):
+
+    file_uploaded = FileField()
+    class Meta:
+        fields = ['file_uploaded']
+
+
+# Serializer for multiple files upload.
+class MultipleFilesUploadSerializer(Serializer):
+    parser_classes = [FileUploadParser]
+    file_uploaded = ListField(FileField())
+    class Meta:
+        fields = ['file_uploaded']

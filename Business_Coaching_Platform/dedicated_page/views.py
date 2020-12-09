@@ -1,15 +1,18 @@
-from user.models import CustomUser
+from user.models import CustomUser,Connection,Coach,Coachee
 from .models import Post
-from .serializer import PostSerializer
+from user.serializer import ConnectionSerializer
+from .serializer import PostSerializer, UploadSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 from rest_framework import status
 from django.shortcuts import render, redirect, get_object_or_404
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from user.views import connection_exists, get_all_connections
+from user.views import connection_exists, get_all_connections, get_connection
 from django.db.models import Q
+
 import html
 
 # Create your views here.
@@ -17,8 +20,10 @@ import html
 @login_required
 def dedicated_page(request,pk):
     other_user = get_object_or_404(CustomUser, pk=pk)
-    if connection_exists(request.user, other_user):
-        return render(request, 'dedicated_page/post_form.html',{"con":other_user})#change con with connection
+    current_connection = get_connection(request.user, other_user)
+    print(type(current_connection))
+    if current_connection:
+        return render(request, 'dedicated_page/post_form.html',{"con":other_user,"link":current_connection})#change con with connection
     return redirect('dashboard')
 
 @login_required
@@ -108,6 +113,23 @@ class PostViewSet(viewsets.ViewSet):
                 return Response(serializer.data)
         return Response([], status=status.HTTP_400_BAD_REQUEST)
 
+
+
+# ViewSets define the view behavior.
+class UploadViewSet(viewsets.ViewSet):
+    serializer_class = UploadSerializer
+
+    def list(self, request):
+        return Response("GET API")
+
+    def put(self, request, format=None):
+        if 'file' not in request.data:
+            raise ParseError("Empty content")
+
+        f = request.data['file']
+
+        mymodel.my_file_field.save(f.name, f, save=True)
+        return Response(status=status.HTTP_201_CREATED)
 
 def get_posts_between_users(user1, user2):
     """

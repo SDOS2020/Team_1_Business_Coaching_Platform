@@ -15,7 +15,7 @@ class Post(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     creator = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name='post_creator')
     viewer = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name='post_viewer')
-
+    # my_file =
 
     def __str__(self):
         return f"{self.creator} -> {self.viewer} : {self.content}"

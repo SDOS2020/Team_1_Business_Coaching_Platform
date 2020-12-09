@@ -2,6 +2,10 @@
 
 {% block content %}
 {% load static %}
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" xmlns:
       xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -10,27 +14,48 @@
 
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" type="text/css" href="/static/home/main.css">-->
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 
 <div class="card hovercard" style="width: 100%; margin-top:6%;">
-  <div class="cardheader" style="background: url('http://lorempixel.com/850/280/nature/4/');
-  background-size: cover;height: 200px; width: 100%"></div>
 
-  <div class="info" style="margin-top: 10px;">
-    {% if user.pk == profile.pk %}
-    <a style="float:right;" href="{% url 'update_coach' pk=profile.coach.pk %}">
-      <i class="fa fa-edit" style="font-size:36px;"></i>
-    </a>
-    {% endif %}
-    <div class="title" style="margin-left:40px">
-      {{ profile.coach.first_name }} {{ profile.coach.last_name }}
-    </div>
-    <div class="desc" style="margin-left:40px">
-      {{ profile.coach.description }}
+<!--  <div class="cardheader" style="background: url('https://accinfosys.com/wp-content/uploads/2017/07/professional-background-check.jpeg');-->
+<!--  <div class="cardheader" style="background: url('https://www.business.com/images/content/5dc/e26d19c658af0458b4567/1500-0-');-->
+<!--  <div class="cardheader" style="background: url('https://banner2.cleanpng.com/20181204/lry/kisspng-clip-art-business-coaching-portable-network-graphi-itampaposseeze-web-design-york-amp-harrogate-5c0740d80caa55.6669210215439792240519.jpg');-->
+<!--  <div class="cardheader" style="background: url('https://gstatic.com/classroom/themes/img_reachout.jpg');-->
+  <div class="cardheader" style="background: url('https://gstatic.com/classroom/themes/img_reachout.jpg');
+  background-size: cover;height: 200px; width: 100%">
+    <div class="top-left">
+    <h1><b>Dedicated Page</b></h1>
+      <h5>Coach: <a class="white-a" href="{% url 'profile' link.coach.user.pk %}"> {{link.coach.first_name}} {{link.coach.last_name}}</a></h5>
+      <h5>Client: <a class="white-a" href="{% url 'profile' link.coachee.user.pk %}"> {{link.coachee.first_name}} {{link.coachee.last_name}}</a></h5>
     </div>
   </div>
+<!--      <h1>{{link.coachee.first_name }}</h1>-->
+    </div>
+
+  </div>
+
+<!--  <div class="info" style="margin-top: 10px;">-->
+<!--    {% if user.pk == profile.pk %}-->
+<!--    <a style="float:right;" href="{% url 'update_coach' pk=profile.coach.pk %}">-->
+<!--      <i class="fa fa-edit" style="font-size:36px;"></i>-->
+<!--    </a>-->
+<!--    {% endif %}-->
+<!--    <div class="title" style="margin-left:40px">-->
+<!--      {{ profile.coach.first_name }} {{ profile.coach.last_name }}-->
+<!--    </div>-->
+<!--    <div class="desc" style="margin-left:40px">-->
+<!--      {{ profile.coach.description }}-->
+<!--    </div>-->
+<!--  </div>-->
 
 </div>
 </div>
@@ -55,13 +80,13 @@
                   <div class="col-md-11">
                     <div class="media">
                       <div class="media-left">
-                        <a href="#">
-                          <img class="media-object photo-profile" v-bind:src ="post.creator.profile_photo" width="40" height="40" alt="...">
+                          <a :href="get_profile(post)">
+                          <img class="info" class="rounded-circle account-img" v-bind:src ="post.creator.profile_photo" style="width:40px; height:40px" alt="...">
                         </a>
                       </div>
                       <div class="media-body">
 
-                        <a href="#" class="anchor-username"><h4 class="media-heading">[[post.creator.name]]</h4></a>
+                        <a :href="get_profile(post)" class="anchor-username"><h4 class="media-heading">[[post.creator.full_name]]</h4></a>
                         <a class="anchor-time">[[post.date_posted]] </a>
                       </div>
                     </div>
@@ -85,12 +110,7 @@
     </form>
   </div>
 
-  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css"
-        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="/static/home/main.css">
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 
   <!--Main Sidebar-->
   <div class="msb" id="msb">
@@ -102,8 +122,6 @@
           <li><a href="#dedicated-pages"><i class="fa fa-dashboard"></i> Posts</a></li>
           <li class="active"><a href="#my-calendar"><i class="fa fa-puzzle-piece"></i> Schedule Meeting</a></li>
 
-          <chat-box :user_pk="vue_selected_user_pk" :user_name="vue_selected_user_username"
-                    is_coach="True"></chat-box>
         </ul>
       </div>
     </nav>
@@ -123,12 +141,21 @@
       con_pk: '',
       newContent: '',
       btnClass: '',
+      coachProfile:'',
+      coacheeProfile:'',
     },
     async created() {
       this.con_pk = "{{con.pk}}";
       var response = await this.get_posts("");
+      this.coachProfile = 'http://localhost:8000/profile/'+{{link.coach.user.pk}};
+      this.coacheeProfile = 'http://localhost:8000/profile/'+{{link.coachee.user.pk}};
     },
     methods: {
+
+      get_profile(post){
+        var url = 'http://localhost:8000/profile/'+String([[post.creator.pk]]);
+        return url;
+      },
 
       async get_posts(other_user_pk) {
 
@@ -242,15 +269,15 @@
 
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
 
-  body, div, form, input, p {
-  padding: 0;
-  margin: 0;
-  outline: none;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 14px;
-  color: #666;
-  line-height: 22px;
-  }
+                                                                                                                                 body, div, form, input, p {
+                                                                                                                                   padding: 0;
+                                                                                                                                   margin: 0;
+                                                                                                                                   outline: none;
+                                                                                                                                   font-family: Roboto, Arial, sans-serif;
+                                                                                                                                   font-size: 14px;
+                                                                                                                                   color: #666;
+                                                                                                                                   line-height: 22px;
+                                                                                                                                 }
   h1 {
     font-weight: 400;
   }
@@ -418,6 +445,30 @@
     animation: slideout 300ms forwards;
     -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
+  }
+
+  .white-a{
+    font-family: 'Open Sans',Roboto, Arial, sans-serif;
+    color: #ffffff;
+  }
+
+  .white-a:hover{
+    color: #ffffff;
+    text-decoration: underline;
+  }
+
+  /* Top right text */
+  .top-left {
+    position: relative;
+    top: 8px;
+    left: 200px;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    font-family: 'Open Sans',Roboto, Arial, sans-serif;
+    font-size: 10px;
+    color: #ffffff;
+    line-height: 10px;
   }
 </style>
 {% endblock content %}
