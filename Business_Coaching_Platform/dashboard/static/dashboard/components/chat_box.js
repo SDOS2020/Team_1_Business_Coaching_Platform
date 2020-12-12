@@ -13,7 +13,8 @@ const chatBox = Vue.component('chat-box', {
         await this.get_chat_data(); 
     },
     async mounted(){
-        this.chatSocket = new WebSocket('wss://' + window.location.host + '/ws/notification/');
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+        this.chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + '/ws/notification/');
         let chatComponent = this;
         this.chatSocket.onmessage = async function(e) {
             await chatComponent.get_chat_data(); 
