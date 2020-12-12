@@ -58,11 +58,11 @@
 		},
 		methods: {
 			async get_my_request() { 
-				var response = await fetch('http://localhost:8000/api/connection/' + String('{{ profile.pk }}') + '/');
+				var response = await fetch('https://business-coaching-platform.herokuapp.com/api/connection/' + String('{{ profile.pk }}') + '/');
 				this.my_request = await response.json();
 			},
 			async send_request(coach_pk) {
-				var url = 'http://localhost:8000/api/connection/';
+				var url = 'https://business-coaching-platform.herokuapp.com/api/connection/';
 				await fetch(url, {
 					method: 'post',
 					headers: {

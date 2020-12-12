@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', ')g!m-m6=v#veyoa4%+^yoyj(f+l6qb
 #DEBUG = True
 DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['http://business-coaching-platform.herokuapp.com']
 
 
 # Application definition
