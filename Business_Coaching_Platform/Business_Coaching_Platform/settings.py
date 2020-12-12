@@ -21,10 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ')g!m-m6=v#veyoa4%+^yoyj(f+l6qb^a7!)rtj8t14xw5k28(n'
+#SECRET_KEY = ')g!m-m6=v#veyoa4%+^yoyj(f+l6qb^a7!)rtj8t14xw5k28(n'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', ')g!m-m6=v#veyoa4%+^yoyj(f+l6qb^a7!)rtj8t14xw5k28(n')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 ALLOWED_HOSTS = []
 
@@ -34,10 +36,8 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'channels',
     'home.apps.HomeConfig',
-    'dedicated_page.apps.DedicatedPageConfig',
     'user.apps.UserConfig',
     'dashboard.apps.DashboardConfig',
-    'notification.apps.NotificationConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -47,10 +47,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'enrolment',
     'rest_framework',
+    'notification',
+    'dedicated_page'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -78,6 +81,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Business_Coaching_Platform.wsgi.application'
+
 ASGI_APPLICATION = "Business_Coaching_Platform.asgi.application"
 
 CHANNEL_LAYERS = {
@@ -86,13 +90,14 @@ CHANNEL_LAYERS = {
     },
 }
 
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
 
@@ -135,13 +140,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATIC_URL = '/static/'
-
-
 MEDIA_URL = '/images/'
 
 AUTH_USER_MODEL = 'user.CustomUser'
@@ -151,3 +149,28 @@ LOGOUT_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
+
+# Heroku: Update database configuration from $DATABASE_URL.
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.1/howto/static-files/
+
+# The absolute path to the directory where collectstatic will collect static files for deployment.
+STATIC_ROOT = BASE_DIR / 'staticfiles'  #. os.path.join(BASE_DIR, 'staticfiles')
+
+# The URL to use when referring to static files (where they will be served from)
+STATIC_URL = '/static/'
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
