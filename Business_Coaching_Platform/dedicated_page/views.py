@@ -32,7 +32,7 @@ def dedicated_page(request,pk):
     other_user = get_object_or_404(CustomUser, pk=pk)
     current_connection = get_connection(request.user, other_user)
     if current_connection:
-        return render(request, 'dedicated_page/post_form.html',{"con":other_user,"link":current_connection})#change con with connection
+        return render(request, 'dedicated_page/dedicated_page.html',{"con":other_user,"link":current_connection})#change con with connection
     return redirect('dashboard')
 
 
