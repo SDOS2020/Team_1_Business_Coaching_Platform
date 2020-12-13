@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 import dedicated_page.views as dedicated_page_views
 from django.views.generic import TemplateView
 
+
 router = DefaultRouter()
 router.register('post', PostViewSet, basename='post')
 
@@ -13,5 +14,7 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/<int:pk>/', include(router.urls)),
     url(r'^dedicated_page/(?P<pk>\d+)/$', dedicated_page_views.dedicated_page, name='dedicated_page'),
-
+    path('create_post/', PostViewSet.as_view({"post": "create_post"}), name='new_post'),
+    # path('new_post/', PostAPIView.as_view()),
+    # url('/play/', dedicated_page_views.form_create),
 ]

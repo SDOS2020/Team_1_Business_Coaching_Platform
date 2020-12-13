@@ -140,7 +140,7 @@ def connection_exists(user1, user2):
 
 def get_connection(user1, user2):
     """
-        Returns a Connection object having user1 and user2 as its
+        Returns the Connection object connecting user1 and user2
     """
     if user1.is_coach and user2.is_coachee:
         connection = Connection.objects.filter(coach=user1.coach, coachee=user2.coachee, accepted=True)

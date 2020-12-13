@@ -12,7 +12,21 @@ from user.models import Coach, Coachee
 from user.serializer import CoachSerializer, CoacheeSerializer
 from .models import Post
 from django.utils.timezone import now
-from rest_framework.serializers import Serializer, FileField, ListField
+from rest_framework.serializers import FileField, ListField
+
+
+# Serializers define the API representation.
+class UploadSerializer(serializers.Serializer):
+    file_uploaded = FileField()
+    class Meta:
+        fields = ['file_uploaded']
+
+# Serializer for multiple files upload.
+class MultipleFilesUploadSerializer(serializers.Serializer):
+    parser_classes = [FileUploadParser]
+    file_uploaded = ListField(FileField())
+    class Meta:
+        fields = ['file_uploaded']
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -28,21 +42,4 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['pk', 'creator','viewer','title','content','date_posted']
-
-
-
-# Serializers define the API representation.
-class UploadSerializer(Serializer):
-
-    file_uploaded = FileField()
-    class Meta:
-        fields = ['file_uploaded']
-
-
-# Serializer for multiple files upload.
-class MultipleFilesUploadSerializer(Serializer):
-    parser_classes = [FileUploadParser]
-    file_uploaded = ListField(FileField())
-    class Meta:
-        fields = ['file_uploaded']
+        fields = ['pk', 'creator','viewer','title','content','date_posted','uploaded_file_url','uploaded_file_name']

@@ -4,6 +4,7 @@ from user.serializer import ConnectionSerializer
 from .serializer import PostSerializer, UploadSerializer
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from rest_framework import status
@@ -12,6 +13,13 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from user.views import connection_exists, get_all_connections, get_connection
 from django.db.models import Q
+from rest_framework.exceptions import ParseError
+from rest_framework.parsers import FileUploadParser
+from .forms import customForm,PostForm
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from django.core.files.storage import FileSystemStorage
+
 
 import html
 
@@ -44,13 +52,15 @@ def post_view(request):
     return redirect('home')
 
 
+
 class PostViewSet(viewsets.ViewSet):
     """
         A viewset for viewing and editing post instances.
     """
-    http_method_names = ['list','get', 'post', 'head','put','create','retrieve','delete']
+    http_method_names = ['form_create','list','get', 'post', 'head','put','retrieve','delete']
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
+
 
     def list(self, request):
         """
@@ -64,17 +74,69 @@ class PostViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         return Response([], status = status.HTTP_400_BAD_REQUEST)
 
+
+    # @action(detail=False, methods=['post'])
     def create(self, request):
         """
         Creates a Post between authenticated user and one of his/her connection
         """
-        other_user = get_object_or_404(CustomUser, pk = request.data['pk'])
-        if connection_exists(request.user, other_user):
-            post = Post.objects.create(creator = request.user, viewer = other_user, content = html.escape(request.data['content']))
-            serializer = PostSerializer(post)
-            return Response(serializer.data, status = status.HTTP_201_CREATED)
         return Response([], status = status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request):
+        """
+        Deletes the Post having primary key as post_pk
+        """
+        post_pk = request.data['post_pk']
+        if post_pk:
+            post = get_object_or_404(Post,pk=post_pk)
+            if request.user.id == post.creator.id:
+                post.delete()
+                post.post_file.delete(save=True)
+                serializer = PostSerializer(post)
+                return Response(serializer.data)
+        return Response([], status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail='True',methods=['post'])
+    def create_post(self, request):
+        """
+        Creates a Post between authenticated user and one of his/her connection
+        """
+        print("Entered")
+
+        parser_class = (FileUploadParser,)
+
+        # if 'file' not in request.data:
+        #     raise ParseError("Empty content")
+        print("Method is", request.data)
+        print("requ", request)
+        if request.method == 'POST':
+            print("it is create")
+            print("FILES",request.FILES)
+            form = customForm(request.POST)
+            if form.is_valid():
+                print("Valid form")
+                other_user = get_object_or_404(CustomUser, pk=form.cleaned_data['pk'])
+                if connection_exists(request.user, other_user):
+                    post = Post.objects.create(creator=request.user, viewer=other_user,
+                                               content=html.escape(form.cleaned_data['content']))
+                    print("Found user")
+                    uploaded_file = request.FILES['file'] if 'file' in request.FILES else None
+                    if uploaded_file:
+                        # uploaded_file_name = form.cleaned_data['file_name']
+                        # print("Type =" + str(type(uploaded_file)) + str(type(form.cleaned_data['pk'])))
+                        print(uploaded_file)
+                        fs = FileSystemStorage()
+                        filename = fs.save(uploaded_file.name, uploaded_file)
+                        uploaded_file_url = fs.url(filename)
+                        post.uploaded_file_url = uploaded_file_url
+                        post.uploaded_file_name = uploaded_file.name
+                        # post.post_file.save(uploaded_file_name, uploaded_file, save=True)
+                        # if uploaded_file:
+                        #     post.post_file.save(uploaded_file_name, uploaded_file, save=True)
+                    post.save()
+                    serializer = PostSerializer(post)
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response([], status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, post_pk = None):
         """
@@ -100,6 +162,7 @@ class PostViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         return Response([], status = status.HTTP_400_BAD_REQUEST)
 
+
     def delete(self, request):
         """
         Deletes the Post having primary key as post_pk
@@ -109,6 +172,7 @@ class PostViewSet(viewsets.ViewSet):
             post = get_object_or_404(Post,pk=post_pk)
             if request.user.id == post.creator.id:
                 post.delete()
+                post.post_file.delete(save=True)
                 serializer = PostSerializer(post)
                 return Response(serializer.data)
         return Response([], status=status.HTTP_400_BAD_REQUEST)
@@ -130,6 +194,8 @@ class UploadViewSet(viewsets.ViewSet):
 
         mymodel.my_file_field.save(f.name, f, save=True)
         return Response(status=status.HTTP_201_CREATED)
+
+
 
 def get_posts_between_users(user1, user2):
     """
