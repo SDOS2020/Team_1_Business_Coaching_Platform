@@ -171,7 +171,6 @@
                 },
 
                 is_file(post) {
-                    console.log("URL is:"+String([[post.uploaded_file_url]]));
                     var url = String([[post.uploaded_file_url]]);
                     if (url!="")
                     {
@@ -219,18 +218,12 @@
                         {
                             if((upload.files.length) > 0)
                             {
-                                console.log("File: "+upload.files[0].name);
                                 file = upload.files[0];
                                 file_name = String(file.name);
-                                console.log("name is:"+file_name);
-                                console.log("File contents"+file);
                                 formData.set('file',file,file_name);
                                 formData.append('file_name',file_name);
                             }
                         }
-                        console.log("FormData is: ");
-                        console.log(FormData);
-                        console.log(url);
                         var response = await fetch(url, {
                             method: 'POST',
                             headers: {
@@ -539,7 +532,7 @@
 
         .fa.fa-paperclip{
             margin-top: 3%;
-            font-size: 75px;
+            font-size: 60px;
         }
 
     </style>

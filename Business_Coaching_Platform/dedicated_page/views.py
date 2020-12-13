@@ -31,7 +31,6 @@ import html
 def dedicated_page(request,pk):
     other_user = get_object_or_404(CustomUser, pk=pk)
     current_connection = get_connection(request.user, other_user)
-    print(type(current_connection))
     if current_connection:
         return render(request, 'dedicated_page/post_form.html',{"con":other_user,"link":current_connection})#change con with connection
     return redirect('dashboard')
@@ -91,38 +90,20 @@ class PostViewSet(viewsets.ViewSet):
         """
         Creates a Post between authenticated user and one of his/her connection
         """
-        print("Entered")
-
-        parser_class = (FileUploadParser,)
-
-        # if 'file' not in request.data:
-        #     raise ParseError("Empty content")
-        print("Method is", request.data)
-        print("requ", request)
         if request.method == 'POST':
-            print("it is create")
-            print("FILES",request.FILES)
             form = customForm(request.POST)
             if form.is_valid():
-                print("Valid form")
                 other_user = get_object_or_404(CustomUser, pk=form.cleaned_data['pk'])
                 if connection_exists(request.user, other_user):
                     post = Post.objects.create(creator=request.user, viewer=other_user,
                                                content=html.escape(form.cleaned_data['content']))
-                    print("Found user")
                     uploaded_file = request.FILES['file'] if 'file' in request.FILES else None
                     if uploaded_file:
-                        # uploaded_file_name = form.cleaned_data['file_name']
-                        # print("Type =" + str(type(uploaded_file)) + str(type(form.cleaned_data['pk'])))
-                        print(uploaded_file)
                         fs = FileSystemStorage()
                         uploaded_file_name = fs.save(uploaded_file.name, uploaded_file)
                         uploaded_file_url = fs.url(uploaded_file_name)
                         post.uploaded_file_url = uploaded_file_url
                         post.uploaded_file_name = uploaded_file_name
-                        # post.post_file.save(uploaded_file_name, uploaded_file, save=True)
-                        # if uploaded_file:
-                        #     post.post_file.save(uploaded_file_name, uploaded_file, save=True)
                     post.save()
                     serializer = PostSerializer(post)
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
