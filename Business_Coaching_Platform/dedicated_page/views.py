@@ -35,24 +35,6 @@ def dedicated_page(request,pk):
         return render(request, 'dedicated_page/post_form.html',{"con":other_user,"link":current_connection})#change con with connection
     return redirect('dashboard')
 
-@login_required
-def create_post(request,pk):
-    other_user = get_object_or_404(CustomUser, pk=pk)
-    if connection_exists(request.user, other_user):
-        return render(request, 'dedicated_page/post_form.html',{"con":other_user})#change con with connection
-    return redirect('dashboard')
-
-@login_required
-def post_view(request):
-    if request.user.is_coach:
-        connections = Connection.objects.filter(coach = request.user.coach, accepted = True)
-        return render(request, 'dedicated_page/chat.html', {'connections' : connections})
-    elif request.user.is_coachee:
-        connections = Connection.objects.filter(coachee = request.user.coachee, accepted = True)
-        return render(request, 'dedicated_page/chat.html', {'connections' : connections})
-    return redirect('home')
-
-
 
 class PostViewSet(viewsets.ViewSet):
     """
