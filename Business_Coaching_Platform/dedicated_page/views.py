@@ -1,3 +1,4 @@
+from django.conf import settings
 from user.models import CustomUser,Connection,Coach,Coachee
 from .models import Post
 from user.serializer import ConnectionSerializer
@@ -19,6 +20,7 @@ from .forms import customForm,PostForm
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from django.core.files.storage import FileSystemStorage
+import os
 
 
 import html
@@ -82,19 +84,7 @@ class PostViewSet(viewsets.ViewSet):
         """
         return Response([], status = status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request):
-        """
-        Deletes the Post having primary key as post_pk
-        """
-        post_pk = request.data['post_pk']
-        if post_pk:
-            post = get_object_or_404(Post,pk=post_pk)
-            if request.user.id == post.creator.id:
-                post.delete()
-                post.post_file.delete(save=True)
-                serializer = PostSerializer(post)
-                return Response(serializer.data)
-        return Response([], status=status.HTTP_400_BAD_REQUEST)
+
 
     @action(detail='True',methods=['post'])
     def create_post(self, request):
@@ -126,10 +116,10 @@ class PostViewSet(viewsets.ViewSet):
                         # print("Type =" + str(type(uploaded_file)) + str(type(form.cleaned_data['pk'])))
                         print(uploaded_file)
                         fs = FileSystemStorage()
-                        filename = fs.save(uploaded_file.name, uploaded_file)
-                        uploaded_file_url = fs.url(filename)
+                        uploaded_file_name = fs.save(uploaded_file.name, uploaded_file)
+                        uploaded_file_url = fs.url(uploaded_file_name)
                         post.uploaded_file_url = uploaded_file_url
-                        post.uploaded_file_name = uploaded_file.name
+                        post.uploaded_file_name = uploaded_file_name
                         # post.post_file.save(uploaded_file_name, uploaded_file, save=True)
                         # if uploaded_file:
                         #     post.post_file.save(uploaded_file_name, uploaded_file, save=True)
@@ -162,7 +152,6 @@ class PostViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         return Response([], status = status.HTTP_400_BAD_REQUEST)
 
-
     def delete(self, request):
         """
         Deletes the Post having primary key as post_pk
@@ -171,12 +160,15 @@ class PostViewSet(viewsets.ViewSet):
         if post_pk:
             post = get_object_or_404(Post,pk=post_pk)
             if request.user.id == post.creator.id:
+                file_name = post.uploaded_file_name
+                if file_name:
+                    fs = FileSystemStorage()
+                    file_path = os.path.join(settings.MEDIA_ROOT,file_name)
+                    fs.delete(file_path)
                 post.delete()
-                post.post_file.delete(save=True)
                 serializer = PostSerializer(post)
                 return Response(serializer.data)
         return Response([], status=status.HTTP_400_BAD_REQUEST)
-
 
 
 # ViewSets define the view behavior.
