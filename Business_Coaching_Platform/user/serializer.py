@@ -6,6 +6,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     profile_photo = serializers.SerializerMethodField('get_profile_photo')
     name = serializers.SerializerMethodField('get_name')
+    full_name = serializers.SerializerMethodField('get_full_name')
 
     def get_profile_photo(self, user):
         if user.is_coach:
@@ -18,10 +19,17 @@ class CustomUserSerializer(serializers.ModelSerializer):
             return str(user.coach.first_name)
         elif user.is_coachee:
             return str(user.coachee.first_name)
+
+    def get_full_name(self,user):
+        "Returns the person's full name."
+        if user.is_coach:
+            return '%s %s' % (user.coach.first_name, user.coach.last_name)
+        elif user.is_coachee:
+            return '%s %s' % (user.coachee.first_name, user.coachee.last_name)
     
     class Meta: 
         model = CustomUser
-        fields = ['pk', 'profile_photo', 'name']
+        fields = ['pk', 'profile_photo', 'name','full_name']
 
 
 class CoachSerializer(serializers.ModelSerializer):
@@ -59,6 +67,13 @@ class CoacheeSerializer(serializers.ModelSerializer):
 class ConnectionSerializer(serializers.ModelSerializer):
     coach = CoachSerializer()
     coachee = CoacheeSerializer()
+
+    # def get_coach_name(self,coach):
+    #     name = coach.first_name+" "+coach.last_name
+    #     return name
+    #
+    # def get_coachee_name(self,coachee):
+
     class Meta:
         model = Connection
         fields = ['pk', 'coach', 'coachee', 'accepted']

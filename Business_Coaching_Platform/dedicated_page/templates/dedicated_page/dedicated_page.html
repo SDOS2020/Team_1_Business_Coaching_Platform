@@ -1,0 +1,511 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+    {% load static %}
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" xmlns:
+          xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@3.4.9/dist/vue-router.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet'type='text/css'>
+
+
+    <div class="card hovercard" style="width: 100%; margin-top:6%;">
+
+        <div class="cardheader" style="background: url('https://gstatic.com/classroom/themes/img_reachout.jpg');
+  background-size: cover;height: 200px; width: 100%">
+            <div class="top-left">
+                <h1><b>Dedicated Page</b></h1>
+                <h5>Coach: <a class="white-a" href="{% url 'profile' link.coach.user.pk %}"> {{link.coach.first_name}}
+                    {{link.coach.last_name}}</a></h5>
+                <h5>Client: <a class="white-a" href="{% url 'profile' link.coachee.user.pk %}"> {{link.coachee.first_name}}
+                    {{link.coachee.last_name}}</a></h5>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="new_post" id="post_container">
+        <div class="testbox">
+            <textarea v-model="newContent" placeholder="Share something..." id="content" rows="6"></textarea>
+            <input type="file" id="newFile">
+
+            <div></div>
+
+            <button id="newPost" :disabled="check_empty" :class="is_active" v-on:click="createPost">Post</button>
+        </div>
+
+        <div>
+            <!--    <ul>-->
+            <div v-for="post in current_posts">
+
+                <div class="container" style="width:100%; margin-left:250px; ">
+                    <div class="col-md-10" style="padding: 4px;">
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="width:100%; padding: 10px;">
+                                <section class="post-heading">
+                                    <div class="row">
+                                        <div class="col-md-11">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a :href="get_profile(post)">
+                                                        <img class="info" class="rounded-circle account-img" v-bind:src="post.creator.profile_photo"
+                                                             style="width:40px; height:40px" alt="...">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+
+                                                    <a :href="get_profile(post)" class="anchor-username">
+                                                        <h4 class="media-heading">[[post.creator.full_name]]</h4>
+                                                    </a>
+                                                    <a class="anchor-time">[[post.date_posted]] </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <a href="#"><i v-on:click="deletePost([[post.pk]])" class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </div>
+                                </section>
+                                <section class="post-body" >
+                                    <p>[[post.content]]</p>
+                                </section>
+                                <div v-if="is_file(post)">
+                                    <a :href="get_file_url(post)" target="_blank">
+                                        <i class="fa fa-paperclip"></i>
+                                        <p><b>[[post.uploaded_file_name]]</b>  </p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </article>
+            </div>
+            </form>
+        </div>
+
+
+
+        <!--Main Sidebar-->
+        <div class="msb" id="msb">
+            <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+            <nav class="navbar navbar-default" role="navigation" style="padding-top: 25%;">
+                <div class="side-menu-container" style="margin-top: 10px">
+                    <ul class="nav navbar-nav" id="chat-container">
+                        <li><a href="#dedicated-pages"><i class="fa fa-dashboard"></i> Posts</a></li>
+                        <li class="active"><a href="#my-calendar"><i class="fa fa-puzzle-piece"></i> Schedule Meeting</a></li>
+
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+
+
+    <script>
+        var app = new Vue({
+            delimiters: ['[[', ']]'],
+            el: '#post_container',
+            data: {
+                current_posts: [],
+                con_pk: '',
+                newContent: '',
+                btnClass: '',
+                coachProfile: '',
+                coacheeProfile: '',
+            },
+            async created() {
+                this.con_pk = "{{con.pk}}";
+                var response = await this.get_posts("");
+                this.coachProfile = 'http://localhost:8000/profile/' + '{{link.coach.user.pk}}';
+                this.coacheeProfile = 'http://localhost:8000/profile/' + '{{link.coachee.user.pk}}';
+            },
+            methods: {
+
+                get_file_url(post) {
+                    var url = 'http://localhost:8000' + String([[post.uploaded_file_url]]);
+                    return url;
+                },
+
+                is_file(post) {
+                    var url = String([[post.uploaded_file_url]]);
+                    if (url!="")
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                },
+
+                get_profile(post) {
+                    var url = 'http://localhost:8000/profile/' + String([[post.creator.pk]]);
+                    return url;
+                },
+
+                async get_posts(other_user_pk) {
+
+                    var url = 'http://localhost:8000/api/post/';
+                    var response = await fetch(url, {
+                        method: 'list',
+                        headers: {
+                            'X-CSRFTOKEN': get_cookie('csrftoken'),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            'pk': parseInt(this.con_pk),
+                        })
+                    });
+                    this.current_posts = await response.json();
+                },
+                async createPost() {
+
+                    var url = 'http://localhost:8000/create_post/';
+                    var msg = String(document.getElementById("content").value);
+                    var upload = document.getElementById("newFile");
+                    var file = null;
+                    var file_name = "";
+                    const formData = new FormData();
+                    formData.append('pk', parseInt(this.con_pk));
+                    formData.append('content', msg);
+                    formData.append('file',null)
+                    if (msg !== "") {
+                        if('files' in upload)
+                        {
+                            if((upload.files.length) > 0)
+                            {
+                                file = upload.files[0];
+                                file_name = String(file.name);
+                                formData.set('file',file,file_name);
+                                formData.append('file_name',file_name);
+                            }
+                        }
+                        var response = await fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFTOKEN': get_cookie('csrftoken'),
+                            },
+                            body: formData
+                        });
+                        document.getElementById("content").value = "";
+                        this.newContent = "";
+                    }
+                    await this.get_posts();
+                },
+                async deletePost(post_pk) {
+                    var url = 'http://localhost:8000/api/post/';
+                    await fetch(url, {
+                        method: 'delete',
+                        headers: {
+                            'X-CSRFTOKEN': get_cookie('csrftoken'),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            'post_pk': parseInt(post_pk),
+                        })
+                    });
+                    await this.get_posts();
+                },
+
+
+            },
+
+            computed: {
+
+                {##}
+
+
+                check_empty: function () {
+                    if (this.newContent === "") {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                },
+
+                is_active: function () {
+                    if (this.newContent === "") {
+                        return "button-disabled";
+                    }
+                    else {
+                        return "button-enabled";
+                    }
+                }
+
+            },
+        });
+
+        function get_cookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+    </script>
+    <style>
+
+        body, div, form, input, p {
+            padding: 0;
+            margin: 0;
+            outline: none;
+            font-family: Roboto, Arial, sans-serif;
+            font-size: 14px;
+            color: #666;
+            line-height: 22px;
+        }
+
+        h1 {
+            font-weight: 400;
+        }
+
+        h4 {
+            margin: 22px 0 4px;
+            color: #095484;
+        }
+
+        .testbox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: inherit;
+            padding: 20px;
+            width: 75%;
+            margin: auto;
+            margin-left: 250px;
+        }
+
+        form {
+            width: 100%;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 5px #ccc;
+        }
+
+        input {
+            width: calc(100% - 10px);
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            vertical-align: middle;
+        }
+
+        input:hover,
+        textarea:hover {
+            outline: none;
+            border: 1px solid #095484;
+        }
+
+        .first-name {
+            margin-bottom: 22px;
+        }
+
+        span {
+            color: red;
+        }
+
+        th,
+        td {
+            width: 21%;
+            padding: 15px 0;
+            border-bottom: 1px solid #ccc;
+            text-align: center;
+            vertical-align: unset;
+            line-height: 18px;
+            font-weight: 400;
+            word-break: break-all;
+        }
+
+        .first-col {
+            width: 16%;
+            text-align: left;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        textarea {
+            width: calc(100% - 6px);
+        }
+
+        .btn-block {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .button-disabled {
+            opacity: 0.6;
+        }
+
+        .button-enabled {
+            opacity: 1.0;
+        }
+
+
+        button {
+            width: 150px;
+            padding: 10px;
+            border: none;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            background-color: #095484;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0666a3;
+        }
+
+        @media (min-width: 568px) {
+
+            th,
+            td {
+                word-break: keep-all;
+            }
+        }
+
+        .msb {
+            width: 200px;
+            background-color: #f5f7f9;
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: auto;
+            min-height: 100%;
+            overflow-y: auto;
+            white-space: nowrap;
+            height: 100%;
+            z-index: 1;
+            border-right: 1px solid #ddd;
+        }
+
+        .msb .navbar {
+            border: none;
+            margin-left: 0;
+            background-color: inherit;
+        }
+
+        .msb .navbar-header {
+            width: 100%;
+            border-bottom: 1px solid #e7e7e7;
+            margin-bottom: 20px;
+            background: #fff;
+        }
+
+        .msb .navbar-nav .panel {
+            border: 0 none;
+            box-shadow: none;
+            margin: 0;
+            background: inherit;
+        }
+
+        .msb .navbar-nav li {
+            display: block;
+            width: 100%;
+        }
+
+        .msb .navbar-nav li a {
+            padding: 15px;
+            color: #5f5f5f;
+        }
+
+        .msb .navbar-nav li a .glyphicon,
+        .msb .navbar-nav li a .fa {
+            margin-right: 8px;
+        }
+
+        .msb .nb {
+            padding-top: 1px;
+            padding-left: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        /*main content wrapper*/
+        /*globals*/
+        a,
+        a:focus,
+        a:hover {
+            text-decoration: solid;
+        }
+
+        .msb,
+        .mnb {
+            -moz-animation: slidein 300ms forwards;
+            -o-animation: slidein 300ms forwards;
+            -webkit-animation: slidein 300ms forwards;
+            animation: slidein 300ms forwards;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+
+        body.msb-x .msb {
+            -moz-animation: slideout 300ms forwards;
+            -o-animation: slideout 300ms forwards;
+            -webkit-animation: slideout 300ms forwards;
+            animation: slideout 300ms forwards;
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+
+        .white-a {
+            font-family: 'Open Sans', Roboto, Arial, sans-serif;
+            color: #ffffff;
+        }
+
+        .white-a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Top right text */
+        .top-left {
+            position: relative;
+            top: 8px;
+            left: 200px;
+            padding: 0;
+            margin: 0;
+            outline: none;
+            font-family: 'Open Sans', Roboto, Arial, sans-serif;
+            font-size: 10px;
+            color: #ffffff;
+            line-height: 10px;
+        }
+
+        .fa.fa-paperclip{
+            margin-top: 3%;
+            font-size: 60px;
+        }
+
+    </style>
+{% endblock content %}
