@@ -11,8 +11,8 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('email', 'age')
 
     @transaction.atomic
-    def save(self):
-        user = super().save()
+    def save(self, *args, **kwargs):
+        user = super().save(*args, **kwargs)
         user.email = self.cleaned_data.get('email')
         user.age = self.cleaned_data.get('age')
         return user

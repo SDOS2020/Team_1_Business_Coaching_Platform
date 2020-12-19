@@ -9,15 +9,16 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
 			integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" href="{% static 'home/main.css' %}">
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		
 		<script src="{% static 'dashboard/components/connection_list.js' %}"></script>
 		<script src="{% static 'dashboard/components/chat_box.js' %}"></script>
-		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-		<!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
-		<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-		<!-- <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
-		<!-- <script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
+		<script src="{% static 'dashboard/components/notification_panel.js' %}"></script>
 		<link rel="stylesheet" type="text/css" href="{% static 'dashboard/chat_style.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'dashboard/notification_style.css' %}">
 		<title> Dashboard</title>
 	</head>
 	<body>
@@ -43,6 +44,7 @@
 						<!-- Navbar Right Side -->
 						<div class="navbar-nav" style="float:right">
 							{% if user.is_authenticated %}
+							<notification-panel user_pk={{user.pk}}></notification-panel>
 							<a class="nav-item nav-link" href="{% url 'profile' user.pk %}">Profile</a>
 							<a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
 							{% else %}
@@ -55,6 +57,7 @@
 				</div>
 			</nav>
 		</header>
+		
 		<!-- SideBar -->
 		<style>
 			/* .navbar-default {
@@ -174,43 +177,7 @@
 				</div>
 			</nav>
 		</div>
-		<!-- <div class="container" style="float: left; padding-left: 10%; width: 200px;">
-			<div class="row" style="overflow:auto; width: 250px;">
-				<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style="float: left;">
-					<div class="sidebar-sticky pt-3">
-						<ul class="nav flex-column">
-							<li class="nav-item">
-								<a class="nav-link active" href="#">
-								<span data-feather="home"></span>
-								Dashboard <span class="sr-only">(current)</span>
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link active" href="#schedule-meeting">
-								<span data-feather="home"></span>
-								Upcoming Events <span class="sr-only">(current)</span>
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link active" href="#app">
-								<span data-feather="home"></span>
-								Client Requests <span class="sr-only">(current)</span>
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link active" href="#">
-								<span data-feather="home"></span>
-								Client Pages <span class="sr-only">(current)</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-					
-				</nav>
-			</div>
-			</div> -->
-		<!-- About Me -->
-		<!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet"> -->
+
 		<link rel="stylesheet" type="text/css" href="{% static 'dashboard/profile_style.css' %}">
 		<!-- Google Calendar/ Upcoming Events -->
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700" rel="stylesheet">
@@ -257,17 +224,19 @@
 							<div class="row" style="padding-left: 5%;">
 								<div class="col-md-4" v-for="(coachee_request, index) in coachee_requests" :key="coachee_request.pk" v-if="coachee_requests[index].accepted !=false" style ="max-width:33%; max-height: 40%; width:max-content; height: max-content">
 									<div class="card p-3">
-										<div class="d-flex flex-row mb-3" style="width:max-content; height: max-content;" >
-											<img :src="coachee_requests[index].coachee.profile_photo" height="40px" width="40px" style="border-radius: 100%;">
+										<a :href="get_dedicated_page_link([[coachee_request.coachee.user_pk]])">
+											<div class="d-flex flex-row mb-3" style="width:max-content; height: max-content;">
+												<img :src="coachee_requests[index].coachee.profile_photo" height="40px" width="40px" style="border-radius: 100%;" href="http://localhost:8000/dedicated_page/3/">
 												<div class="d-flex flex-column ml-2">
 													<span>
 														[[ coachee_requests[index].coachee.first_name + ' ' + coachee_requests[index].coachee.last_name ]]
 													</span>
-												<a :href="'mailto:' + coachee_requests[index].coachee.email" style="margin:5px;">
-													<i class="fa fa-envelope" style="font-size:24px;"></i>
-												</a>
+													<a :href="'mailto:' + coachee_requests[index].coachee.email" style="margin:5px;">
+														<i class="fa fa-envelope" style="font-size:24px;"></i>
+													</a>
+												</div>
 											</div>
-										</div>
+										</a>
 									</div>
 								</div>
 							</div>
@@ -353,6 +322,10 @@
 						var response = await fetch('http://localhost:8000/api/connection/');
 						this.coachee_requests = await response.json();
 					},
+					get_dedicated_page_link(pk) {
+                    	var url = 'http://localhost:8000/dedicated_page/' + String(pk);
+						return url;
+					}
 				}
 				});
 		</script>
@@ -600,6 +573,15 @@
 				}
 				return cookieValue;
 			}
+		</script>
+		<script>
+			var nav_bar = new Vue({
+				delimiters: ['[[', ']]'],
+				el: '#navbarToggle',
+				components: {
+					'notification-panel': notificationPanel
+				},
+			});
 		</script>
 	</body>
 </html>

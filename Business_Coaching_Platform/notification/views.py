@@ -10,22 +10,19 @@ from .models import Notification
 from .serializer import NotificationSerializer
 
 
-def room(request, room_name):
-    return render(request, 'notification/room.html', {'room_name': room_name})
-
-
 class NotificationViewSet(viewsets.ViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        notifications = Notification.objects.filter(user = request.user)
+        notifications = Notification.objects.filter(receiver = request.user)
         serializer = NotificationSerializer(notifications, many = True)
         return Response(serializer.data)
 
-    def delete(self, request, pk = None):
+    def delete(self, request):
+        pk = request.data['pk']
         notification = get_object_or_404(Notification, pk = pk)
-        if request.user == notification.user:
+        if request.user == notification.receiver:
             notification.delete()
             serializer = NotificationSerializer(notification)
             return Response(serializer.data)

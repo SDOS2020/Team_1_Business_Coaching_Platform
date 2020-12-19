@@ -4,8 +4,8 @@ from user.serializer import CustomUserSerializer
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer()
-    
+    sender = CustomUserSerializer()
+    receiver = CustomUserSerializer()
     class Meta:
         model = Notification
-        fields = ['pk', 'user', 'event']
+        fields = ['pk', 'sender', 'receiver', 'event']
