@@ -68,6 +68,7 @@ CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
     'https://business-coaching.herokuapp.com',
+    'https://business-coaching-platform.herokuapp.com/api/connection/',
 )
 
 ROOT_URLCONF = 'Business_Coaching_Platform.urls'
