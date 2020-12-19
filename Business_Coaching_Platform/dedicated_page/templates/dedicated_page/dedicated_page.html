@@ -94,12 +94,12 @@
                                 <section class="post-body" >
                                     <p>[[post.content]]</p>
 
-                                <div v-if="is_file(post)">
-                                    <a :href="get_file_url(post)" target="_blank">
-                                        <i class="fa fa-paperclip"></i>
-                                        <p><b>[[post.uploaded_file_name]]</b>  </p>
-                                    </a>
-                                </div>
+                                    <div v-if="is_file(post)">
+                                        <a :href="get_file_url(post)" target="_blank">
+                                            <i class="fa fa-paperclip"></i>
+                                            <p><b>[[post.uploaded_file_name]]</b>  </p>
+                                        </a>
+                                    </div>
                                 </section>
                             </div>
                         </div>
@@ -242,11 +242,17 @@
                 toggleEmpty(event) {
                     var currentUpload = event.target;
                     if('files' in currentUpload) {
-                        if((currentUpload.files.length) > 0)
-                        {
-                            this.uploadedFiles =  true;
+                        if((currentUpload.files.length) > 0) {
+
                             console.log("Hey, not empty");
-                            this.isPostEmpty = false;
+                            var filesize = ((currentUpload.files[0].size / 1024) / 1024).toFixed(4);//MB
+                            if (filesize <= 25) {
+                                this.uploadedFiles = true;
+                                this.isPostEmpty = false;
+                            } else {
+                                alert("File size exceeds 25 MB.");
+                                document.getElementById("newFile").value = "";
+                            }
                         }
                         else
                         {
