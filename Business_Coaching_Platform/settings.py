@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'enrolment',
     'rest_framework',
     'notification',
-    'dedicated_page'
+    'dedicated_page',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
