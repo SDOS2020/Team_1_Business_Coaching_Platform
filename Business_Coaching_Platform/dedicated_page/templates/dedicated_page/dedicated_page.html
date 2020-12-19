@@ -5,6 +5,8 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet'type='text/css'>
+
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" xmlns:
           xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
@@ -14,16 +16,14 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet'type='text/css'>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
 
-    <div class="card hovercard" style="width: 100%; margin-top:6%;">
+
+
+
+    <div class="card hovercard" style="width: 80%; margin-top:6%;margin-left:11%">
 
         <div class="cardheader" style="background: url('https://gstatic.com/classroom/themes/img_reachout.jpg');
   background-size: cover;height: 200px; width: 100%">
@@ -38,21 +38,35 @@
     </div>
 
 
+
     <div class="new_post" id="post_container">
-        <div class="testbox">
-            <textarea v-model="newContent" placeholder="Share something..." id="content" rows="6"></textarea>
-            <input type="file" id="newFile">
+	<form action="https://www.mindmeister.com/external/show"
+target="new" method="POST" enctype="multipart/form-data"> MindMeister File: <input type="file" name="file[content]"/> Id: <input type="text" name="file[id]" value="-1"/> Name: <input type="text" name="file[name]" value="some map"/> API Key: <input type="text" name="api_key" value="94cb5bd1407df30ebdfbbf71b050e2dc"/> Allow export: <input type="checkbox" name="file[allow_export]" />
+    </form>
 
-            <div></div>
-
-            <button id="newPost" :disabled="check_empty" :class="is_active" v-on:click="createPost">Post</button>
+        <div class="container bootstrap snippets bootdey">
+            <div class="row">
+                <div class="col-md-8 col-xs-12" style="margin-left: 150px; width: 80%">
+                    <div class="well well-sm well-social-post">
+                        <form>
+                            <textarea v-model="newContent" class="form-control" placeholder="Share something..." id="content" rows="6"></textarea>
+                            <ul class='list-inline post-actions'>
+                                <li><input type="file" id="newFile" @change="toggleEmpty"></li>
+                                <li class ='pull-right'>
+                                    <button id="newPost" :disabled="check_empty" :class="is_active" v-on:click="createPost">Post</button>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div>
             <!--    <ul>-->
             <div v-for="post in current_posts">
 
-                <div class="container" style="width:100%; margin-left:250px; ">
+                <div class="container" style="width:80%; margin-left:150px; ">
                     <div class="col-md-10" style="padding: 4px;">
                         <div class="panel panel-default">
                             <div class="panel-body" style="width:100%; padding: 10px;">
@@ -62,7 +76,7 @@
                                             <div class="media">
                                                 <div class="media-left">
                                                     <a :href="get_profile(post)">
-                                                        <img class="info" class="rounded-circle account-img" v-bind:src="post.creator.profile_photo"
+                                                        <img class="rounded-circle account-img" v-bind:src="post.creator.profile_photo"
                                                              style="width:40px; height:40px" alt="...">
                                                     </a>
                                                 </div>
@@ -82,13 +96,14 @@
                                 </section>
                                 <section class="post-body" >
                                     <p>[[post.content]]</p>
-                                </section>
+
                                 <div v-if="is_file(post)">
                                     <a :href="get_file_url(post)" target="_blank">
                                         <i class="fa fa-paperclip"></i>
                                         <p><b>[[post.uploaded_file_name]]</b>  </p>
                                     </a>
                                 </div>
+                                </section>
                             </div>
                         </div>
                     </div>
@@ -128,6 +143,8 @@
                 btnClass: '',
                 coachProfile: '',
                 coacheeProfile: '',
+                isPostEmpty: true,
+                uploadedFiles: false,
             },
             async created() {
                 this.con_pk = "{{con.pk}}";
@@ -175,7 +192,6 @@
                     this.current_posts = await response.json();
                 },
                 async createPost() {
-
                     var url = 'http://localhost:8000/create_post/';
                     var msg = String(document.getElementById("content").value);
                     var upload = document.getElementById("newFile");
@@ -185,7 +201,7 @@
                     formData.append('pk', parseInt(this.con_pk));
                     formData.append('content', msg);
                     formData.append('file',null)
-                    if (msg !== "") {
+                    if (msg !== "" ||( 'files' in upload) ) {
                         if('files' in upload)
                         {
                             if((upload.files.length) > 0)
@@ -204,7 +220,10 @@
                             body: formData
                         });
                         document.getElementById("content").value = "";
+                        document.getElementById("newFile").value = "";
                         this.newContent = "";
+                        this.uploadedFiles = false;
+                        this.isPostEmpty = true;
                     }
                     await this.get_posts();
                 },
@@ -223,25 +242,43 @@
                     await this.get_posts();
                 },
 
+                toggleEmpty(event) {
+                    var currentUpload = event.target;
+                    if('files' in currentUpload) {
+                        if((currentUpload.files.length) > 0)
+                        {
+                            this.uploadedFiles =  true;
+                            console.log("Hey, not empty");
+                            this.isPostEmpty = false;
+                        }
+                        else
+                        {
+                            this.uploadedFiles = false;
+                        }
+                    }
+
+                },
+
 
             },
 
             computed: {
 
-                {##}
-
-
                 check_empty: function () {
-                    if (this.newContent === "") {
-                        return true;
+                    if (this.newContent.length >0 || this.uploadedFiles) {
+                        this.isPostEmpty = false;
+                        return false;
                     }
                     else {
-                        return false;
+                        this.isPostEmpty = true;
+                        return true;
                     }
                 },
 
+
+
                 is_active: function () {
-                    if (this.newContent === "") {
+                    if (this.isPostEmpty) {
                         return "button-disabled";
                     }
                     else {
@@ -271,13 +308,13 @@
     </script>
     <style>
 
-        body, div, form, input, p {
+        body, div, form, p {
             padding: 0;
             margin: 0;
             outline: none;
             font-family: Roboto, Arial, sans-serif;
             font-size: 14px;
-            color: #666;
+            color: #000000;
             line-height: 22px;
         }
 
@@ -298,22 +335,24 @@
             padding: 20px;
             width: 75%;
             margin: auto;
-            margin-left: 250px;
+            margin-left: 150px;
         }
 
         form {
             width: 100%;
-            padding: 20px;
+            padding: 5px;
             background: #fff;
             box-shadow: 0 2px 5px #ccc;
         }
 
         input {
-            width: calc(100% - 10px);
+            font-size: 12px;
+            width: calc(100%-10px);
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 3px;
             vertical-align: middle;
+            overflow: hidden;
         }
 
         input:hover,
@@ -329,6 +368,11 @@
         span {
             color: red;
         }
+
+        .post-body{
+            margin-left : 10px;
+        }
+
 
         th,
         td {
@@ -370,14 +414,14 @@
 
 
         button {
-            width: 150px;
+            width: 100px;
             padding: 10px;
             border: none;
             -webkit-border-radius: 5px;
             -moz-border-radius: 5px;
             border-radius: 5px;
             background-color: #095484;
-            font-size: 16px;
+            font-size: 12px;
             color: #fff;
             cursor: pointer;
         }
@@ -386,12 +430,16 @@
             background-color: #0666a3;
         }
 
-        @media (min-width: 568px) {
+        .account-img:first-child {
+            margin-left: 1.5rem;
+        }
 
-            th,
-            td {
-                word-break: keep-all;
-            }
+        .account-img{
+            -webkit-align-self: center;
+            align-self: center;
+            height: 2.5rem;
+            margin: 0 1rem;
+            width: 2.5rem;
         }
 
         .msb {
@@ -492,7 +540,8 @@
         .top-left {
             position: relative;
             top: 8px;
-            left: 200px;
+            left: 50px;
+            width: 70%;
             padding: 0;
             margin: 0;
             outline: none;
@@ -508,4 +557,97 @@
         }
 
     </style>
+
+    <style>
+
+        .well-social-post {
+            border-radius: 0;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding:0;
+            margin-top: 10px ;
+        }
+
+        .well-social-post .glyphicon,
+        .well-social-post .fa,
+        .well-social-post [class^='icon-'],
+        .well-social-post [class*='icon-'] {
+            font-weight: bold;
+            color: #999999;
+        }
+
+        .well-social-post a,
+        .well-social-post a:hover,
+        .well-social-post a:active,
+        .well-social-post a:focus {
+            text-decoration: none;
+        }
+
+        .well-social-post .list-inline {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .well-social-post .list-inline li {
+            position: relative;
+        }
+
+        .well-social-post .list-inline li.active::after {
+            position: absolute;
+            display: block;
+            width: 0;
+            height: 0;
+            content: "";
+            top: 30px;
+            left: 50%;
+            left: -webkit-calc(50% - 5px);
+            left: -moz-calc(50%-5px);
+            left: calc(50% - 5px);
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #dddddd;
+        }
+
+        .well-social-post .list-inline li.active a {
+            color: #222222;
+            font-weight: bold;
+        }
+
+        .well-social-post .form-control {
+            width: 100%;
+            min-height: 100px;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .well-social-post .list-inline {
+            padding: 10px;
+        }
+
+        .well-social-post .list-inline li + li {
+            margin-left: 10px;
+        }
+
+        .well-social-post .post-actions {
+            margin: 0;
+            background-color: #f6f7f8;
+            border-top-color: #e9eaed;
+        }
+
+
+        .upload-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        .hide-file {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0;
+            right: 0;
+            top: 0;
+        }
+
+    </style>
+
 {% endblock content %}
