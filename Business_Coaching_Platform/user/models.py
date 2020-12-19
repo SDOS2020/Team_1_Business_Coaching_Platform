@@ -79,7 +79,6 @@ class Coach(models.Model):
     description = models.TextField(max_length = 1000)
     profile_photo = models.ImageField(null = True, blank = True, upload_to = 'profile_photos')
     linkedin = models.URLField(max_length = 100, blank = True, null = True)
-
     class Meta:    
         verbose_name = 'Coach'
         verbose_name_plural = "Coaches"

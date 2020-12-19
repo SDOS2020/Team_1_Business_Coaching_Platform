@@ -1,8 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 from django.db import transaction
 from .models import CustomUser, Coach, Coachee
-
 
 class CustomUserCreationForm(UserCreationForm):
 
@@ -23,6 +22,12 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = ('email', 'age')
+
+class UserPasswordChangeForm(PasswordChangeForm):
+
+    class Meta:
+        model = CustomUser
+        fields = ('password')
 
 
 class CoachCreationForm(UserCreationForm):

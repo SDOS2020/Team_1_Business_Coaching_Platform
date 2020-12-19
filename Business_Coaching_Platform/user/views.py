@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from .forms import CoachCreationForm, CoacheeCreationForm
+from .forms import CoachCreationForm, CoacheeCreationForm, UserPasswordChangeForm
 from .decorators import is_coach, is_coachee, requested_user_is_coach_or_connection
 from .models import Coach, Coachee, CustomUser, Connection
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -13,8 +13,9 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-
-
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
 
 
 class ConnectionViewSet(viewsets.ViewSet):
@@ -86,7 +87,7 @@ class CoacheeRegisterView(CreateView):
 
 
 class CoachUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    success_url = reverse_lazy('profile')
+    success_url = reverse_lazy('dashboard')
     template_name = 'user/update_coach.html'
     model = Coach
     fields = ['first_name', 'last_name', 'description', 'profile_photo', 'linkedin']
@@ -99,7 +100,8 @@ class CoachUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
 
 class CoacheeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    success_url = reverse_lazy('profile')
+    
+    success_url = reverse_lazy('dashboard')
     template_name = 'user/update_coachee.html'
     model = Coachee
     fields = ['first_name', 'last_name', 'profile_photo', 'linkedin']
@@ -109,6 +111,11 @@ class CoacheeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user.coachee == coachee:
             return True
         return False
+
+class ChangeUserPasswordView(PasswordChangeView):
+    template_name = 'user/change_password.html'
+    success_url = reverse_lazy('login')
+    form_class = UserPasswordChangeForm
 
 
 @requested_user_is_coach_or_connection
