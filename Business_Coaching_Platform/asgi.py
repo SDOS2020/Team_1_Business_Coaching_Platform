@@ -9,30 +9,30 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/asgi/
 
 import os
 
-# from django.core.asgi import get_asgi_application
-
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Business_Coaching_Platform.settings")
-# django_asgi_app = get_asgi_application()
-
-import django
-from channels.routing import get_default_application
+from django.core.asgi import get_asgi_application
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Business_Coaching_Platform.settings")
-django.setup()
-application = get_default_application()
+django_asgi_app = get_asgi_application()
 
-# from channels.auth import AuthMiddlewareStack
-# from channels.security.websocket import AllowedHostsOriginValidator
-# from channels.routing import ProtocolTypeRouter, URLRouter
-# import notification.routing
+# import django
+# from channels.routing import get_default_application
 
-# application = ProtocolTypeRouter({
-#   "http": django_asgi_app,
-#   "websocket": AllowedHostsOriginValidator(
-#         AuthMiddlewareStack(
-#             URLRouter(
-#                 notification.routing.websocket_urlpatterns
-#                 )
-#             ),
-#     ),
-# })
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Business_Coaching_Platform.settings")
+# django.setup()
+# application = get_default_application()
+
+from channels.auth import AuthMiddlewareStack
+from channels.security.websocket import AllowedHostsOriginValidator
+from channels.routing import ProtocolTypeRouter, URLRouter
+import notification.routing
+
+application = ProtocolTypeRouter({
+  "http": django_asgi_app,
+  "websocket": AllowedHostsOriginValidator(
+        AuthMiddlewareStack(
+            URLRouter(
+                notification.routing.websocket_urlpatterns
+                )
+            ),
+    ),
+})

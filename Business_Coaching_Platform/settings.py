@@ -96,7 +96,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Business_Coaching_Platform.wsgi.application'
 
-ASGI_APPLICATION = "Business_Coaching_Platform.routing.application"
+ASGI_APPLICATION = "Business_Coaching_Platform.asgi.application"
 
 CHANNEL_LAYERS = {
     'default': {
