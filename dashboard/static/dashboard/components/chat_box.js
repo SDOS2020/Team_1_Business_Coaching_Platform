@@ -23,12 +23,12 @@ const chatBox = Vue.component('chat-box', {
     methods: {
         async get_chat_data() {
             if (this.user_pk != ''){
-                var response = await fetch('https://business-coaching-platform.herokuapp.com/api/chat/' + String(this.user_pk) + '/');
+                var response = await fetch('https://business-coaching.herokuapp.com/api/chat/' + String(this.user_pk) + '/');
                 this.chat_data = await response.json();
             }
         },
         async send_message() {
-            var url = 'https://business-coaching-platform.herokuapp.com/api/chat/';
+            var url = 'https://business-coaching.herokuapp.com/api/chat/';
             var msg = String(document.getElementById("input_message").value).replace(/(\r\n|\n|\r)/gm, "")
             console.log(msg);
             await fetch(url, {

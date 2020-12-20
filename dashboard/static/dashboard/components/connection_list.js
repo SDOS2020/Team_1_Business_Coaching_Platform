@@ -11,7 +11,7 @@ const connectionList = Vue.component('connection-list', {
     },
     methods: {
         async get_connections() {
-            var response = await fetch('https://business-coaching-platform.herokuapp.com/api/connection/');
+            var response = await fetch('https://business-coaching.herokuapp.com/api/connection/');
             this.my_connections = await response.json();
         },
     },

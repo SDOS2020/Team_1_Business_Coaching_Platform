@@ -308,7 +308,7 @@
 				},
 				methods: {
 					async get_coach_requests() {
-						var response = await fetch('https://business-coaching-platform.herokuapp.com/api/connection/');
+						var response = await fetch('https://business-coaching.herokuapp.com/api/connection/');
 						this.coach_requests = await response.json();
 					},
 				}
@@ -456,7 +456,7 @@
 				},
 				methods: {
 					async get_coach_requests() {
-						var response = await fetch('https://business-coaching-platform.herokuapp.com/api/connection/');
+						var response = await fetch('https://business-coaching.herokuapp.com/api/connection/');
 						this.coach_requests = await response.json();
 					},
 				}

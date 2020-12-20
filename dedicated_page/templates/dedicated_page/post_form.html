@@ -132,7 +132,7 @@
 
       async get_posts(other_user_pk) {
 
-        var url = 'https://business-coaching-platform.herokuapp.com/api/post/';
+        var url = 'https://business-coaching.herokuapp.com/api/post/';
         var response = await fetch(url, {
           method: 'list',
           headers: {
@@ -147,7 +147,7 @@
       },
       async createPost() {
 
-        var url = 'https://business-coaching-platform.herokuapp.com/api/post/';
+        var url = 'https://business-coaching.herokuapp.com/api/post/';
         var msg = String(document.getElementById("content").value)
         if (msg !== "") {
           await fetch(url, {
@@ -167,7 +167,7 @@
         await this.get_posts();
       },
       async deletePost(post_pk){
-        var url = 'https://business-coaching-platform.herokuapp.com/api/post/';
+        var url = 'https://business-coaching.herokuapp.com/api/post/';
         await fetch(url, {
           method: 'delete',
           headers: {

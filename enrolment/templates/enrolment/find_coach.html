@@ -71,7 +71,7 @@
         },
         methods: {
             async get_coaches() {
-                var response = await fetch('https://business-coaching-platform.herokuapp.com/api/find_coach');
+                var response = await fetch('https://business-coaching.herokuapp.com/api/find_coach');
                 this.data = await response.json();
                 this.columns = ['profile_photo','first_name','description','link'];
             },
@@ -83,7 +83,7 @@
                 return entry['profile_photo']+'/';
             },
             get_profile(entry) {
-                return "https://business-coaching-platform.herokuapp.com/profile/" + entry['user_pk'] + '/';
+                return "https://business-coaching.herokuapp.com/profile/" + entry['user_pk'] + '/';
             },
         },
         computed: {
