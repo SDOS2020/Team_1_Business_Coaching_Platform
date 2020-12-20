@@ -17,7 +17,7 @@ django_asgi_app = get_asgi_application()
 from django.urls import re_path
 from channels.auth import AuthMiddlewareStack
 from channels.security.websocket import AllowedHostsOriginValidator
-from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.routing import ProtocolTypeRouter, URLRouter, ChannelNameRouter
 from notification.consumers import NotificationConsumer
 
 application = ProtocolTypeRouter({
@@ -27,5 +27,9 @@ application = ProtocolTypeRouter({
             re_path(r"^ws/notification/$", NotificationConsumer.as_asgi()),
         ])
     ),
-
+    'channel': ChannelNameRouter(
+        {
+            'NotificationConsumerRoute': NotificationConsumer
+        }
+    ),
 })
