@@ -13,7 +13,7 @@ const notificationPanel = Vue.component('notification-panel', {
         await this.get_notification_data(); 
     },
     async mounted(){
-        this.socket = new WebSocket('ws://' + window.location.host + '/ws/notification/');
+        this.socket = new WebSocket('wss://' + window.location.host + '/ws/notification/');
         let notificationComponent = this;
         this.socket.onmessage = async function(e) {
             await notificationComponent.get_notification_data(); 
