@@ -145,13 +145,13 @@
             async created() {
                 this.con_pk = "{{con.pk}}";
                 var response = await this.get_posts("");
-                this.coachProfile = 'http://localhost:8000/profile/' + '{{link.coach.user.pk}}';
-                this.coacheeProfile = 'http://localhost:8000/profile/' + '{{link.coachee.user.pk}}';
+                this.coachProfile = 'https://trellis.herokuapp.com/profile/' + '{{link.coach.user.pk}}';
+                this.coacheeProfile = 'https://trellis.herokuapp.com/profile/' + '{{link.coachee.user.pk}}';
             },
             methods: {
 
                 get_file_url(post) {
-                    var url = 'http://localhost:8000' + String([[post.uploaded_file_url]]);
+                    var url = 'https://trellis.herokuapp.com' + String([[post.uploaded_file_url]]);
                     return url;
                 },
 
@@ -168,18 +168,18 @@
                 },
 
                 get_calendar_url(){
-                    var url = 'http://localhost:8000/dashboard/#my-calendar';
+                    var url = 'https://trellis.herokuapp.com/dashboard/#my-calendar';
                     return url;
                 },
 
                 get_profile(post) {
-                    var url = 'http://localhost:8000/profile/' + String([[post.creator.pk]]);
+                    var url = 'https://trellis.herokuapp.com/profile/' + String([[post.creator.pk]]);
                     return url;
                 },
 
                 async get_posts(other_user_pk) {
 
-                    var url = 'http://localhost:8000/api/post/';
+                    var url = 'https://trellis.herokuapp.com/api/post/';
                     var response = await fetch(url, {
                         method: 'list',
                         headers: {
@@ -193,7 +193,7 @@
                     this.current_posts = await response.json();
                 },
                 async createPost() {
-                    var url = 'http://localhost:8000/create_post/';
+                    var url = 'https://trellis.herokuapp.com/create_post/';
                     var msg = String(document.getElementById("content").value);
                     var upload = document.getElementById("newFile");
                     var file = null;
@@ -229,7 +229,7 @@
                     await this.get_posts();
                 },
                 async deletePost(post_pk) {
-                    var url = 'http://localhost:8000/api/post/';
+                    var url = 'https://trellis.herokuapp.com/api/post/';
                     await fetch(url, {
                         method: 'delete',
                         headers: {

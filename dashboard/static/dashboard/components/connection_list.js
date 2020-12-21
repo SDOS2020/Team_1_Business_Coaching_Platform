@@ -11,7 +11,7 @@ const connectionList = Vue.component('connection-list', {
     },
     methods: {
         async get_connections() {
-            var response = await fetch('http://localhost:8000/api/connection/');
+            var response = await fetch('https://trellis.herokuapp.com/api/connection/');
             this.my_connections = await response.json();
         },
     },

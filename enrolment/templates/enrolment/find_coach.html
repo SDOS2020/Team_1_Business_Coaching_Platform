@@ -71,7 +71,7 @@
         },
         methods: {
             async get_coaches() {
-                var response = await fetch('http://localhost:8000/api/find_coach');
+                var response = await fetch('https://trellis.herokuapp.com/api/find_coach');
                 this.data = await response.json();
                 this.columns = ['profile_photo','first_name','area_of_expertise','link'];
             },
@@ -83,7 +83,7 @@
                 return entry['profile_photo']+'/';
             },
             get_profile(entry) {
-                return "http://localhost:8000/profile/" + entry['user_pk'] + '/';
+                return "https://trellis.herokuapp.com/profile/" + entry['user_pk'] + '/';
             },
         },
         computed: {

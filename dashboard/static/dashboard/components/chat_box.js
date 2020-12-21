@@ -22,12 +22,12 @@ const chatBox = Vue.component('chat-box', {
     methods: {
         async get_chat_data() {
             if (this.user_pk != ''){
-                var response = await fetch('http://localhost:8000/api/chat/' + String(this.user_pk) + '/');
+                var response = await fetch('https://trellis.herokuapp.com/api/chat/' + String(this.user_pk) + '/');
                 this.chat_data = await response.json();
             }
         },
         async send_message() {
-            var url = 'http://localhost:8000/api/chat/';
+            var url = 'https://trellis.herokuapp.com/api/chat/';
             var msg = String(document.getElementById("input_message").value).replace(/(\r\n|\n|\r)/gm, "")
             await fetch(url, {
                 method: 'post',

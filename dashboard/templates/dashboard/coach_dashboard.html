@@ -226,7 +226,7 @@
 									<div class="card p-3">
 										<a :href="get_dedicated_page_link([[coachee_request.coachee.user_pk]])">
 											<div class="d-flex flex-row mb-3" style="width:max-content; height: max-content;">
-												<img :src="coachee_requests[index].coachee.profile_photo" height="40px" width="40px" style="border-radius: 100%;" href="http://localhost:8000/dedicated_page/3/">
+												<img :src="coachee_requests[index].coachee.profile_photo" height="40px" width="40px" style="border-radius: 100%;" href="https://trellis.herokuapp.com/dedicated_page/3/">
 												<div class="d-flex flex-column ml-2">
 													<span>
 														[[ coachee_requests[index].coachee.first_name + ' ' + coachee_requests[index].coachee.last_name ]]
@@ -373,11 +373,11 @@
 				},
 				methods: {
 					async get_coachee_requests() {
-						var response = await fetch('http://localhost:8000/api/connection/');
+						var response = await fetch('https://trellis.herokuapp.com/api/connection/');
 						this.coachee_requests = await response.json();
 					},
 					get_dedicated_page_link(pk) {
-                    	var url = 'http://localhost:8000/dedicated_page/' + String(pk);
+                    	var url = 'https://trellis.herokuapp.com/dedicated_page/' + String(pk);
 						return url;
 					}
 				}
@@ -588,11 +588,11 @@
 				},
 				methods: {
 					async get_coachee_requests() {
-						var response = await fetch('http://localhost:8000/api/connection/');
+						var response = await fetch('https://trellis.herokuapp.com/api/connection/');
 						this.coachee_requests = await response.json();
 					},
 					async accept(request) {
-						var url = 'http://localhost:8000/api/connection/' + String(request.pk) + '/';
+						var url = 'https://trellis.herokuapp.com/api/connection/' + String(request.pk) + '/';
 						await fetch(url, {
 							method: 'put',
 							headers: {
@@ -609,7 +609,7 @@
 						await this.get_coachee_requests();
 					},
 					async reject(request) {
-						var url = 'http://localhost:8000/api/connection/' + String(request.pk) + '/';
+						var url = 'https://trellis.herokuapp.com/api/connection/' + String(request.pk) + '/';
 						await fetch(url, {
 							method: 'delete',
 							headers: {

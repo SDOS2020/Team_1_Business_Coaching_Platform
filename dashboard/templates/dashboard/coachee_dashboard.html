@@ -311,11 +311,11 @@
 				},
 				methods: {
 					async get_coach_requests() {
-						var response = await fetch('http://localhost:8000/api/connection/');
+						var response = await fetch('https://trellis.herokuapp.com/api/connection/');
 						this.coach_requests = await response.json();
 					},
 					get_dedicated_page_link(pk) {
-                    	var url = 'http://localhost:8000/dedicated_page/' + String(pk);
+                    	var url = 'https://trellis.herokuapp.com/dedicated_page/' + String(pk);
                     return url;
                 	},
 				}
@@ -463,7 +463,7 @@
 				},
 				methods: {
 					async get_coach_requests() {
-						var response = await fetch('http://localhost:8000/api/connection/');
+						var response = await fetch('https://trellis.herokuapp.com/api/connection/');
 						this.coach_requests = await response.json();
 					},
 				}

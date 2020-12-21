@@ -96,11 +96,11 @@
 			},
 			methods: {
 				async get_coachee_requests() {
-					var response = await fetch('http://localhost:8000/api/connection/');
+					var response = await fetch('https://trellis.herokuapp.com/api/connection/');
 					this.coachee_requests = await response.json();
 				},
 				async accept(request){
-					var url = 'http://localhost:8000/api/connection/' + String(request.pk) + '/';
+					var url = 'https://trellis.herokuapp.com/api/connection/' + String(request.pk) + '/';
 					await fetch(url, {
 						method: 'put',
 						headers: {
@@ -117,7 +117,7 @@
 					await this.get_coachee_requests();
 				},
 				async reject(request){
-					var url = 'http://localhost:8000/api/connection/' + String(request.pk) + '/';
+					var url = 'https://trellis.herokuapp.com/api/connection/' + String(request.pk) + '/';
 					await fetch(url, {
 						method: 'delete',
 						headers: {
@@ -310,7 +310,7 @@
 			},
 			methods: {
 				async get_coachee_requests() {
-					var response = await fetch('http://localhost:8000/api/connection/');
+					var response = await fetch('https://trellis.herokuapp.com/api/connection/');
 					this.coachee_requests = await response.json();
 				},
 			}

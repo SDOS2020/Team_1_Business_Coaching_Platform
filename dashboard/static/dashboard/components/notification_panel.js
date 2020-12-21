@@ -21,7 +21,7 @@ const notificationPanel = Vue.component('notification-panel', {
     },
     methods: {
         async get_notification_data() {
-            var response = await fetch('http://localhost:8000/api/notification/');
+            var response = await fetch('https://trellis.herokuapp.com/api/notification/');
             this.notificationData = await response.json();
             this.notificationNumber = this.notificationData.length
         },
@@ -33,7 +33,7 @@ const notificationPanel = Vue.component('notification-panel', {
             await this.get_notification_data();
         },
         async clear_notification(pk) {
-            var url = 'http://localhost:8000/api/notification/';
+            var url = 'https://trellis.herokuapp.com/api/notification/';
             await fetch(url, {
                 method: 'delete',
                 headers: {
