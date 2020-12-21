@@ -8,10 +8,10 @@ class PostModelTest(TestCase):
     def setUpTestData(cls):
         # Set up non-modified objects used by all test methods
         creator = CustomUser.objects.create(age=50,is_coach = True,email="raghav@gmail.com")
-        viewer = CustomUser.objects.create(age=27,is_coach = True,email="paras@gmail.com")
+        viewer = CustomUser.objects.create(age=27,is_coachee = True,email="paras@gmail.com")
         print(CustomUser.objects.all())
         # viewer = CustomUser.objects.all()[1]
-        post = Post.objects.create(creator= creator,viewer = viewer,content = "Hello world!")
+        Post.objects.create(creator= creator,viewer = viewer,content = "Hello world!")
 
     def setUp(self):
         print("setUp: Run once for every test method to setup clean data.")
