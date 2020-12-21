@@ -17,6 +17,7 @@ const chatBox = Vue.component('chat-box', {
         this.chatSocket = new WebSocket(ws_scheme + '://' + window.location.host + '/ws/notification/');
         let chatComponent = this;
         this.chatSocket.onmessage = async function(e) {
+            console.log("kuch aaya")
             await chatComponent.get_chat_data(); 
         };
     },

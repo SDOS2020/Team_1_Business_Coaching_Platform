@@ -10,7 +10,7 @@ class NotificationConsumer(WebsocketConsumer):
     
     def connect(self):
         user = get_object_or_404(CustomUser,  email = self.scope["user"])
-        self.room_group_name = "group_2"
+        self.room_group_name = "group_" + str(user.pk)
         
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
