@@ -29,7 +29,6 @@ const chatBox = Vue.component('chat-box', {
         async send_message() {
             var url = 'http://localhost:8000/api/chat/';
             var msg = String(document.getElementById("input_message").value).replace(/(\r\n|\n|\r)/gm, "")
-            console.log(msg);
             await fetch(url, {
                 method: 'post',
                 headers: {

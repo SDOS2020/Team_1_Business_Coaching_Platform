@@ -16,7 +16,7 @@ from user.views import connection_exists, get_all_connections, get_connection
 from django.db.models import Q
 from rest_framework.exceptions import ParseError
 from rest_framework.parsers import FileUploadParser
-from .forms import customForm,PostForm
+from .forms import customForm
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from django.core.files.storage import FileSystemStorage
@@ -32,8 +32,8 @@ def dedicated_page(request,pk):
     other_user = get_object_or_404(CustomUser, pk=pk)
     current_connection = get_connection(request.user, other_user)
     if current_connection:
-        return render(request, 'dedicated_page/dedicated_page.html',{"con":other_user,"link":current_connection})#change con with connection
-    return redirect('dashboard')
+        return render(request, 'dedicated_page/dedicated_page.html',{"con":other_user,"link":current_connection})#replace con with connection
+    return redirect('home')
 
 
 class PostViewSet(viewsets.ViewSet):

@@ -16,7 +16,7 @@ const connectionList = Vue.component('connection-list', {
         },
     },
     template: `<div id="connection_list">
-                    <ul class="users" style="height: 300px; float: left; width: 200px;">
+                    <ul class="users" style="float: left; width: 200px;">
                         <div v-if='is_coach == "True"'>
                             <li v-for="connection in my_connections" v-if="connection.accepted" :key="connection.pk" class="person" v-on:click="$emit('request_chat',connection.coachee)">
                                 <div class="user">
