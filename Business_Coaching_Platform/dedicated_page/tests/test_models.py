@@ -10,7 +10,6 @@ class PostModelTest(TestCase):
         creator = CustomUser.objects.create(age=50,is_coach = True,email="raghav@gmail.com")
         viewer = CustomUser.objects.create(age=27,is_coachee = True,email="paras@gmail.com")
         print(CustomUser.objects.all())
-        # viewer = CustomUser.objects.all()[1]
         Post.objects.create(creator= creator,viewer = viewer,content = "Hello world!")
 
     def setUp(self):
@@ -23,13 +22,5 @@ class PostModelTest(TestCase):
         content = "Hello world!"
         post = Post.objects.all()[0]
         expected_object_name = f'{creator} -> {viewer} : {content}'
-        self.assertEqual(expected_object_namec, str(post))
+        self.assertEqual(expected_object_name, str(post))
 
-
-    # def test_false_is_true(self):
-    #     print("Method: test_false_is_true.")
-    #     self.assertTrue(False)
-    #
-    # def test_one_plus_one_equals_two(self):
-    #     print("Method: test_one_plus_one_equals_two.")
-    #     self.assertEqual(1 + 1, 2)

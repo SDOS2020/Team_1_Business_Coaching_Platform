@@ -31,8 +31,6 @@ import html
 def dedicated_page(request,pk):
     other_user = get_object_or_404(CustomUser, pk=pk)
     current_connection = get_connection(request.user, other_user)
-    print("Hello")
-    print("current",current_connection)
     if current_connection:
         return render(request, 'dedicated_page/dedicated_page.html',{"con":other_user,"link":current_connection})#replace con with connection
     return redirect('home')
