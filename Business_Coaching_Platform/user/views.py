@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from .forms import CoachCreationForm, CoacheeCreationForm
+from .forms import CoachCreationForm, CoacheeCreationForm, UserPasswordChangeForm
 from .decorators import is_coach, is_coachee, requested_user_is_coach_or_connection
 from .models import Coach, Coachee, CustomUser, Connection
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -13,8 +13,9 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
-
-
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
 
 
 class ConnectionViewSet(viewsets.ViewSet):
@@ -86,10 +87,10 @@ class CoacheeRegisterView(CreateView):
 
 
 class CoachUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    success_url = reverse_lazy('profile')
+    success_url = reverse_lazy('dashboard')
     template_name = 'user/update_coach.html'
     model = Coach
-    fields = ['first_name', 'last_name', 'description', 'profile_photo', 'linkedin']
+    fields = ['first_name', 'last_name', 'area_of_expertise', 'profile_photo', 'linkedin','location','description' , 'coaching_hours', 'calendly_username']
 
     def test_func(self):
         coach = self.get_object()
@@ -98,17 +99,23 @@ class CoachUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return False
 
 
-class CoacheeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    success_url = reverse_lazy('profile')
+class CoacheeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):    
+    success_url = reverse_lazy('dashboard')
     template_name = 'user/update_coachee.html'
     model = Coachee
-    fields = ['first_name', 'last_name', 'profile_photo', 'linkedin']
+    fields = ['first_name', 'last_name', 'profile_photo', 'linkedin','location','resume','purpose','contact']
 
     def test_func(self):
         coachee = self.get_object()
         if self.request.user.coachee == coachee:
             return True
         return False
+
+
+class ChangeUserPasswordView(PasswordChangeView):
+    template_name = 'user/change_password.html'
+    success_url = reverse_lazy('login')
+    form_class = UserPasswordChangeForm
 
 
 @requested_user_is_coach_or_connection
@@ -138,6 +145,7 @@ def connection_exists(user1, user2):
         return True
     return False
 
+
 def get_connection(user1, user2):
     """
         Returns the Connection object connecting user1 and user2
@@ -151,6 +159,7 @@ def get_connection(user1, user2):
         if connection.exists():
             return connection.first()
     return None
+
 
 def get_all_connections(user):
     if user.is_coach:

@@ -45,7 +45,7 @@ class CoachSerializer(serializers.ModelSerializer):
 
     class Meta: 
         model = Coach
-        fields = ['id', 'first_name', 'last_name',  'profile_photo', 'description', 'user_pk', 'email']
+        fields = ['id', 'first_name', 'last_name',  'profile_photo', 'area_of_expertise', 'user_pk', 'email']
 
 
 class CoacheeSerializer(serializers.ModelSerializer):

@@ -1,6 +1,7 @@
 from django.db import models
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class MyUserManager(BaseUserManager):
@@ -76,10 +77,13 @@ class Coach(models.Model):
     user = models.OneToOneField(CustomUser, on_delete = models.CASCADE) 
     first_name = models.CharField(max_length = 100)
     last_name = models.CharField(max_length = 100)
-    description = models.TextField(max_length = 1000)
+    calendly_username = models.CharField(max_length = 100, blank=True, null=True)
+    description = models.TextField(max_length = 1000, null = True, blank = True)
     profile_photo = models.ImageField(null = True, blank = True, upload_to = 'profile_photos')
     linkedin = models.URLField(max_length = 100, blank = True, null = True)
-
+    location = models.CharField(max_length = 100, null = True, blank = True)
+    coaching_hours = models.IntegerField(blank=True, null=True)
+    area_of_expertise = models.TextField(max_length = 1000)
     class Meta:    
         verbose_name = 'Coach'
         verbose_name_plural = "Coaches"
@@ -95,7 +99,10 @@ class Coachee(models.Model):
     last_name = models.CharField(max_length = 100)
     profile_photo = models.ImageField(null = True, blank = True, upload_to = 'profile_photos')
     linkedin = models.URLField(max_length = 100, blank = True, null = True)
-
+    location = models.CharField(max_length = 100, blank = True, null = True)
+    resume = models.FileField(upload_to='resume_uploads', blank = True, null = True)
+    purpose = models.TextField(max_length = 1000, blank = True, null = True)
+    contact = PhoneNumberField(blank = True, null = True)
     class Meta:
         verbose_name = 'Coachee'
         verbose_name_plural = "Coachees"

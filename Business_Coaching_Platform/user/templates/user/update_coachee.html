@@ -1,16 +1,104 @@
 {% extends "home/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
+    <div class="content-section" style="margin: auto; background-color: azure; padding: 100px; width: 70%; margin-top: auto;">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
+            <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Update Your Profile</h1>
+            
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Update Your Profile</legend>
-                {{ form|crispy }}
-            </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Submit</button>
-            </div>
-        </form>
+                <div class="row">
+                    <div class="col">
+                        <div id="div_id_first_name" class="form-group"> 
+                            <label for="id_first_name" class="requiredField">First Name</label> 
+                            <div class> 
+                                <input type="text" name="first_name" value="{{ form.first_name.value }}" maxlength="100" class="textinput textInput form-control" required="" id="id_first_name"> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div id="div_id_last_name" class="form-group"> 
+                            <label for="id_last_name" class="requiredField">Last Name</label> 
+                            <div class="form-group">
+                                <input type="text" name="last_name" value="{{ form.last_name.value }}" maxlength="500" placeholder="Last Name" class="textinput textInput form-control" id="id_last_name"> 
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div id="div_id_profile_photo" class="form-group"> 
+                    <label for="id_profile_photo" class="custom-file-upload">
+                        <i class="fa fa-cloud-upload"></i> Profile Photo
+                    </label> 
+                    <div class="form-group"> 
+                        <input type="file"  name="profile_photo" value="{{ form.profile_photo.value }}" accept="image/*" class="clearablefileinput form-control-file"  id="id_profile_photo"> 
+                    </div> 
+                </div> 
+                <div id="div_id_linkedin" class="form-group"> 
+                    <label for="id_linkedin" class="">Linkedin Profile</label> 
+                    <div class="form-group"> 
+                        <input type="url" name="linkedin" placeholder="URL" maxlength="100" value="{{ form.linkedin.value|default_if_none:'' }}" class="urlinput form-control" id="id_linkedin"> 
+                    </div> 
+                </div> 
+                <div id="div_id_location" class="form-group"> 
+                    <label for="id_location" class="">Location</label> 
+                    <div class="form-group"> 
+                        <input type="text" name="location" placeholder="Location" maxlength="100" value="{{ form.location.value|default_if_none:'' }}" class="form-control" id="id_location"> 
+                    </div> 
+                </div> 
+                <div id="div_id_resume" class="form-group"> 
+                    <label for="id_resume" class="custom-file-upload">
+                        <i class="fa fa-cloud-upload"></i> Resume
+                    </label> 
+                    <div class="form-group"> 
+                        <input type="file"  name="resume" accept="image/*" class="clearablefileinput form-control-file"  value="{{ form.resume.value|default_if_none:'' }}" id="id_resume"> 
+                    </div> 
+                </div>
+                <div id="div_id_purpose" class="form-group"> 
+                    <label for="id_purpose" class="">Purpose for Seeking Coaching</label> 
+                    <div class="form-group"> 
+                        <input type="text" name="purpose" placeholder="Purpose for Seeking Coaching" maxlength="500" value="{{ form.purpose.value|default_if_none:'' }}" class="form-control" id="id_purpose"> 
+                    </div> 
+                </div> 
+                <div id="div_id_contact" class="form-group"> 
+                    <label for="id_contact" class="">Contact Number</label> 
+                    <div class="form-group"> 
+                        <input type="text" name="contact" value="{{ form.contact.value|default_if_none:'' }}" placeholder="Contact Number" class="form-control" id="id_contact"> 
+                    </div> 
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-outline-info btn-block" style="margin-top: 20px;" type="submit">Update Profile</button>
+                </div>
+        </fieldset>  
+    </form>
     </div>
 {% endblock content %}
+
+<style>
+    body {
+        color: #fff;
+        background: #3598dc;
+        font-family: 'Roboto', sans-serif;
+    }
+    .form-control {
+        height: 41px;
+        background: #f2f2f2;
+        box-shadow: none !important;
+        border: none;
+    }
+    .form-control:focus {
+        background: #e2e2e2;
+    }
+    .form-control, .btn {        
+        border-radius: 3px;
+    }
+    input[type="file"] {
+    display: none;
+    }
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+</style>
