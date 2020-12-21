@@ -90,7 +90,7 @@ class CoachUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     success_url = reverse_lazy('dashboard')
     template_name = 'user/update_coach.html'
     model = Coach
-    fields = ['first_name', 'last_name', 'area_of_expertise', 'profile_photo', 'linkedin','location','description' , 'coaching_hours']
+    fields = ['first_name', 'last_name', 'area_of_expertise', 'profile_photo', 'linkedin','location','description' , 'coaching_hours', 'calendly_username']
 
     def test_func(self):
         coach = self.get_object()
@@ -99,8 +99,7 @@ class CoachUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return False
 
 
-class CoacheeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    
+class CoacheeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):    
     success_url = reverse_lazy('dashboard')
     template_name = 'user/update_coachee.html'
     model = Coachee
@@ -111,6 +110,7 @@ class CoacheeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         if self.request.user.coachee == coachee:
             return True
         return False
+
 
 class ChangeUserPasswordView(PasswordChangeView):
     template_name = 'user/change_password.html'
@@ -145,6 +145,7 @@ def connection_exists(user1, user2):
         return True
     return False
 
+
 def get_connection(user1, user2):
     """
         Returns the Connection object connecting user1 and user2
@@ -158,6 +159,7 @@ def get_connection(user1, user2):
         if connection.exists():
             return connection.first()
     return None
+
 
 def get_all_connections(user):
     if user.is_coach:

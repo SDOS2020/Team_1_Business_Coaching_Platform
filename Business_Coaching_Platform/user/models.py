@@ -77,6 +77,7 @@ class Coach(models.Model):
     user = models.OneToOneField(CustomUser, on_delete = models.CASCADE) 
     first_name = models.CharField(max_length = 100)
     last_name = models.CharField(max_length = 100)
+    calendly_username = models.CharField(max_length = 100, blank=True, null=True)
     description = models.TextField(max_length = 1000, null = True, blank = True)
     profile_photo = models.ImageField(null = True, blank = True, upload_to = 'profile_photos')
     linkedin = models.URLField(max_length = 100, blank = True, null = True)

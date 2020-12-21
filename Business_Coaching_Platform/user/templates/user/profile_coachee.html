@@ -46,7 +46,7 @@
 						{% if user.pk == profile.pk %}
 						<div class="purpose" style="margin-left:40px">
 							<h5>Purpose for Seeking Coaching</h5>
-							{{ profile.coachee.purpose }}
+							{{ profile.coachee.purpose|default_if_none:'' }}
 						</div>
 					</div>
 						{% endif %}
@@ -58,7 +58,7 @@
 						{% if user.pk == profile.pk %}
 						<div class="contact" style="margin-left:30px">
 							<h5>Contact Information</h5>
-							{{ profile.coachee.contact }}
+							{{ profile.coachee.contact|default_if_none:'' }}
 						</div>
 						</div>
 						{% endif %}

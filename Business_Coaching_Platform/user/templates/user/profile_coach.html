@@ -49,7 +49,7 @@
 						{% if user.pk == profile.pk %}
 						<div class="Bio" style="margin-left:40px">
 							<h5>About</h5>
-							{{ profile.coach.description }}
+							{{ profile.coach.description|default_if_none:'' }}
 						</div>
 					</div>
 						{% endif %}
@@ -61,7 +61,7 @@
 						{% if user.pk == profile.pk %}
 						<div class="contact" style="margin-left:30px">
 							<h5>Contact Information</h5>
-							{{ profile.coach.location }}
+							{{ profile.coach.location|default_if_none:'' }}
 						</div>
 						</div>
 						{% endif %}
