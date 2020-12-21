@@ -23,7 +23,7 @@ class PostModelTest(TestCase):
         content = "Hello world!"
         post = Post.objects.all()[0]
         expected_object_name = f'{creator} -> {viewer} : {content}'
-        self.assertEqual(expected_object_name, str(post))
+        self.assertEqual(expected_object_namec, str(post))
 
 
     # def test_false_is_true(self):
