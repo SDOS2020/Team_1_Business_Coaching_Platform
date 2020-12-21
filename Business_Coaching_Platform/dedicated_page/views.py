@@ -16,7 +16,7 @@ from user.views import connection_exists, get_all_connections, get_connection
 from django.db.models import Q
 from rest_framework.exceptions import ParseError
 from rest_framework.parsers import FileUploadParser
-from .forms import customForm,PostForm
+from .forms import customForm
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from django.core.files.storage import FileSystemStorage
