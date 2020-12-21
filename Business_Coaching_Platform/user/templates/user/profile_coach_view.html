@@ -39,6 +39,17 @@
 							<div id="app" style="margin-top:15px;">
 								<button style="background-color: #40c0e7;border: 1px solid;" :disabled="my_request.length != 0" v-on:click="send_request({{ profile.pk }})">[[ get_send_request_button_message ]]</button>
 							</div>
+							<!-- Add Calendly here -->
+							<!-- Calendly inline widget begin -->
+							<div class="calendly-inline-widget" style="min-width:320px;height:580px;" data-auto-load="false">
+								<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js"></script>
+								<script>
+									Calendly.initInlineWidget({
+										url: 'https://calendly.com/yatinarora'
+									});
+								</script>
+							</div>
+							<!-- Calendly inline widget end -->
 						{% endif %}
 					</div>
 				</div>
