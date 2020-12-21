@@ -323,11 +323,11 @@
 								</div>
 								<ul class="events__list">
 									<li class="events__item" style="width:100%;overflow:auto;max-height:400px;">
-										<div class="events__item--left" style="width:100%;text-align: center;">
+										<div class="events__item--left" style="width:100%;text-align: center; padding-bottom: 10%;">
 											<div class="row">
 												<div class="col" style="column-span: 2;">
 													<label for = "email-coachee">Client Email</label>
-													<input type="text" id="email-coachee" name="email-coachee"><br><br>
+													<input type="text" id="email-coachee" name="email-coachee" style="min-width: 62%;"><br><br>
 												</div>
 											</div>
 											<div class="row">
@@ -335,11 +335,16 @@
 												<div class="col" style="column-span: 2;">
 													<label for="meeting-time">Choose a time for your appointment:</label>
 													<input type="datetime-local" id="meeting-time"
-														name="meeting-time" value="2021-01-01T00:00"
+														name="meeting-time" value="2020-12-22T00:00"
 													>
 												</div>
 											</div>
-											
+											<div class="row">
+												<div class="col" style="column-span: 2;">
+													<label for="meeting-duration">Enter Duration (in Minutes)</label>
+													<input type="text" id="meeting-duration" name="meeting-time" style="max-width: 15%;">
+												</div>
+											</div>
 
 											<div class="row" style= "width: max-content; float: right;">
 												<button type="button" class="btn btn-secondary" id="schedule-meet"
@@ -514,40 +519,35 @@
 			// Schedule a meeting
 			// Patch is used for updating
 			function scheduleMeeting() {
-				
-				// var eventPatch = {
-				// 	conferenceData: {
-				// 		createRequest: {requestId: "7qxalsvy0e"}
-				// 	}
-				// };
-				// gapi.client.calendar.events.patch({
-				// 	calendarId: "primary",
-				// 	eventId: "7cbh8rpc10lrc0ckih9tafss99",
-				// 	resource: eventPatch,
-				// 	sendNotifications: true,
-				// 	conferenceDataVersion: 1
-				// }).execute(function(event) {
-				// 	console.log("Conference created for event: %s", event.htmlLink);
-				// });
 				// Creating new event
+				var startTime = new Date(document.getElementById('meeting-time').value);
+				var duration = parseInt(document.getElementById('meeting-duration').value);
+				var clientEmail = document.getElementById('email-coachee').value;
+				var endTime = new Date(startTime.getTime() + duration*60000);
+				startTime = startTime.toISOString();
+				endTime = endTime.toISOString();
+				console.log(startTime);
+				console.log(endTime);
+				console.log(duration);
+				console.log(clientEmail);
 				var event = {
-					'summary': 'Shreyansh and Yatin - Business Coaching',
+					'summary': 'Business Coaching Meeting',
 					'description': 'Coach and Client interaction meeting details',
 					'start': {
-						'dateTime': '2020-12-21T11:00:45+00:00',
+						'dateTime': startTime,
 						'timeZone': 'Asia/Kolkata'
 					},
 					'end': {
-						'dateTime': '2020-12-21T12:00:45+00:00',
+						'dateTime': endTime,
 						'timeZone': 'Asia/Kolkata'
 					},
 					'attendees': [
-						{'email': 'shrey@mailinator.com'}
+						{'email': clientEmail}
 					],
 					'sendNotifications': true,
 					'conferenceData': {
 						'createRequest': {
-							'requestId': CryptoJS.MD5("SomeRandomString").toString(),
+							'requestId': CryptoJS.MD5(startTime).toString(),
 							'conferenceSolutionKey': {
 								'type': 'hangoutsMeet'
 							}
@@ -562,7 +562,8 @@
 					'resource': event
 				});
 				request.execute(function(event) {
-					console.log('Done Scheduling');
+					console.log('Meeting Scheduled :)');
+					document.getElementById('email-coachee').value = 'Success!';
 					appendPre('Event created: ' + event.htmlLink);
 				});
 			}
