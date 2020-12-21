@@ -1,16 +1,164 @@
 {% extends "home/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
+    <div class="content-section" style="margin: auto; background-color: azure; padding: 100px; width: 70%; margin-top: auto;">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Update Your Profile</legend>
-                {{ form|crispy }}
+            <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 font-weight-normal">Update Your Profile</h1>
+            
+            <fieldset class="signup-form">
+                <div class="row">
+                    <div class="col">
+                        <div id="div_id_first_name" class="form-group"> 
+                            <label for="id_first_name" class=" requiredField"></label> 
+                            <div class="form-group"> 
+                                <input type="text" name="first_name" value="{{ form.first_name.value }}" maxlength="500" placeholder="First Name" class="textinput textInput form-control" id="id_first_name"> 
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div id="div_id_last_name" class="form-group"> 
+                            <label for="id_last_name" class=" requiredField"></label> 
+                            <div class="form-group">
+                                <input type="text" name="last_name" value="{{ form.last_name.value }}" maxlength="500" placeholder="Last Name" class="textinput textInput form-control" id="id_last_name"> 
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div id="div_id_area_of_expertise" class="form-group"> 
+                    <label for="id_area_of_expertise"></label> 
+                    <div class="form-group"> 
+                        <input type="text" name="area_of_expertise" value="{{ form.area_of_expertise.value }}" maxlength="500" placeholder="Area of Expertise" class="textinput textInput form-control" id="id_area_of_expertise"> 
+                    </div> 
+                </div>
+                <div id="div_id_profile_photo" class="form-group"> 
+                    <label for="id_profile_photo" class="custom-file-upload">
+                        <i class="fa fa-cloud-upload"></i> Profile photo
+                    </label> 
+                    <div class="form-group"> 
+                        <input type="file"  name="profile_photo" value="{{ form.profile_photo.value }}" accept="image/*" class="clearablefileinput form-control-file"  id="id_profile_photo"> 
+                    </div> 
+                </div> 
+                <div id="div_id_linkedin" class="form-group"> 
+                    <label for="id_linkedin" class=""></label> 
+                    <div class="form-group"> 
+                        <input type="url" name="linkedin" placeholder="URL" value="{{ form.linkedin.value }}" maxlength="100" class="urlinput form-control" id="id_linkedin"> 
+                    </div> 
+                </div> 
+                <div id="div_id_location" class="form-group"> 
+                    <label for="id_location" class=""></label> 
+                    <div class="form-group"> 
+                        <input type="text" name="location" placeholder="Location" value="{{ form.location.value }}" maxlength="100" class="form-control" id="id_location"> 
+                    </div> 
+                </div> 
+                <div id="div_id_description" class="form-group"> 
+                    <label for="id_description" class=""></label> 
+                    <div class="form-group"> 
+                        <input type="text" name="description" value="{{ form.description.value }}" placeholder="Bio" maxlength="500" class="form-control" id="id_description"> 
+                    </div> 
+                </div> 
+                <div id="div_id_coaching_hours" class="form-group"> 
+                    <label for="id_coaching_hours" class=""></label> 
+                    <div class="form-group"> 
+                        <input type="int" name="coaching_hours" value="{{ form.coaching_hours.value }}" placeholder="No. of Hours of Coaching" class="form-control" id="id_coaching_hours"> 
+                    </div> 
+                </div> 
+                <div class="form-group">
+                    <button class="btn btn-outline-info btn-block" style="margin-top: 20px;" type="submit">Update Profile</button>
+                </div>
             </fieldset>
-            <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Submit</button>
-            </div>
         </form>
     </div>
 {% endblock content %}
+
+<style>
+    body {
+        color: #fff;
+        background: #3598dc;
+        font-family: 'Roboto', sans-serif;
+    }
+    .form-control {
+        height: 41px;
+        background: #f2f2f2;
+        box-shadow: none !important;
+        border: none;
+    }
+    .form-control:focus {
+        background: #e2e2e2;
+    }
+    .form-control, .btn {        
+        border-radius: 3px;
+    }
+    .signup-form {
+        width: 400px;
+        margin: 30px auto;
+    }
+    .signup-form form {
+        color: #999;
+        border-radius: 3px;
+        margin-bottom: 15px;
+        background: #fff;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+    .signup-form h2  {
+        color: #333;
+        font-weight: bold;
+        margin-top: 0;
+    }
+    .signup-form hr  {
+        margin: 0 -30px 20px;
+    }    
+    .signup-form .form-group {
+        margin-bottom: 20px;
+    }
+    .signup-form input[type="checkbox"] {
+        margin-top: 3px;
+    }
+    .signup-form .row div:first-child {
+        padding-right: 10px;
+    }
+    .signup-form .row div:last-child {
+        padding-left: 10px;
+    }
+    .signup-form .btn {        
+        font-size: 16px;
+        font-weight: bold;
+        background: #3598dc;
+        border: none;
+        min-width: 140px;
+    }
+    .signup-form .btn:hover, .signup-form .btn:focus {
+        background: #2389cd !important;
+        outline: none;
+    }
+    .signup-form a {
+        color: #fff;
+        text-decoration: underline;
+    }
+    .signup-form a:hover {
+        text-decoration: none;
+    }
+    .signup-form form a {
+        color: #3598dc;
+        text-decoration: none;
+    }	
+    .signup-form form a:hover {
+        text-decoration: underline;
+    }
+    .signup-form .hint-text  {
+        padding-bottom: 15px;
+        text-align: center;
+    }
+
+    input[type="file"] {
+    display: none;
+    }
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 6px 12px;
+        cursor: pointer;
+    }
+    </style>

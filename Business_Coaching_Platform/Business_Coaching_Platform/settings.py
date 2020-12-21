@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'enrolment',
     'rest_framework',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [

@@ -73,7 +73,7 @@
             async get_coaches() {
                 var response = await fetch('http://localhost:8000/api/find_coach');
                 this.data = await response.json();
-                this.columns = ['profile_photo','first_name','description','link'];
+                this.columns = ['profile_photo','first_name','area_of_expertise','link'];
             },
             sort_by(key) {
                 this.sort_key = key;
@@ -118,7 +118,7 @@
                 if (!str.localeCompare("first_name")){
                     return "Name";
                 }
-                if (!str.localeCompare("description")){
+                if (!str.localeCompare("area_of_expertise")){
                     return "Area of Expertise";
                 }
                 return str.charAt(0).toUpperCase() + str.slice(1);

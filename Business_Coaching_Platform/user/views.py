@@ -90,7 +90,7 @@ class CoachUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     success_url = reverse_lazy('dashboard')
     template_name = 'user/update_coach.html'
     model = Coach
-    fields = ['first_name', 'last_name', 'description', 'profile_photo', 'linkedin']
+    fields = ['first_name', 'last_name', 'area_of_expertise', 'profile_photo', 'linkedin','location','description' , 'coaching_hours']
 
     def test_func(self):
         coach = self.get_object()
@@ -104,7 +104,7 @@ class CoacheeUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     success_url = reverse_lazy('dashboard')
     template_name = 'user/update_coachee.html'
     model = Coachee
-    fields = ['first_name', 'last_name', 'profile_photo', 'linkedin']
+    fields = ['first_name', 'last_name', 'profile_photo', 'linkedin','location','resume','purpose','contact']
 
     def test_func(self):
         coachee = self.get_object()

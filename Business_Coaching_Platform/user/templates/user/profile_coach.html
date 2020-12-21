@@ -28,7 +28,7 @@
 							{{ profile.coach.first_name }} {{ profile.coach.last_name }}
 						</div>
 						<div class="desc" style="margin-left:40px">
-							{{ profile.coach.description }}
+							{{ profile.coach.area_of_expertise }}
 						</div>
 					</div>
 					<div class="bottom">
@@ -42,5 +42,33 @@
 				</div>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-lg-6 col-sm-6" style="width: 50%;">
+				<div class="card hovercard">
+					<div class="info" style="margin-top: 10px;">
+						{% if user.pk == profile.pk %}
+						<div class="Bio" style="margin-left:40px">
+							<h5>About</h5>
+							{{ profile.coach.description }}
+						</div>
+					</div>
+						{% endif %}
+				</div>
+			</div>
+			<div class="col-lg-6 col-sm-6" style="width: 50%;">
+				<div class="card hovercard">
+					<div class="info" style="margin-top: 10px;">
+						{% if user.pk == profile.pk %}
+						<div class="contact" style="margin-left:30px">
+							<h5>Contact Information</h5>
+							{{ profile.coach.location }}
+						</div>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	</div>
 {% endblock add-html %}
