@@ -8,7 +8,9 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from .models import Notification
 from .serializer import NotificationSerializer
-
+from django.conf import settings 
+from django.core.mail import send_mail 
+from user.models import CustomUser
 
 class NotificationViewSet(viewsets.ViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
@@ -30,6 +32,7 @@ class NotificationViewSet(viewsets.ViewSet):
 
 
 def notify(user_pk, message):
+    mail(user_pk, message)
     group_name = "group_" + str(user_pk)
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
@@ -39,3 +42,11 @@ def notify(user_pk, message):
             'message': message
         }
     )
+
+def mail(user_pk, message):
+    user = CustomUser.objects.get(pk = user_pk)
+    subject = 'Business Coaching Platform'
+    body = f'{message}'
+    email_from = settings.EMAIL_HOST_USER 
+    recipient_list = [user.email, ]
+    send_mail( subject, body, email_from, recipient_list ) 

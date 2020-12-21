@@ -26,7 +26,8 @@ const notificationPanel = Vue.component('notification-panel', {
             this.notificationNumber = this.notificationData.length
         },
         async clear_all_notification() {
-            for (var i = 0; i < this.notificationData.length; i++) {
+            var len = this.notificationData.length
+            for (var i = 0; i < len; i++) {
                 await this.clear_notification(this.notificationData[i].pk);
             }
             await this.get_notification_data();
@@ -43,7 +44,6 @@ const notificationPanel = Vue.component('notification-panel', {
                     "pk": String(pk)
                 })
             });
-            await this.get_notification_data();
         }
     },
     template: `
