@@ -119,7 +119,7 @@
                 <div class="side-menu-container" style="margin-top: 10px">
                     <ul class="nav navbar-nav" id="chat-container">
                         <li><a href="#dedicated-pages"><i class="fa fa-dashboard"></i> Posts</a></li>
-                        <li class="active"><a :href="get_calendar_url"><i class="fa fa-puzzle-piece"></i> Schedule Meeting</a></li>
+                        <li class="active"><a :href="get_calendar_url()"><i class="fa fa-puzzle-piece"></i> Schedule Meeting</a></li>
                     </ul>
                 </div>
             </nav>
@@ -168,7 +168,7 @@
                 },
 
                 get_calendar_url(){
-                    var url = 'http://localhost:8000/dashboard/';
+                    var url = 'http://localhost:8000/dashboard/#my-calendar';
                     return url;
                 },
 
