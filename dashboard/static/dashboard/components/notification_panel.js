@@ -12,12 +12,14 @@ const notificationPanel = Vue.component('notification-panel', {
     async created() {
         await this.get_notification_data(); 
     },
-    async mounted(){
-        this.socket = new WebSocket('wss://' + window.location.host + '/ws/notification/');
-        let notificationComponent = this;
-        this.socket.onmessage = async function(e) {
-            await notificationComponent.get_notification_data(); 
-        };
+    mounted(){
+        this.get_notification_data();
+        this.interval = setInterval(function () {
+            this.get_notification_data();
+        }.bind(this), 2000); 
+    },
+    beforeDestroy: function(){
+        clearInterval(this.interval);
     },
     methods: {
         async get_notification_data() {

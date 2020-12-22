@@ -12,16 +12,19 @@ const chatBox = Vue.component('chat-box', {
     async created() {
         await this.get_chat_data(); 
     },
-    async mounted(){
-        this.chatSocket = new WebSocket('wss://' + window.location.host + '/ws/notification/');
-        let chatComponent = this;
-        this.chatSocket.onmessage = async function(e) {
-            await chatComponent.get_chat_data(); 
-        };
+    mounted(){
+        this.get_chat_data();
+        this.interval = setInterval(function () {
+            this.get_chat_data();
+        }.bind(this), 2000); 
+    },
+    beforeDestroy: function(){
+        clearInterval(this.interval);
     },
     methods: {
         async get_chat_data() {
             if (this.user_pk != ''){
+                console.log("calling chat data")
                 var response = await fetch('https://trellis.herokuapp.com/api/chat/' + String(this.user_pk) + '/');
                 this.chat_data = await response.json();
             }
