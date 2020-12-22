@@ -149,12 +149,10 @@
                 this.coacheeProfile = 'https://trellis.herokuapp.com/profile/' + '{{link.coachee.user.pk}}';
             },
             methods: {
-
                 get_file_url(post) {
                     var url = 'https://trellis.herokuapp.com' + String([[post.uploaded_file_url]]);
                     return url;
                 },
-
                 is_file(post) {
                     var url = String([[post.uploaded_file_url]]);
                     if (url!="")
@@ -166,30 +164,17 @@
                         return false;
                     }
                 },
-
                 get_calendar_url(){
                     var url = 'https://trellis.herokuapp.com/dashboard/#my-calendar';
                     return url;
                 },
-
                 get_profile(post) {
                     var url = 'https://trellis.herokuapp.com/profile/' + String([[post.creator.pk]]);
                     return url;
                 },
-
                 async get_posts(other_user_pk) {
-
-                    var url = 'https://trellis.herokuapp.com/api/post/';
-                    var response = await fetch(url, {
-                        method: 'list',
-                        headers: {
-                            'X-CSRFTOKEN': get_cookie('csrftoken'),
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            'pk': parseInt(this.con_pk),
-                        })
-                    });
+                    var url = 'https://trellis.herokuapp.com/api/post/' + parseInt(this.con_pk) + '/';
+                    var response = await fetch(url);
                     this.current_posts = await response.json();
                 },
                 async createPost() {

@@ -40,31 +40,9 @@ class PostViewSet(viewsets.ViewSet):
     """
         A viewset for viewing and editing post instances.
     """
-    http_method_names = ['form_create','list','get', 'post', 'head','put','retrieve','delete']
+    http_method_names = ['get', 'post', 'head','put','retrieve','delete']
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
-
-
-    def list(self, request):
-        """
-        Get posts between the authenticated user and one of his/her connection (whose pk is specified)
-        """
-
-        other_user = get_object_or_404(CustomUser, pk = request.data['pk'])
-        if connection_exists(request.user, other_user):
-            posts = get_posts_between_users(request.user, other_user)
-            serializer = PostSerializer(posts, many = True)
-            return Response(serializer.data)
-        return Response([], status = status.HTTP_400_BAD_REQUEST)
-
-
-    # @action(detail=False, methods=['post'])
-    def create(self, request):
-        """
-        Creates a Post between authenticated user and one of his/her connection
-        """
-        return Response([], status = status.HTTP_400_BAD_REQUEST)
-
 
 
     @action(detail='True',methods=['post'])
@@ -106,7 +84,7 @@ class PostViewSet(viewsets.ViewSet):
 
     def retrieve(self,request,pk = None):
         """
-         Get posts between the authenticated user and one of his/her connection (whose pk is specified)
+        Get posts between the authenticated user and one of his/her connection (whose pk is specified)
         """
         other_user = get_object_or_404(CustomUser, pk = pk)
         if connection_exists(request.user, other_user):
