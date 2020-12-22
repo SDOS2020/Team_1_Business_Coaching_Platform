@@ -74,3 +74,4 @@ zope.interface==5.2.0
 Django==3.1.2
 coverage==5.3.1
 cloudinary==1.24.0
+dj3-cloudinary-storage==0.0.3

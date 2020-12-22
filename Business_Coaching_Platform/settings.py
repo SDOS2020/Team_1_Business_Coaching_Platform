@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'enrolment',
     'rest_framework',
     'phonenumber_field',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -178,3 +179,10 @@ DATABASES['default'].update(db_from_env)
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'hgk9pjyny',
+    'API_KEY': '592534578418115',
+    'API_SECRET': 'CD54Nb_lojIDipUPHH0KzcLO024',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
