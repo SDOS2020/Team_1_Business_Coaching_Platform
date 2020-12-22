@@ -214,16 +214,13 @@
                     await this.get_posts();
                 },
                 async deletePost(post_pk) {
-                    var url = 'https://trellis.herokuapp.com/api/post/';
+                    var url = 'https://trellis.herokuapp.com/api/post/' + parseInt(post_pk) + '/';
                     await fetch(url, {
                         method: 'delete',
                         headers: {
                             'X-CSRFTOKEN': get_cookie('csrftoken'),
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({
-                            'post_pk': parseInt(post_pk),
-                        })
                     });
                     await this.get_posts();
                 },

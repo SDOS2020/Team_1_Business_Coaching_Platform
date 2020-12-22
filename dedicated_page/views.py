@@ -93,11 +93,11 @@ class PostViewSet(viewsets.ViewSet):
             return Response(serializer.data)
         return Response([], status = status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request):
+    def delete(self, request, pk = None):
         """
         Deletes the Post having primary key as post_pk
         """
-        post_pk = request.data['post_pk']
+        post_pk = pk
         if post_pk:
             post = get_object_or_404(Post,pk=post_pk)
             if request.user.id == post.creator.id:
