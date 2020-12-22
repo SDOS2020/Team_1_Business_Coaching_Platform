@@ -4,13 +4,14 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.conf import settings
 import os
-
+import pytz
+from dateutil.tz import *
 from user.models import CustomUser,Coach, Coachee
 
 
 class Post(models.Model):
     content = models.TextField()
-    date_posted = models.DateTimeField(default=timezone.localtime(timezone.now()))
+    date_posted = models.DateTimeField(default = datetime.now().replace(tzinfo = tzlocal()).astimezone(pytz.timezone('Asia/Kolkata')))
     creator = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name='post_creator')
     viewer = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name='post_viewer')
     uploaded_file_url = models.CharField(null=True, max_length=500)
