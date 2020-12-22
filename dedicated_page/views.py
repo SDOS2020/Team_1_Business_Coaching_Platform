@@ -101,12 +101,12 @@ class PostViewSet(viewsets.ViewSet):
         if post_pk:
             post = get_object_or_404(Post,pk=post_pk)
             if request.user.id == post.creator.id:
-                file_name = post.uploaded_file_name
-                if file_name:
-                    fs = FileSystemStorage()
-                    file_path = os.path.join(settings.MEDIA_ROOT,file_name)
-                    fs.delete(file_path)
                 post.delete()
+                # file_name = post.uploaded_file_name
+                # if file_name:
+                #     fs = FileSystemStorage()
+                #     file_path = os.path.join(settings.MEDIA_ROOT,file_name)
+                #     fs.delete(file_path)
                 serializer = PostSerializer(post)
                 return Response(serializer.data)
         return Response([], status=status.HTTP_400_BAD_REQUEST)
