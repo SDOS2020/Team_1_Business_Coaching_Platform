@@ -180,9 +180,9 @@ DATABASES['default'].update(db_from_env)
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'hgk9pjyny',
-    'API_KEY': '592534578418115',
-    'API_SECRET': 'CD54Nb_lojIDipUPHH0KzcLO024',
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', ''),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', ''),          
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', ''),
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
