@@ -5,4 +5,4 @@ A platform for business coaching that enhances the experience of personalised on
 
 ### [Coding Convention](https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style)
 
-Final presentation: [https://docs.google.com/presentation/d/11-dc7os_Tf2LgbDS1iKqxyZgPRzGiHca78WLLLkzSgA/edit?usp=sharing](url)
+Final presentation: https://docs.google.com/presentation/d/11-dc7os_Tf2LgbDS1iKqxyZgPRzGiHca78WLLLkzSgA/edit?usp=sharing
